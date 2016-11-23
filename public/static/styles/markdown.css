@@ -1,0 +1,200 @@
+.markdown-body {
+    font-size: 14px
+}
+
+.markdown-body img {
+    max-width: 680px
+}
+
+.markdown-body table {
+    display: block;
+    width: 100%;
+    overflow: auto;
+    word-break: normal;
+    word-break: keep-all;
+    margin: 10px 0
+}
+
+.markdown-body table tr {
+    background-color: #fff;
+    border-top: 1px solid #ccc
+}
+
+.markdown-body table td,.markdown-body table th {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+}
+.markdown-body table thead tr{
+    background-color: #0088CC;
+    color: #ffffff;
+}
+
+.markdown-body table tr:nth-child(2n) {
+    background-color: #f8f8f8
+}
+
+.markdown-body blockquote,.markdown-body blockquote p {
+    font-size: 14px;
+    color: #999
+}
+
+.markdown-body h1 {
+    margin: 5px 0 20px;
+    font-size: 26px;
+    line-height: 1.2
+}
+
+.markdown-body h2 {
+    padding-bottom: .3em;
+    font-size: 18px;
+    line-height: 1.225;
+    margin: 5px 0
+}
+
+.markdown-body h3 {
+    font-size: 18px;
+    margin-top: 30px
+}
+
+.markdown-body h4,h5,h6 {
+    font-size: 14px
+}
+
+.markdown-body p {
+    font-size: 14px;
+    color: #666;
+    line-height: 26px;
+    margin: 0 0 10px
+}
+
+.markdown-body strong {
+    color: #333;
+    line-height: 26px
+}
+
+.markdown-body h1,h2,h3,h4,h5,h6 {
+    color: #333
+}
+
+
+
+.markdown-body pre code,.markdown-body pre code * {
+    font-family: Consolas,'Liberation Mono',Menlo,Courier,monospace;
+}
+
+.markdown-body ul li {
+    font-size: 14px
+}
+
+.previous-and-next {
+    height: 20px;
+    font-size: 14px;
+    color: #999;
+    margin: 20px 0
+}
+
+.book_select .tooltip-inner,.previous-and-next .tooltip-inner {
+    white-space: pre;
+    max-width: none
+}
+
+#jkcomments {
+    margin-bottom: 30px
+}
+
+#jkcomments ul li .txt .txt-content pre {
+    background-color: #fff!important;
+    border: none!important
+}
+
+#jkcomments ul li .txt .txt-oter .txt-reply {
+    box-sizing: content-box!important
+}
+
+#jkcomments #pager ul.pages li.pagenow #gotoval {
+    line-height: 20px!important
+}
+
+#jkcomments span.emotion {
+    box-sizing: content-box
+}
+
+.wiki-right {
+    position: absolute;
+    left: 50%
+}
+
+.backtotop {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    margin-left: 400px
+}
+
+.backtotop .btn-backtotop {
+    display: block;
+    width: 38px;
+    height: 38px;
+    background-color: #ddd;
+    border-radius: 3px;
+    border: 0;
+    cursor: pointer;
+    position: relative
+}
+
+.backtotop .arrow {
+    position: relative;
+    width: 0;
+    height: 0;
+    top: -1px;
+    border: 9px solid transparent;
+    border-bottom-color: #aaa;
+    margin-left: 10px
+}
+
+.backtotop .stick {
+    position: relative;
+    width: 8px;
+    height: 14px;
+    top: -1px;
+    border-radius: 1px;
+    background-color: #aaa;
+    margin-left: 15px
+}
+
+
+.markdown-body .default{
+    width: 70px;
+    display: inline-block;
+    background-color: #333333;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-bottom: 3px;
+    margin-right: 15px;
+    color: #FFF !important;
+    font-size: 11px;
+    height: 24px;
+    line-height: 24px;
+    text-transform: uppercase;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.markdown-body .post{
+    background-color: #F47023 !important;
+}
+.markdown-body .get{
+    background-color:#27AE60 !important;
+}
+.markdown-body .put{
+    background-color:#4A90E2!important;
+}
+
+.markdown-body .del{
+    background-color:red!important;
+}
+.markdown-body .trace{
+    background-color:#e09d43 !important;
+}
