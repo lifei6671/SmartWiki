@@ -12,6 +12,29 @@ git clone https://github.com/lifei6671/SmartWiki.git
 
 因为laravel使用了composer，所以需要服务器安装composer进行包的还原。
 
+## 部分截图
+
+**个人资料**
+
+![个人资料](https://raw.githubusercontent.com/lifei6671/SmartWiki/master/storage/app/images/20161124082553.png)
+
+**我的项目**
+
+![我的项目](https://github.com/lifei6671/SmartWiki/blob/master/storage/app/images/20161124082647.png)
+
+**项目参与用户**
+
+![项目参与用户](https://github.com/lifei6671/SmartWiki/blob/master/storage/app/images/20161124082703.png)
+
+**文档编辑**
+
+![文档编辑](https://raw.githubusercontent.com/lifei6671/SmartWiki/master/storage/app/images/20161124082810.png)
+
+**文档模板**
+
+![文档模板](https://raw.githubusercontent.com/lifei6671/SmartWiki/master/storage/app/images/20161124082844.png)
+
+
 ## 使用的技术
 - laravel 5.2
 - mysql 5.6
