@@ -4,24 +4,24 @@ SmartWiki是一款针对IT团队开发的简单好用的文档管理系统。
 
 ## 使用
 
-1.  下载源码
+1.下载源码
 ```
 git clone https://github.com/lifei6671/SmartWiki.git
 ```
-2.  安装composer
+2.安装composer
 
 ```
 sudo curl -sS https://getcomposer.org/installer | sudo php
 sudo mv composer.phar /usr/local/bin/composer
 ```
-3.  设置目录权限
+3.设置目录权限
 
 ```
 sudo chmod -R 0777 storage
 
 ```
 
-4.  恢复laravel的依赖
+4.恢复laravel的依赖
 
 ```
 composer install
@@ -31,7 +31,7 @@ composer install
 如果不是root权限，可能会出现没有写权限的错误。解决方法是手动创建目录，或者是切换到root权限执行。
 
 
-5.  然后打开首页会自动跳转到安装页面。
+5.然后打开首页会自动跳转到安装页面。
 
 
 ## 部分截图
