@@ -12,3 +12,4 @@ _migration_helper.php
 composer.lock
 gulpfile.js
 phpunit.xml
+/public/install.lock
