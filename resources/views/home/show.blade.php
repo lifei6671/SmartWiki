@@ -150,24 +150,6 @@
                     NProgress.done();
                 }
             });
-//            NProgress.start();
-//
-//            $.get(url).done(function (res) {
-//                if(res.errcode == 0){
-//                    $("#page-content .markdown-body").html(res.data.body);
-//                    $("#page-title h1").text(res.data.doc_title);
-//                    $("title").text(res.data.title);
-//                    if(history.pushState){
-//                        history.pushState({ title: res.data.doc_title }, res.data.doc_title, url);
-//                    }
-//                }else{
-//                    layer.msg("加载失败");
-//                }
-//
-//                NProgress.done();
-//            }).fail(function () {
-//                NProgress.done();
-//            });
         });
     })
 </script>
