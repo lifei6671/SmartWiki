@@ -20,11 +20,11 @@ git clone https://github.com/lifei6671/SmartWiki.git
 
 **我的项目**
 
-![我的项目](https://github.com/lifei6671/SmartWiki/blob/master/storage/app/images/20161124082647.png)
+![我的项目](https://raw.githubusercontent.com/lifei6671/SmartWiki/master/storage/app/images/20161124082647.png)
 
 **项目参与用户**
 
-![项目参与用户](https://github.com/lifei6671/SmartWiki/blob/master/storage/app/images/20161124082703.png)
+![项目参与用户](https://raw.githubusercontent.com/lifei6671/SmartWiki/master/storage/app/images/20161124082703.png)
 
 **文档编辑**
 
