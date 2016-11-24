@@ -34,8 +34,7 @@ class CaptchaController extends Controller
         //把内容存入session
         Session::flash('milkcaptcha', $phrase);
         $builder->output();
-
-        return $this->response->header('Content-type','image/jpeg');
+        header('Content-type: image/jpeg');
 
     }
 }
