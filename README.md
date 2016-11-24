@@ -65,7 +65,7 @@ git clone https://github.com/lifei6671/SmartWiki.git
 
 ## 作者
 
-一个纯粹的PHPer。[个人网站(备案中)](http://www.iminho.me)
+一个纯粹的PHPer。[SmartWiki 演示文档](http://www.iminho.me/docs/show/1)
 
 
 
