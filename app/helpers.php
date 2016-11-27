@@ -107,3 +107,14 @@ if(!function_exists('modify_env')) {
         \File::put($envPath, $content);
     }
 }
+
+if(!function_exists('is_can_create_project')) {
+    /**
+     * 判断指定用户是否能创建用户
+     * @param int $member_id
+     * @return bool
+     */
+    function is_can_create_project($member_id){
+        return \SmartWiki\Project::isCanCreateProject($member_id);
+    }
+}

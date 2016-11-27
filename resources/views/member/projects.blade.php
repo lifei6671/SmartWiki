@@ -18,9 +18,11 @@
     <div class="project-box">
         <div class="box-head">
             <h4>我的项目</h4>
+            @if(is_can_create_project($member->member_id))
             <a href="{{route('project.edit')}}" class="btn btn-success btn-sm pull-right" style="margin-top: 10px;">
                 添加项目
             </a>
+            @endif
         </div>
         <div class="box-body">
             <div class="project-list">

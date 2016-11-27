@@ -299,6 +299,10 @@ class MemberController extends Controller
             $member->phone =$phone;
             $member->description = $des;
 
+            if(empty($member->headimgurl) ){
+                $member->headimgurl = '/static/images/middle.gif';
+            }
+
             $member->group_level = $group_level;
 
             try{
