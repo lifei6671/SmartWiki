@@ -166,7 +166,7 @@ class Project extends ModelBase
                     $join->on('pro.project_id','=','rel.project_id')
                         ->where('rel.member_id','=',$member_id);
                 })
-                ->orWhere('pro.project_open_state','<>',1)
+                ->orWhere('pro.project_open_state','<>',0)
                 ->orWhere('rel_id','>',0)
                 ->orderBy('pro.project_id','DESC')
                 ->paginate($pageSize,['*'],'page',$pageIndex);
@@ -176,7 +176,7 @@ class Project extends ModelBase
 
         }else{
             $query = DB::table('wk_project')
-                ->where('project_open_state','<>',1)
+                ->where('project_open_state','<>',0)
                 ->paginate($pageSize,'*','page',$pageIndex);
 
             return $query;
@@ -236,6 +236,22 @@ class Project extends ModelBase
         return false;
     }
 
+    /**
+     * 判断制定用户是否有创建项目权限
+     * @param int $member_id
+     * @return bool
+     */
+    public static function isCanCreateProject($member_id){
+        if(empty($member_id)){
+            return false;
+        }
+        $member = Member::find($member_id);
+
+        if(!$member || ($member->group_level != 0 && $member->group_level != 1)){
+            return false;
+        }
+        return true;
+    }
     /**
      * 获取项目的文档树
      * @param int $project_id

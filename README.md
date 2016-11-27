@@ -64,6 +64,7 @@ git clone https://github.com/lifei6671/SmartWiki.git
 4. 项目文档树生成
 5. 忘记密码
 
+
 ## 作者
 
 一个纯粹的PHPer。[SmartWiki 演示文档](http://www.iminho.me/docs/show/1)

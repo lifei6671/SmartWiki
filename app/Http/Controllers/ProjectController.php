@@ -17,17 +17,17 @@ use Illuminate\Auth\Access\AuthorizationException;
 
 class ProjectController extends Controller
 {
-    public function index()
-    {
-
-    }
-
     /**
      * 创建项目
      * @return \Illuminate\Http\JsonResponse
      */
     public function create()
     {
+        //如果非管理员用户并且非普通用户则禁止创建项目
+        if($this->member->group_level != 0 && $this->member->group_level != 1){
+            abort(403);
+        }
+
         $projectName = trim($this->request->input('projectName'));
         $description = trim($this->request->input('description',null));
         $isPasswd = $this->request->input('projectPasswd','1');
@@ -114,7 +114,7 @@ class ProjectController extends Controller
         return view('project.delete',$this->data);
     }
     /**
-     * 编辑项目
+     * 编辑项目或创建
      * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|JsonResponse
      * @throws AuthorizationException
@@ -122,7 +122,10 @@ class ProjectController extends Controller
     public function edit($id = null)
     {
         $project_id = intval($id);
-
+        //如果是访客则不能创建项目
+        if($project_id <=0 && is_can_create_project($this->member_id) === false){
+            abort(403);
+        }
         $project = null;
         //如果项目不存在
         if($project_id > 0 && empty($project = Project::find($id)) ){
@@ -196,6 +199,7 @@ class ProjectController extends Controller
         if(empty($project_id)){
             abort(404);
         }
+
         $project = Project::find($project_id);
         if(empty($project)){
             abort(404);
