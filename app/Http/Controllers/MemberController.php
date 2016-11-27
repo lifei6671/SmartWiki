@@ -290,7 +290,7 @@ class MemberController extends Controller
                 $member->create_at = $this->member_id;
             }
 
-            if(empty($password)) {
+            if(empty($password) === false) {
                 $member->member_passwd = password_hash($password, PASSWORD_DEFAULT);
             }
 
