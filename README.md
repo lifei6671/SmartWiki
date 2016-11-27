@@ -68,7 +68,7 @@ git clone https://github.com/lifei6671/SmartWiki.git
 3. 角色细分
 4. 项目文档树生成
 5. 忘记密码
-
+6. 实现系统日志
 
 ## 作者
 
