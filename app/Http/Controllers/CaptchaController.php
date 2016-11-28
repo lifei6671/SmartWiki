@@ -24,6 +24,7 @@ class CaptchaController extends Controller
         $fonts = Storage::allFiles('fonts');
 
         $builder = new CaptchaBuilder();
+        $builder->setInterpolation(1);
         $font = storage_path('app/' . $fonts[mt_rand(0,count($fonts)-1)]);
 
         $builder->build(110,34,$font);
@@ -31,10 +32,12 @@ class CaptchaController extends Controller
         //获取验证码的内容
         $phrase = $builder->getPhrase();
 
-        //把内容存入session
+       // 把内容存入session
         Session::flash('milkcaptcha', $phrase);
         $builder->output();
-        header('Content-type: image/jpeg');
 
+
+        header('Content-type: image/jpeg');
+        return;
     }
 }

@@ -47,6 +47,11 @@ class DocumentController extends Controller
         return view('document.document',$this->data);
     }
 
+    /**
+     * 显示文档历史
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function history($id)
     {
         $doc_id = intval($id);

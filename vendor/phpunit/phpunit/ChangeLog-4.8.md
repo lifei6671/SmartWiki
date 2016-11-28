@@ -2,6 +2,18 @@
 
 All notable changes of the PHPUnit 4.8 release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [4.8.29] - 2016-11-20
+
+### Changed
+
+* Bumped the required version of `sebastian/comparator`
+
+## [4.8.28] - 2016-11-14
+
+### Fixed
+
+* Improved the fix for [#1955](https://github.com/sebastianbergmann/phpunit/issues/1955): Process isolation fails when running tests with `phpdbg -qrr`
+
 ## [4.8.27] - 2016-07-21
 
 ### Fixed
@@ -196,6 +208,8 @@ New PHAR release due to updated dependencies
 * Made the argument check of `assertContains()` and `assertNotContains()` more strict to prevent undefined behavior such as [#1808](https://github.com/sebastianbergmann/phpunit/issues/1808)
 * Changed the name of the default group from `__nogroup__` to `default`
 
+[4.8.29]: https://github.com/sebastianbergmann/phpunit/compare/4.8.28...4.8.29
+[4.8.28]: https://github.com/sebastianbergmann/phpunit/compare/4.8.27...4.8.28
 [4.8.27]: https://github.com/sebastianbergmann/phpunit/compare/4.8.26...4.8.27
 [4.8.26]: https://github.com/sebastianbergmann/phpunit/compare/4.8.25...4.8.26
 [4.8.25]: https://github.com/sebastianbergmann/phpunit/compare/4.8.24...4.8.25

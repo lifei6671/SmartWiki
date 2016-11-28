@@ -502,23 +502,30 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getTimestampTests
      */
-    public function testParseTimestampAsDateTimeObject($yaml, $year, $month, $day, $hour, $minute, $second)
+    public function testParseTimestampAsDateTimeObject($yaml, $year, $month, $day, $hour, $minute, $second, $timezone)
     {
         $expected = new \DateTime($yaml);
         $expected->setTimeZone(new \DateTimeZone('UTC'));
         $expected->setDate($year, $month, $day);
-        @$expected->setTime($hour, $minute, $second, 1000000 * ($second - (int) $second));
 
-        $this->assertEquals($expected, Inline::parse($yaml, Yaml::PARSE_DATETIME));
+        if (PHP_VERSION_ID >= 70100) {
+            $expected->setTime($hour, $minute, $second, 1000000 * ($second - (int) $second));
+        } else {
+            $expected->setTime($hour, $minute, $second);
+        }
+
+        $date = Inline::parse($yaml, Yaml::PARSE_DATETIME);
+        $this->assertEquals($expected, $date);
+        $this->assertSame($timezone, $date->format('O'));
     }
 
     public function getTimestampTests()
     {
         return array(
-            'canonical' => array('2001-12-15T02:59:43.1Z', 2001, 12, 15, 2, 59, 43.1),
-            'ISO-8601' => array('2001-12-15t21:59:43.10-05:00', 2001, 12, 16, 2, 59, 43.1),
-            'spaced' => array('2001-12-15 21:59:43.10 -5', 2001, 12, 16, 2, 59, 43.1),
-            'date' => array('2001-12-15', 2001, 12, 15, 0, 0, 0),
+            'canonical' => array('2001-12-15T02:59:43.1Z', 2001, 12, 15, 2, 59, 43.1, '+0000'),
+            'ISO-8601' => array('2001-12-15t21:59:43.10-05:00', 2001, 12, 16, 2, 59, 43.1, '-0500'),
+            'spaced' => array('2001-12-15 21:59:43.10 -5', 2001, 12, 16, 2, 59, 43.1, '-0500'),
+            'date' => array('2001-12-15', 2001, 12, 15, 0, 0, 0, '+0000'),
         );
     }
 
@@ -530,7 +537,11 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $expected = new \DateTime($yaml);
         $expected->setTimeZone(new \DateTimeZone('UTC'));
         $expected->setDate($year, $month, $day);
-        @$expected->setTime($hour, $minute, $second, 1000000 * ($second - (int) $second));
+        if (PHP_VERSION_ID >= 70100) {
+            $expected->setTime($hour, $minute, $second, 1000000 * ($second - (int) $second));
+        } else {
+            $expected->setTime($hour, $minute, $second);
+        }
 
         $expectedNested = array('nested' => array($expected));
         $yamlNested = "{nested: [$yaml]}";
@@ -594,5 +605,14 @@ class InlineTest extends \PHPUnit_Framework_TestCase
             'too many equals characters' => array('!!binary "SGVsbG8gd29yb==="', '/The base64 encoded data \(.*\) contains invalid characters/'),
             'misplaced equals character' => array('!!binary "SGVsbG8gd29ybG=Q"', '/The base64 encoded data \(.*\) contains invalid characters/'),
         );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Yaml\Exception\ParseException
+     * @expectedExceptionMessage Malformed inline YAML string: {this, is not, supported}.
+     */
+    public function testNotSupportedMissingValue()
+    {
+        Inline::parse('{this, is not, supported}');
     }
 }

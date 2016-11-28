@@ -23,8 +23,9 @@ Route::get('/logout',[
 Route::get('/verify',[
     'as' => 'captcha.verify', 'uses' => 'CaptchaController@verify'
 ]);
+//首页
 Route::get('/',[
-    'middleware' => 'authorize', 'as' => 'home.index', 'uses' => 'HomeController@index'
+     'as' => 'home.index', 'uses' => 'HomeController@index'
 ]);
 //查看文档
 Route::get('/show/{id}',[
@@ -45,6 +46,7 @@ Route::group(['middleware' => 'super.member','prefix' => 'member'],function (){
     Route::match(['get','post'],'setting/edit/{id?}',[
         'uses' => 'MemberController@editSetting'
     ])->name('member.setting.edit');
+    //删除配置
     Route::match(['get','post'],'setting/delete/{id?}',[
         'uses' => 'MemberController@deleteSetting'
     ])->name('member.setting.delete');

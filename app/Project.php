@@ -175,9 +175,10 @@ class Project extends ModelBase
             return $query;
 
         }else{
-            $query = DB::table('wk_project')
+            $query = DB::table('project')
+                ->select('*')
                 ->where('project_open_state','<>',0)
-                ->paginate($pageSize,'*','page',$pageIndex);
+                ->paginate($pageSize,['*'],'page',$pageIndex);
 
             return $query;
         }
