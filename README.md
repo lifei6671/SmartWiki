@@ -94,7 +94,7 @@ composer install
 
 ## 作者
 
-一个纯粹的PHPer。[SmartWiki 演示文档](http://www.iminho.me/docs/show/1)
+一个纯粹的PHPer。[SmartWiki 演示文档](https://wiki.iminho.me/docs/show/1)
 
 
 
