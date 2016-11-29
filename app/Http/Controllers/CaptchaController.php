@@ -24,6 +24,7 @@ class CaptchaController extends Controller
         $fonts = Storage::allFiles('fonts');
 
         $builder = new CaptchaBuilder();
+        $builder->setInterpolation(0);
         $font = storage_path('app/' . $fonts[mt_rand(0,count($fonts)-1)]);
 
         $builder->build(110,34,$font);
