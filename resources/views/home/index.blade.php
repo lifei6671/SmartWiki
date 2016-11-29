@@ -28,9 +28,11 @@
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav navbar-right">
+                @if(isset($member) && ($member->group_level == 0 || $member->group_level == 1))
                 <li>
                     <a href="javascript:;" data-toggle="modal" data-target="#create-project" title="创建项目"><i class="fa fa-plus"></i></a>
                 </li>
+                @endif
                 <li>
                     <a href="{{route('account.logout')}}" title="退出登录">
                         <i class="fa fa-sign-out"></i>
@@ -62,20 +64,9 @@
     </div>
     <div class="clearfix"></div>
 </div>
-<footer class="footer">
-    <div class="container">
-        <div class="row text-center">
-            <ul>
-                <li><a href="http://www.iminho.me">SmartWiki</a></li>
-                <li>&nbsp;·&nbsp;</li>
-                <li><a href="https://github.com/lifei6671/SmartWiki/issues" target="_blank">意见反馈</a> </li>
-                <li>&nbsp;·&nbsp;</li>
-                <li><a href="https://github.com/lifei6671/SmartWiki">Github</a> </li>
-            </ul>
+@include('widget.footer')
 
-        </div>
-    </div>
-</footer>
+@if(isset($member) && ($member->group_level == 0 || $member->group_level == 1))
 <!-- Modal -->
 <div class="modal fade" id="create-project" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -126,6 +117,7 @@
         </div>
     </div>
 </div>
+@endif
 
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>

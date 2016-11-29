@@ -290,7 +290,7 @@ class MemberController extends Controller
                 $member->create_at = $this->member_id;
             }
 
-            if(empty($password)) {
+            if(empty($password) === false) {
                 $member->member_passwd = password_hash($password, PASSWORD_DEFAULT);
             }
 
@@ -298,6 +298,10 @@ class MemberController extends Controller
             $member->email = $email;
             $member->phone =$phone;
             $member->description = $des;
+
+            if(empty($member->headimgurl) ){
+                $member->headimgurl = '/static/images/middle.gif';
+            }
 
             $member->group_level = $group_level;
 
