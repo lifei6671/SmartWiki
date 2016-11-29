@@ -76,7 +76,7 @@ class MemberController extends Controller
         if($this->isPost()){
             $oldPassword = $this->request->input('oldPasswd');
             $newPassword = $this->request->input('newPasswd');
-            $configPassword = $this->request->input('configPasswd');
+            $configPassword = $this->request->input('confirmPassword');
 
             if(empty($oldPassword)){
                 return $this->jsonResult(40601);

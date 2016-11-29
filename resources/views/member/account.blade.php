@@ -15,7 +15,7 @@ $(function () {
        beforSubmit : function () {
            var oldPasswd = $("#oldPasswd").val();
            var newPasswd = $("#newPasswd").val();
-           var configPasswd = $("#configPasswd").val();
+           var confirmPassword = $("#confirmPassword").val();
            if(!oldPasswd ){
                showError("原始密码不能为空");
                return false;
@@ -24,7 +24,7 @@ $(function () {
                showError("新密码不能为空");
                return false;
            }
-           if(!configPasswd){
+           if(!confirmPassword){
                showError("确认密码不能为空");
                return false;
            }
@@ -61,7 +61,7 @@ $(function () {
                 </div>
                 <div class="form-group">
                     <label for="configPasswd">确认密码</label>
-                    <input type="password" class="form-control" id="configPasswd" name="configPasswd" maxlength="20" placeholder="确认密码">
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" maxlength="20" placeholder="确认密码">
                 </div>
 
                 <div class="form-group">

@@ -129,6 +129,8 @@ CREATE TABLE IF NOT EXISTS `wk_config`(
   UNIQUE `key_uindex` (`key`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配置表';
 
+INSERT smart_wiki.wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('邮件有效期','MAIL_TOKEN_TIME','3600','system','找回密码邮件有效期,单位为秒',now());
+
 /*****************************************
 * 系统日志表
 ******************************************/
@@ -148,11 +150,13 @@ CREATE TABLE `wk_passwords` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `token` varchar(200) NOT NULL COMMENT '唯一认证码',
   `email` varchar(200) NOT NULL COMMENT '收件的邮箱',
-  `is_valid` int(11) DEFAULT '0' COMMENT '是否邮箱：0 是/1 否',
+  `is_valid` int(11) DEFAULT '0' COMMENT '是否有效：0 是/1 否',
   `create_time` datetime NOT NULL COMMENT '记录创建时间',
   `user_address` varchar(200) DEFAULT NULL COMMENT '用户IP地址',
   `send_time` datetime DEFAULT NULL COMMENT '邮件发送时间',
+  `valid_time` datetime default null comment '校验时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `wk_passwords_id_uindex` (`id`),
   UNIQUE KEY `wk_passwords_token_uindex` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='找回密码';
+

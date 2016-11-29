@@ -24,6 +24,10 @@ use DB;
  * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereModifyTime($value)
  * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereModifyAt($value)
  * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereVersion($value)
+ * @property string $create_time 历史记录创建时间
+ * @property integer $create_at 历史记录创建人
+ * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereCreateTime($value)
+ * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereCreateAt($value)
  */
 class DocumentHistory extends ModelBase
 {

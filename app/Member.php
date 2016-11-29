@@ -49,6 +49,7 @@ use SmartWiki\Exceptions\ResultNullException;
  * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereVersion($value)
  * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereState($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereGroupLevel($value)
  */
 class Member extends ModelBase
 {

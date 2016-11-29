@@ -29,6 +29,9 @@ Route::match(['get','post'],'/modify_password/{key}',[
     'uses' => 'AccountController@modifyPassword'
 ])->name('account.modify_password')->where('key','^([a-fA-F0-9]{32})$');
 
+//处理结果跳转页
+Route::get('/process_result')->name('account.process_result')->uses('AccountController@processResult');
+
 //验证码
 Route::get('/verify',[
     'as' => 'captcha.verify', 'uses' => 'CaptchaController@verify'

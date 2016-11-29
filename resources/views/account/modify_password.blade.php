@@ -32,15 +32,18 @@
     <div class="row login">
         <div class="login-body">
             <form role="form" method="post">
-                <h3 class="text-center">找回密码</h3>
+                <input type="hidden" name="token" value="{{$token}}">
+                <h3 class="text-center">修改密码</h3>
+
                 <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon">
-                            <i class="fa fa-at"></i>
-                        </div>
-                        <input type="email" class="form-control" placeholder="邮箱" name="email" id="email" autocomplete="off">
-                    </div>
+                    <label for="newPasswd">新密码</label>
+                    <input type="password" class="form-control" name="passowrd" id="newPassword" maxlength="20" placeholder="新密码">
                 </div>
+                <div class="form-group">
+                    <label for="configPasswd">确认密码</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" maxlength="20" placeholder="确认密码">
+                </div>
+
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">
@@ -51,7 +54,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="button" id="btn-login" class="btn btn-success" style="width: 100%"  data-loading-text="正在发送...">找回密码</button>
+                    <button type="button" id="btn-login" class="btn btn-success" style="width: 100%"  data-loading-text="正在修改...">立即修改</button>
                 </div>
             </form>
         </div>
@@ -65,7 +68,7 @@
 <script src="/static/scripts/scripts.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function () {
-        $("#email,#code").on('focus',function () {
+        $("#newPassword,#confirmPassword,#code").on('focus',function () {
             $(this).tooltip('destroy').parents('.form-group').removeClass('has-error');;
         });
 
@@ -78,15 +81,24 @@
         $("#btn-login").on('click',function () {
             var $btn = $(this).button('loading');
 
-            var email = $.trim($("#email").val());
+            var newPassword = $.trim($("#newPassword").val());
+            var confirmPassword = $.trim($("#confirmPassword").val());
             var code = $.trim($("#code").val());
 
-            if(email == ""){
-                $("#email").tooltip({placement:"auto",title : "邮箱不能为空",trigger : 'manual'})
+            if(newPassword == ""){
+                $("#newPassword").tooltip({placement:"auto",title : "密码不能为空",trigger : 'manual'})
                     .tooltip('show')
                     .parents('.form-group').addClass('has-error');
                 $btn.button('reset');
                 return false;
+
+            }else if(confirmPassword == ""){
+                $("#confirmPassword").tooltip({placement:"auto",title : "确认密码不能为空",trigger : 'manual'})
+                    .tooltip('show')
+                    .parents('.form-group').addClass('has-error');
+                $btn.button('reset');
+                return false;
+            }else if(newPassword != confirmPassword) {
 
             }else if(code == ""){
                 $("#code").tooltip({title : '验证码不能为空',trigger : 'manual'})
@@ -96,7 +108,7 @@
                 return false;
             }else{
                 $.ajax({
-                    url : "{{route('account.find_password')}}",
+                    url : "{{route('account.modify_password',['key' => $token])}}",
                     data : $("form").serializeArray(),
                     dataType : "json",
                     type : "POST",

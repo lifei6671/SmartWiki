@@ -13,7 +13,7 @@ use SmartWiki\Member;
 use Mail;
 use Cache;
 use SmartWiki\Passwords;
-
+use Illuminate\Mail\Message;
 
 class AccountController extends Controller
 {
@@ -111,7 +111,7 @@ class AccountController extends Controller
                 return $this->jsonResult(40506);
             }
 
-            $totalCount = Passwords::where('create_time','>=', date('Y-m-d H:i:s',time() - 3600))->count();
+            $totalCount = Passwords::where('create_time','>=', date('Y-m-d H:i:s',time() - (int)wiki_config('MAIL_TOKEN_TIME',3600)))->count();
 
             if($totalCount > 5){
                 return $this->jsonResult(40607);
@@ -119,23 +119,109 @@ class AccountController extends Controller
 
             $key = md5(uniqid('find_password'));
 
-            $cacheItem[$key] = ['email' => $email , 'time' => time(), 'key' => $key];
-
+            $passwords = new Passwords();
+            $passwords->email = $email;
+            $passwords->token = $key;
+            $passwords->is_valid = 0;
+            $passwords->user_address = $this->request->getClientIp();
+            $passwords->create_time = date('Y-m-d H:i:s');
+            if(!$passwords->save()){
+                return $this->jsonResult(40608);
+            }
 
             $url = route('account.modify_password',['key' => $key ]);
 
-            Mail::queue('emails.find_password', ['url' => $url], function($message)use($email)
+            Mail::queue('emails.find_password', ['url' => $url], function($message)use($passwords)
             {
-                $message->to($email)->subject('SmartWiki - 找回密码!');
+                $message->to($passwords->email)->subject('SmartWiki - 找回密码!');
+                $passwords->send_time =  date('Y-m-d H:i:s');
+                $passwords->save();
             });
+            session(['processs.data' => [
+                'message' => "<p>密码重置链接已经发到您邮箱</p><p><a>{$email}</a> </p><p>请登录您的邮箱并点击密码重置链接进行密码更改</p><p><b>还没收到确认邮件?</b> 尝试到广告邮件、垃圾邮件目录里找找看</p>",
+                'title' => '邮件发送成功'
+            ]]);
 
-            return $this->jsonResult(0);
+
+            return $this->jsonResult(0,['url' => route('account.process_result')]);
         }
         return view('account.find_password');
     }
 
-    public function modifyPassword()
+    /**
+     * 修改密码
+     * @param $key
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    public function modifyPassword($key)
     {
-        return view('account.modify_password');
+        $this->data['token'] = $key;
+
+        if(empty($key)){
+            abort(404);
+        }
+
+        $passwords = Passwords::where('token','=',$key)->where('is_valid','=','0')->where('create_time','>', date('Y-m-d H:i:s',time() - (int)wiki_config('MAIL_TOKEN_TIME',3600)))->first();
+
+        if($this->isPost()){
+            if(empty($passwords)){
+                return $this->jsonResult(50001,null,'身份验证失败');
+            }
+
+            $password = $this->request->input('passowrd');
+            $confirmPassword = $this->request->input('confirmPassword');
+
+
+            if(empty($password)){
+                return $this->jsonResult(40602);
+            }
+            if(empty($confirmPassword)){
+                return $this->jsonResult(40603);
+            }
+            if(strcmp($password,$confirmPassword) !== 0){
+                return $this->jsonResult(40604);
+            }
+
+            $member = Member::where('email','=',$passwords->email)->first();
+
+            if(empty($member)){
+                return $this->jsonResult(40506);
+            }
+
+            $member->member_passwd =  password_hash($password,PASSWORD_DEFAULT);
+
+            if(!$member->save()){
+                return $this->jsonResult(500);
+            }
+            $passwords->is_valid = 1;
+            $passwords->valid_time = date('Y-m-d H:i:s');
+            $passwords->save();
+
+            return $this->jsonResult(0,['url' => route('account.login')]);
+        }
+
+        if(empty($passwords)){
+            session(['processs.data' => [
+                'title' => '身份验证失败',
+                'message' => '身份验证失败，请重新发送邮件'
+            ]]);
+            return redirect(route('account.process_result'));
+        }
+
+        return view('account.modify_password',$this->data);
+    }
+
+    /**
+     * 显示处理结果
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function processResult()
+    {
+        $data = session('processs.data');
+        if(empty($data) || !is_array($data)){
+            return redirect(route('home.index'));
+        }
+
+        return view('account.process_result',$data);
     }
 }
