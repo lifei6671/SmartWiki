@@ -1,9 +1,19 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "lifei6671/smartwiki",
+    "description": "SmartWiki is a tool greatly applicable for an IT team to share documents online",
+    "keywords": ["SmartWiki", "document","api"],
+    "homepage": "https://www.iminho.me",
+    "version": "v0.1",
     "license": "MIT",
     "type": "project",
+    "authors": [
+        {
+            "name" : "Minho",
+            "email": "longfei6671@163.com",
+            "homepage": "https://www.iminho.me",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",

@@ -33,6 +33,7 @@
                     <a href="javascript:;" data-toggle="modal" data-target="#create-project" title="创建项目"><i class="fa fa-plus"></i></a>
                 </li>
                 @endif
+                @if(isset($member))
                 <li>
                     <a href="{{route('account.logout')}}" title="退出登录">
                         <i class="fa fa-sign-out"></i>
@@ -43,6 +44,11 @@
                         <img src="{{$member['headimgurl']}}" class="img-circle" style="width: 43px;">
                     </a>
                 </li>
+                @else
+                    <li>
+                        <a href="{{route('account.login')}}" title="用户登录">登录</a>
+                    </li>
+                @endif
             </ul>
         </nav>
     </div>

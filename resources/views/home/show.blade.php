@@ -64,15 +64,13 @@
 <script type="text/javascript">
 
     $(function () {
-        $('pre>code').each(function(i, block) {
-            hljs.highlightBlock(block);
-        });
+        hljs.initHighlightingOnLoad();
 
         $(document).ready(function () {
             $('#sidebar>ul').stickUp({
                 marginTop:"5px"
             });
-        })
+        });
         var windowHeight = $(window).height();
         var bodyHeight = $(document).height();
         var height = Math.max(windowHeight,bodyHeight);

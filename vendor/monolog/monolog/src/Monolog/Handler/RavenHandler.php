@@ -84,7 +84,7 @@ class RavenHandler extends AbstractProcessingHandler
 
         // the record with the highest severity is the "main" one
         $record = array_reduce($records, function ($highest, $record) {
-            if ($record['level'] >= $highest['level']) {
+            if ($record['level'] > $highest['level']) {
                 return $record;
             }
 
@@ -179,7 +179,7 @@ class RavenHandler extends AbstractProcessingHandler
             $options['release'] = $this->release;
         }
 
-        if (isset($record['context']['exception']) && $record['context']['exception'] instanceof \Exception) {
+        if (isset($record['context']['exception']) && ($record['context']['exception'] instanceof \Exception || (PHP_VERSION_ID >= 70000 && $record['context']['exception'] instanceof \Throwable))) {
             $options['extra']['message'] = $record['formatted'];
             $this->ravenClient->captureException($record['context']['exception'], $options);
         } else {
