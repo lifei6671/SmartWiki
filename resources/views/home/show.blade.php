@@ -64,7 +64,7 @@
 <script type="text/javascript">
 
     $(function () {
-        hljs.highlightBlock();
+        hljs.initHighlightingOnLoad();
 
         $(document).ready(function () {
             $('#sidebar>ul').stickUp({
