@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{$project_name}} - SmartWiki</title>
+    <title>{{$project_name}} -  {{wiki_config('SITE_NAME','SmartWiki')}}</title>
 
     <script src="/static/scripts/jquery.min.js"></script>
     <script src="/static/scripts/jquery.form.js"></script>

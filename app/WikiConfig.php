@@ -60,12 +60,15 @@ class WikiConfig extends ModelBase
             return false;
         }
 
-        $key = 'config.key' . $key;
+        $cacheKey = 'config.key.' . $key;
 
-        $config = $update or Cache::get($key);
+        $config = $update or Cache::get($cacheKey);
+
+
 
         if(empty($config)) {
             $config = WikiConfig::where('key','=',$key)->first();
+
             if(empty($config)){
                 return false;
             }

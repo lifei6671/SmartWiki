@@ -19,10 +19,22 @@ Route::match(['get','post'],'/login',[
 Route::get('/logout',[
     'as' => 'account.logout', 'uses' => 'AccountController@logout'
 ]);
+//找回密码
+Route::match(['get','post'],'/find_password',[
+    'uses' => 'AccountController@findPassword'
+])->name('account.find_password');
+
+//找回密码后的修改
+Route::match(['get','post'],'/modify_password/{key}',[
+    'uses' => 'AccountController@modifyPassword'
+])->name('account.modify_password')->where('key','^([a-fA-F0-9]{32})$');
+
 //验证码
 Route::get('/verify',[
     'as' => 'captcha.verify', 'uses' => 'CaptchaController@verify'
 ]);
+//发送邮件
+Route::post('/send_mail',['uses' => 'MailController@sendMail'])->name('mail.send_mail');
 //首页
 Route::get('/',[
      'as' => 'home.index', 'uses' => 'HomeController@index'

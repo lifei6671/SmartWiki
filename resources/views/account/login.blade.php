@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SmartWiki</title>
+    <title>用户登录 - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
 
     <!-- Bootstrap -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -24,7 +24,7 @@
 <header class="navbar navbar-static-top smart-nav navbar-fixed-top" role="banner">
     <div class="container">
         <div class="navbar-header">
-            <a href="{{route('home.index')}}" class="navbar-brand">SmartWiki</a>
+            <a href="{{route('home.index')}}" class="navbar-brand"> {{wiki_config('SITE_NAME','SmartWiki')}}</a>
         </div>
     </div>
 </header>
@@ -62,7 +62,7 @@
                     <label>
                         <input type="checkbox" name="is_remember"> 保持登录
                     </label>
-                    <a href="#" style="display: inline-block;float: right">忘记密码？</a>
+                    <a href="{{route('account.find_password')}}" style="display: inline-block;float: right">忘记密码？</a>
                 </div>
                 <div class="form-group">
                     <button type="button" id="btn-login" class="btn btn-success" style="width: 100%"  data-loading-text="正在登录..." autocomplete="off">立即登录</button>
@@ -72,20 +72,7 @@
     </div>
     <div class="clearfix"></div>
 </div>
-<footer class="footer">
-    <div class="container">
-        <div class="row text-center">
-            <ul>
-                <li><a href="http://www.iminho.me">SmartWiki</a></li>
-                <li>&nbsp;·&nbsp;</li>
-                <li><a href="https://github.com/lifei6671/SmartWiki/issues" target="_blank">意见反馈</a> </li>
-                <li>&nbsp;·&nbsp;</li>
-                <li><a href="https://github.com/lifei6671/SmartWiki">Github</a> </li>
-            </ul>
-
-        </div>
-    </div>
-</footer>
+@include('widget.footer')
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="/static/layer/layer.js"></script>

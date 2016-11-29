@@ -114,6 +114,20 @@ class InstallController extends Controller
                         throw new DataException('添加系统配置时出错',1000004);
                     }
 
+                    $sth = $pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+                    $params = [
+                        ':name' => '启用匿名访问',
+                        ':key' => 'ENABLE_ANONYMOUS',
+                        ':value' => '0',
+                        ':config_type' => 'system',
+                        ':remark' => '是否启用匿名访问：0 否/1 是',
+                        ':create_time' => date('Y-m-d H:i:s'),
+                    ];
+                    if($sth->execute($params) === false){
+
+                        throw new DataException('添加系统配置时出错',1000004);
+                    }
+
                     $pdo->commit();
 
                 }else{

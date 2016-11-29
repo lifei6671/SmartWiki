@@ -26,6 +26,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        //如果没有启用匿名访问
+        if(!wiki_config('ENABLE_ANONYMOUS',false) && empty($this->member)){
+            return redirect(route('account.login'));
+        }
         $pageIndex = intval($this->request->input('page',1));
         $member_id = null;
 

@@ -76,7 +76,7 @@ if(!function_exists('wiki_config')){
     function wiki_config($key,$default = null){
         $config = WikiConfig::getConfigFromCache($key);
 
-        return empty($config) ? $default : $config;
+        return empty($config) ? $default : $config->value;
     }
 }
 

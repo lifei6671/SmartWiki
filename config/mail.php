@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => 'longfei6671@163.com', 'name' => 'SmartWiki'],
 
     /*
     |--------------------------------------------------------------------------

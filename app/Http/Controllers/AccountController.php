@@ -8,7 +8,12 @@
 
 namespace SmartWiki\Http\Controllers;
 
+use Carbon\Carbon;
 use SmartWiki\Member;
+use Mail;
+use Cache;
+use SmartWiki\Passwords;
+
 
 class AccountController extends Controller
 {
@@ -87,15 +92,50 @@ class AccountController extends Controller
         return redirect($loginUrl,302);
     }
 
-    protected function initMember()
+    /**
+     * 找回密码
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    public function findPassword()
     {
-        $member =new Member();
-        $member->account = 'admin';
-        $member->nickname = 'admin';
-        $member->member_passwd = password_hash('123456',PASSWORD_DEFAULT);
-        $member->email = 'longfei6671@163.com';
-        $member->gorup_level = 0;
-        $member->headimgurl = '/static/images/938_longfei6671.jpg';
-        $member->save();
+        if($this->isPost()){
+            $email = $this->request->input('email');
+            $captcha = $this->request->input('code');
+            if (empty($captcha) or strcasecmp(session('milkcaptcha'),$captcha) !== 0) {
+                return $this->jsonResult(40101);
+            }
+
+            $member = Member::where('email','=',$email)->first();
+
+            if(empty($member)){
+                return $this->jsonResult(40506);
+            }
+
+            $totalCount = Passwords::where('create_time','>=', date('Y-m-d H:i:s',time() - 3600))->count();
+
+            if($totalCount > 5){
+                return $this->jsonResult(40607);
+            }
+
+            $key = md5(uniqid('find_password'));
+
+            $cacheItem[$key] = ['email' => $email , 'time' => time(), 'key' => $key];
+
+
+            $url = route('account.modify_password',['key' => $key ]);
+
+            Mail::queue('emails.find_password', ['url' => $url], function($message)use($email)
+            {
+                $message->to($email)->subject('SmartWiki - 找回密码!');
+            });
+
+            return $this->jsonResult(0);
+        }
+        return view('account.find_password');
+    }
+
+    public function modifyPassword()
+    {
+        return view('account.modify_password');
     }
 }
