@@ -13,3 +13,4 @@ composer.lock
 gulpfile.js
 phpunit.xml
 /public/install.lock
+/vendor
