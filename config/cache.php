@@ -67,8 +67,8 @@ return [
                 ],
             ],
             'options' => [
-                Memcached::OPT_BINARY_PROTOCOL => true,
-                Memcached::OPT_COMPRESSION => false
+                \Memcached::OPT_BINARY_PROTOCOL => true,
+                \Memcached::OPT_COMPRESSION => false
             ]
         ],
         'redis' => [

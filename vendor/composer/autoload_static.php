@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita0d0749c2cd39942e6392d0315c3465e
+class ComposerStaticInita9d785ee90d5b88d4b95ec35c1caf152
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -107,9 +107,9 @@ class ComposerStaticInita0d0749c2cd39942e6392d0315c3465e
     public static $prefixDirsPsr4 = array (
         'phpDocumentor\\Reflection\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
         'XdgBaseDir\\' => 
         array (
@@ -3293,6 +3293,7 @@ class ComposerStaticInita0d0749c2cd39942e6392d0315c3465e
         'SmartWiki\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'SmartWiki\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'SmartWiki\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
+        'SmartWiki\\Providers\\MemcachedExtendServiceProvider' => __DIR__ . '/../..' . '/app/Providers/MemcachedExtendServiceProvider.php',
         'SmartWiki\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'SmartWiki\\Relationship' => __DIR__ . '/../..' . '/app/Relationship.php',
         'SmartWiki\\WikiConfig' => __DIR__ . '/../..' . '/app/WikiConfig.php',
@@ -3802,6 +3803,7 @@ class ComposerStaticInita0d0749c2cd39942e6392d0315c3465e
         'Symfony\\Component\\VarDumper\\Exception\\ThrowingCasterException' => __DIR__ . '/..' . '/symfony/var-dumper/Exception/ThrowingCasterException.php',
         'Symfony\\Component\\VarDumper\\Test\\VarDumperTestTrait' => __DIR__ . '/..' . '/symfony/var-dumper/Test/VarDumperTestTrait.php',
         'Symfony\\Component\\VarDumper\\VarDumper' => __DIR__ . '/..' . '/symfony/var-dumper/VarDumper.php',
+        'Symfony\\Component\\Yaml\\Command\\LintCommand' => __DIR__ . '/..' . '/symfony/yaml/Command/LintCommand.php',
         'Symfony\\Component\\Yaml\\Dumper' => __DIR__ . '/..' . '/symfony/yaml/Dumper.php',
         'Symfony\\Component\\Yaml\\Escaper' => __DIR__ . '/..' . '/symfony/yaml/Escaper.php',
         'Symfony\\Component\\Yaml\\Exception\\DumpException' => __DIR__ . '/..' . '/symfony/yaml/Exception/DumpException.php',
@@ -3888,10 +3890,10 @@ class ComposerStaticInita0d0749c2cd39942e6392d0315c3465e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita0d0749c2cd39942e6392d0315c3465e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita0d0749c2cd39942e6392d0315c3465e::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInita0d0749c2cd39942e6392d0315c3465e::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInita0d0749c2cd39942e6392d0315c3465e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita9d785ee90d5b88d4b95ec35c1caf152::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita9d785ee90d5b88d4b95ec35c1caf152::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInita9d785ee90d5b88d4b95ec35c1caf152::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInita9d785ee90d5b88d4b95ec35c1caf152::$classMap;
 
         }, null, ClassLoader::class);
     }

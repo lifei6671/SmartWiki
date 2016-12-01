@@ -31,9 +31,30 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getDataFormSpecifications
      */
-    public function testSpecifications($file, $expected, $yaml, $comment)
+    public function testSpecifications($file, $expected, $yaml, $comment, $deprecated)
     {
+        $deprecations = array();
+
+        if ($deprecated) {
+            set_error_handler(function ($type, $msg) use (&$deprecations) {
+                if (E_USER_DEPRECATED !== $type) {
+                    restore_error_handler();
+
+                    return call_user_func_array('PHPUnit_Util_ErrorHandler::handleError', func_get_args());
+                }
+
+                $deprecations[] = $msg;
+            });
+        }
+
         $this->assertEquals($expected, var_export($this->parser->parse($yaml), true), $comment);
+
+        if ($deprecated) {
+            restore_error_handler();
+
+            $this->assertCount(1, $deprecations);
+            $this->assertContains('Using the comma as a group separator for floats is deprecated since version 3.2 and will be removed in 4.0.', $deprecations[0]);
+        }
     }
 
     public function getDataFormSpecifications()
@@ -58,7 +79,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
                 } else {
                     eval('$expected = '.trim($test['php']).';');
 
-                    $tests[] = array($file, var_export($expected, true), $test['yaml'], $test['test']);
+                    $tests[] = array($file, var_export($expected, true), $test['yaml'], $test['test'], isset($test['deprecated']) ? $test['deprecated'] : false);
                 }
             }
         }
@@ -749,6 +770,7 @@ EOF
      *
      * @see http://yaml.org/spec/1.2/spec.html#id2759572
      * @see http://yaml.org/spec/1.1/#id932806
+     * @group legacy
      */
     public function testMappingDuplicateKeyBlock()
     {
@@ -768,6 +790,9 @@ EOD;
         $this->assertSame($expected, Yaml::parse($input));
     }
 
+    /**
+     * @group legacy
+     */
     public function testMappingDuplicateKeyFlow()
     {
         $input = <<<'EOD'
@@ -780,6 +805,74 @@ EOD;
             ),
         );
         $this->assertSame($expected, Yaml::parse($input));
+    }
+
+    /**
+     * @group legacy
+     * @dataProvider getParseExceptionOnDuplicateData
+     * @expectedDeprecation Duplicate key "%s" detected on line %d whilst parsing YAML. Silent handling of duplicate mapping keys in YAML is deprecated %s.
+     * throws \Symfony\Component\Yaml\Exception\ParseException in 4.0
+     */
+    public function testParseExceptionOnDuplicate($input, $duplicateKey, $lineNumber)
+    {
+        Yaml::parse($input);
+    }
+
+    public function getParseExceptionOnDuplicateData()
+    {
+        $tests = array();
+
+        $yaml = <<<EOD
+parent: { child: first, child: duplicate }
+EOD;
+        $tests[] = array($yaml, 'child', 1);
+
+        $yaml = <<<EOD
+parent:
+  child: first,
+  child: duplicate
+EOD;
+        $tests[] = array($yaml, 'child', 3);
+
+        $yaml = <<<EOD
+parent: { child: foo }
+parent: { child: bar }
+EOD;
+        $tests[] = array($yaml, 'parent', 2);
+
+        $yaml = <<<EOD
+parent: { child_mapping: { value: bar},  child_mapping: { value: bar} }
+EOD;
+        $tests[] = array($yaml, 'child_mapping', 1);
+
+        $yaml = <<<EOD
+parent:
+  child_mapping:
+    value: bar
+  child_mapping:
+    value: bar
+EOD;
+        $tests[] = array($yaml, 'child_mapping', 4);
+
+        $yaml = <<<EOD
+parent: { child_sequence: ['key1', 'key2', 'key3'],  child_sequence: ['key1', 'key2', 'key3'] }
+EOD;
+        $tests[] = array($yaml, 'child_sequence', 1);
+
+        $yaml = <<<EOD
+parent:
+  child_sequence:
+    - key1
+    - key2
+    - key3
+  child_sequence:
+    - key1
+    - key2
+    - key3
+EOD;
+        $tests[] = array($yaml, 'child_sequence', 6);
+
+        return $tests;
     }
 
     public function testEmptyValue()
@@ -1329,6 +1422,32 @@ bar:
 YAML
             ),
         );
+    }
+
+    public function testParseMultiLineQuotedString()
+    {
+        $yaml = <<<EOT
+foo: "bar
+  baz
+   foobar
+foo"
+bar: baz
+EOT;
+
+        $this->assertSame(array('foo' => 'bar baz foobar foo', 'bar' => 'baz'), $this->parser->parse($yaml));
+    }
+
+    public function testParseMultiLineUnquotedString()
+    {
+        $yaml = <<<EOT
+foo: bar
+  baz
+   foobar
+  foo
+bar: baz
+EOT;
+
+        $this->assertSame(array('foo' => 'bar baz foobar foo', 'bar' => 'baz'), $this->parser->parse($yaml));
     }
 }
 

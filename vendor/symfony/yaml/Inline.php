@@ -25,9 +25,12 @@ class Inline
 {
     const REGEX_QUOTED_STRING = '(?:"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'([^\']*(?:\'\'[^\']*)*)\')';
 
+    public static $parsedLineNumber;
+
     private static $exceptionOnInvalidType = false;
     private static $objectSupport = false;
     private static $objectForMap = false;
+    private static $constantSupport = false;
 
     /**
      * Converts a YAML string to a PHP value.
@@ -77,6 +80,7 @@ class Inline
         self::$exceptionOnInvalidType = (bool) (Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE & $flags);
         self::$objectSupport = (bool) (Yaml::PARSE_OBJECT & $flags);
         self::$objectForMap = (bool) (Yaml::PARSE_OBJECT_FOR_MAP & $flags);
+        self::$constantSupport = (bool) (Yaml::PARSE_CONSTANT & $flags);
 
         $value = trim($value);
 
@@ -206,6 +210,7 @@ class Inline
             case Escaper::requiresDoubleQuoting($value):
                 return Escaper::escapeWithDoubleQuotes($value);
             case Escaper::requiresSingleQuoting($value):
+            case preg_match('{^[0-9]+[_0-9]*$}', $value):
             case preg_match(self::getHexRegex(), $value):
             case preg_match(self::getTimestampRegex(), $value):
                 return Escaper::escapeWithSingleQuotes($value);
@@ -454,6 +459,14 @@ class Inline
             // key
             $key = self::parseScalar($mapping, $flags, array(':', ' '), array('"', "'"), $i, false);
 
+            if (false === $i = strpos($mapping, ':', $i)) {
+                break;
+            }
+
+            if (!isset($mapping[$i + 1]) || ' ' !== $mapping[$i + 1]) {
+                @trigger_error('Omitting the space after the colon that follows a mapping key definition is deprecated since version 3.2 and will throw a ParseException in 4.0.', E_USER_DEPRECATED);
+            }
+
             // value
             $done = false;
 
@@ -467,6 +480,8 @@ class Inline
                         // are processed sequentially.
                         if (!isset($output[$key])) {
                             $output[$key] = $value;
+                        } else {
+                            @trigger_error(sprintf('Duplicate key "%s" detected on line %d whilst parsing YAML. Silent handling of duplicate mapping keys in YAML is deprecated since version 3.2 and will throw \Symfony\Component\Yaml\Exception\ParseException in 4.0.', $key, self::$parsedLineNumber + 1), E_USER_DEPRECATED);
                         }
                         $done = true;
                         break;
@@ -478,6 +493,8 @@ class Inline
                         // are processed sequentially.
                         if (!isset($output[$key])) {
                             $output[$key] = $value;
+                        } else {
+                            @trigger_error(sprintf('Duplicate key "%s" detected on line %d whilst parsing YAML. Silent handling of duplicate mapping keys in YAML is deprecated since version 3.2 and will throw \Symfony\Component\Yaml\Exception\ParseException in 4.0.', $key, self::$parsedLineNumber + 1), E_USER_DEPRECATED);
                         }
                         $done = true;
                         break;
@@ -491,6 +508,8 @@ class Inline
                         // are processed sequentially.
                         if (!isset($output[$key])) {
                             $output[$key] = $value;
+                        } else {
+                            @trigger_error(sprintf('Duplicate key "%s" detected on line %d whilst parsing YAML. Silent handling of duplicate mapping keys in YAML is deprecated since version 3.2 and will throw \Symfony\Component\Yaml\Exception\ParseException in 4.0.', $key, self::$parsedLineNumber + 1), E_USER_DEPRECATED);
                         }
                         $done = true;
                         --$i;
@@ -580,8 +599,24 @@ class Inline
                         }
 
                         return;
+                    case 0 === strpos($scalar, '!php/const:'):
+                        if (self::$constantSupport) {
+                            if (defined($const = substr($scalar, 11))) {
+                                return constant($const);
+                            }
+
+                            throw new ParseException(sprintf('The constant "%s" is not defined.', $const));
+                        }
+                        if (self::$exceptionOnInvalidType) {
+                            throw new ParseException(sprintf('The string "%s" could not be parsed as a constant. Have you forgotten to pass the "Yaml::PARSE_CONSTANT" flag to the parser?', $scalar));
+                        }
+
+                        return;
                     case 0 === strpos($scalar, '!!float '):
                         return (float) substr($scalar, 8);
+                    case preg_match('{^[+-]?[0-9][0-9_]*$}', $scalar):
+                        $scalar = str_replace('_', '', (string) $scalar);
+                        // omitting the break / return as integers are handled in the next case
                     case ctype_digit($scalar):
                         $raw = $scalar;
                         $cast = (int) $scalar;
@@ -594,6 +629,8 @@ class Inline
                         return '0' == $scalar[1] ? octdec($scalar) : (((string) $raw === (string) $cast) ? $cast : $raw);
                     case is_numeric($scalar):
                     case preg_match(self::getHexRegex(), $scalar):
+                        $scalar = str_replace('_', '', $scalar);
+
                         return '0x' === $scalar[0].$scalar[1] ? hexdec($scalar) : (float) $scalar;
                     case '.inf' === $scalarLower:
                     case '.nan' === $scalarLower:
@@ -602,8 +639,13 @@ class Inline
                         return log(0);
                     case 0 === strpos($scalar, '!!binary '):
                         return self::evaluateBinaryScalar(substr($scalar, 9));
-                    case preg_match('/^(-|\+)?[0-9,]+(\.[0-9]+)?$/', $scalar):
-                        return (float) str_replace(',', '', $scalar);
+                    case preg_match('/^(-|\+)?[0-9][0-9,]*(\.[0-9_]+)?$/', $scalar):
+                    case preg_match('/^(-|\+)?[0-9][0-9_]*(\.[0-9_]+)?$/', $scalar):
+                        if (false !== strpos($scalar, ',')) {
+                            @trigger_error('Using the comma as a group separator for floats is deprecated since version 3.2 and will be removed in 4.0.', E_USER_DEPRECATED);
+                        }
+
+                        return (float) str_replace(array(',', '_'), '', $scalar);
                     case preg_match(self::getTimestampRegex(), $scalar):
                         if (Yaml::PARSE_DATETIME & $flags) {
                             // When no timezone is provided in the parsed date, YAML spec says we must assume UTC.
@@ -681,6 +723,6 @@ EOF;
      */
     private static function getHexRegex()
     {
-        return '~^0x[0-9a-f]++$~i';
+        return '~^0x[0-9a-f_]++$~i';
     }
 }
