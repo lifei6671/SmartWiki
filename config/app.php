@@ -156,6 +156,7 @@ return [
         SmartWiki\Providers\EventServiceProvider::class,
         SmartWiki\Providers\RouteServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        SmartWiki\Providers\MemcachedExtendServiceProvider::class
     ],
 
     /*
