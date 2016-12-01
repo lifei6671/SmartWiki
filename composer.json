@@ -20,7 +20,8 @@
         "gregwar/captcha": "^1.1",
         "erusev/parsedown": "^1.6",
         "intervention/image": "^2.3",
-        "sebastian/diff": "^1.4"
+        "sebastian/diff": "^1.4",
+        "predis/predis": "1.0.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
