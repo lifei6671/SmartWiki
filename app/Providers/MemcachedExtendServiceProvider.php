@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Cache;
 use Session;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler;
+use RuntimeException;
 
 class MemcachedExtendServiceProvider extends ServiceProvider
 {
@@ -64,7 +65,13 @@ class MemcachedExtendServiceProvider extends ServiceProvider
 
 
         // 利用 Illuminate\Cache\MemcachedConnector 类来创建新的 Memcached 对象
-        $memcached = $app['memcached.connector']->connect($servers);
+        $memcached = new \Memcached;
+
+        foreach ($servers as $server) {
+            $memcached->addServer(
+                $server['host'], $server['port'], $server['weight']
+            );
+        }
 
         // 如果服务器上的 PHP Memcached 扩展支持 SASL 认证
         if (ini_get('memcached.use_sasl') && isset($app['config']['cache.storess.MemcachedExtend.memcached_user']) && isset($app['config']['cache.storess.MemcachedExtend.memcached_pass'])) {
@@ -85,6 +92,16 @@ class MemcachedExtendServiceProvider extends ServiceProvider
                 $memcached->setOption($key, $option);
             }
         }
+        $memcachedStatus = $memcached->getVersion();
+
+        if (! is_array($memcachedStatus)) {
+            throw new RuntimeException('No Memcached servers added.');
+        }
+
+        if (in_array('255.255.255', $memcachedStatus) && count(array_unique($memcachedStatus)) === 1) {
+            throw new RuntimeException('Could not establish Memcached connection.');
+        }
+
         return $memcached;
     }
 }
