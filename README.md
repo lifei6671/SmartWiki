@@ -6,6 +6,7 @@ SmartWiki是一款针对IT团队开发的简单好用的文档管理系统。
 
 演示地址： [https://www.iminho.me](https://www.iminho.me)
 账号密码： test123@test123
+该演示账号移除了项目创建功能。
 
 ## 使用
 
