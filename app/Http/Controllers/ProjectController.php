@@ -234,7 +234,7 @@ class ProjectController extends Controller
             return $this->jsonResult(40206);
         }
         //如果不是项目的拥有者并且不是超级管理员
-        if (Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {
+        if (!Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {
             return $this->jsonResult(40305);
         }
         $member = Member::where('account', '=', $account)->first();
