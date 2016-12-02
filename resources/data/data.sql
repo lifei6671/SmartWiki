@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `wk_relationship`(
   `rel_id` INT NOT NULL AUTO_INCREMENT,
   `member_id` INT NOT NULL ,
   `project_id` INT NOT NULL,
-  `role_type` TINYINT DEFAULT 0 COMMENT '项目角色：0 参与者，2 所有者',
+  `role_type` TINYINT DEFAULT 0 COMMENT '项目角色：0 参与者，1 所有者',
   PRIMARY KEY (`rel_id`),
   KEY `member_id_index` (`member_id`),
   KEY `project_id_index` (`project_id`)

@@ -38,7 +38,7 @@
                     if(!email){
                         return showError('邮箱不能为空');
                     }
-
+                    $("#saveMember").button('loading');
                 },
                 success : function (res) {
                     if(res.errcode == 0){
@@ -47,6 +47,11 @@
                     }else{
                         showError(res.message);
                     }
+                    $("#saveMember").button('reset');
+                },
+                error : function () {
+                    showError('服务器错误');
+                    $("#saveMember").button('reset');
                 }
             });
         });
@@ -102,7 +107,7 @@
                     </div>
                     <div class="form-group">
                         <button type="button" class="btn btn-info" onclick="self.location=document.referrer;">返回</button>
-                        <button type="submit" class="btn btn-success">立即保存</button>
+                        <button type="submit" id="saveMember" class="btn btn-success" data-loading-text="正在保存...">立即保存</button>
                         <span id="error-message" style="vertical-align: baseline"></span>
                     </div>
                 </form>

@@ -101,6 +101,8 @@ Route::group(['middleware' => 'authorize','prefix' => 'project'],function (){
     Route::post('members/add/{id}',[
         'as' => 'project.members.add', 'uses' => 'ProjectController@addMember'
     ]);
+    //转让项目
+    Route::post('transfer/{id}')->uses('ProjectController@transfer')->name('project.transfer');
 });
 
 Route::group(['middleware' => 'authorize','prefix' => 'docs'],function (){

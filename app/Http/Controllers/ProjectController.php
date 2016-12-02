@@ -83,7 +83,8 @@ class ProjectController extends Controller
             }
             abort(404);
         }
-        if (Project::isOwner($project_id,$this->member_id) === false) {
+        //如果不是项目的拥有者并且不是超级管理员
+        if (!Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {
             if($this->request->ajax()) {
                 return $this->jsonResult(40305);
             }
@@ -144,7 +145,10 @@ class ProjectController extends Controller
                 abort(403);
             }
         }
-
+        //如果不是项目的拥有者并且不是超级管理员
+        if (!Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {
+            abort(403);
+        }
         //如果是修改项目
         if($this->isPost()){
             $name = trim($this->request->input('name'));
@@ -179,6 +183,9 @@ class ProjectController extends Controller
             $project = new Project();
             $project->project_open_state = 0;
             $this->data['title'] = '添加项目';
+            $this->data['is_owner'] = false;
+        }else{
+            $this->data['is_owner'] = Project::isOwner($project_id,$this->member->member_id) ;
         }
 
         $this->data['project'] = $project;
@@ -204,10 +211,12 @@ class ProjectController extends Controller
         if(empty($project)){
             abort(404);
         }
+
         //如果不是项目的拥有者并且不是超级管理员
-        if($project->create_at != $this->member_id && $this->member->group_level != 0){
-            abort(403);
+        if (!Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {
+            return $this->jsonResult(40305);
         }
+
         $this->data = $project;
         $this->data['member'] = $this->member;
         $this->data['member_projects'] = true;
@@ -234,13 +243,14 @@ class ProjectController extends Controller
             return $this->jsonResult(40206);
         }
         //如果不是项目的拥有者并且不是超级管理员
-        if (Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {
+        if (!Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {
             return $this->jsonResult(40305);
         }
-        $member = Member::where('account', '=', $account)->first();
+        $member = Member::findNormalMemberOfFirst([['account', '=', $account]]);
         if (empty($member)) {
             return $this->jsonResult(40506);
         }
+
         if($member->state == 1){
             return $this->jsonResult(40511);
         }
@@ -276,4 +286,55 @@ class ProjectController extends Controller
         return $result ? $this->jsonResult(0,$data) : $this->jsonResult(500);
     }
 
+    /**
+     * 项目转让
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function transfer($id)
+    {
+        $project_id = intval($id);
+        $account = trim($this->request->input('account'));
+
+        if (empty($project_id)) {
+            return $this->jsonResult(50502);
+        }
+        $project = Project::find($project_id);
+        if (empty($project)) {
+            return $this->jsonResult(40206);
+        }
+
+        //如果不是项目的拥有者并且不是超级管理员
+        if (!Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {
+            return $this->jsonResult(40305);
+        }
+        $member = Member::findNormalMemberOfFirst([['account', '=', $account]]);
+
+        if (empty($member)) {
+            return $this->jsonResult(40506);
+        }
+
+        //将拥有用户降级为参与者
+        $rel = Relationship::where('project_id', '=', $project_id)->where('member_id', '=', $this->member_id)->first();
+
+        $rel->role_type = 0;
+
+        if(!$rel->save()){
+            return $this->jsonResult(40802);
+        }
+        //如果目标用户存在则升级为拥有者
+        $newRel = Relationship::where('project_id', '=', $project_id)->where('member_id', '=', $member->member_id)->first();
+        if(empty($newRel)){
+            $newRel = new Relationship();
+        }
+
+        $newRel->project_id = $project_id;
+        $newRel->member_id = $member->member_id;
+        $newRel->role_type = 1;
+        if(!$newRel->save()){
+            return $this->jsonResult(40802);
+        }
+        return $this->jsonResult(0);
+
+    }
 }

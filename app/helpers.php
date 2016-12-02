@@ -103,8 +103,7 @@ if(!function_exists('modify_env')) {
         });
 
         $content = implode($contentArray->toArray(), "\n");
-
-        \File::put($envPath, $content);
+        file_put_contents($envPath, $content, 0);
     }
 }
 
@@ -116,5 +115,15 @@ if(!function_exists('is_can_create_project')) {
      */
     function is_can_create_project($member_id){
         return \SmartWiki\Project::isCanCreateProject($member_id);
+    }
+}
+
+if(!function_exists('wiki_version')) {
+    /**
+     * 获取系统版本
+     * @return mixed
+     */
+    function wiki_version(){
+        return env('APP_VERSION',null);
     }
 }

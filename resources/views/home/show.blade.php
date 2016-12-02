@@ -33,7 +33,21 @@
             {{$project->project_name}}
             <span style="font-size: 12px;">v {{$project->version}}</span>
         </div>
-
+        <div class="navbar-header pull-right">
+            <div class="dropdown">
+                <button id="dLabel" class="btn btn-default" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    项目
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dLabel">
+                    @if($project->project_open_state ==1 || $project->project_open_state ==2)
+                    <li><a href="javascript:">项目分享</a> </li>
+                    @endif
+                    <li role="presentation" class="divider"></li>
+                    <li><a href="{{route('home.index')}}" title="返回首页">返回首页</a> </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </header>
 <article class="container wiki-container">
@@ -53,7 +67,26 @@
         </div>
     </div>
 </article>
-
+@if($project->project_open_state ==1 || $project->project_open_state ==2)
+<!-- Share Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">项目分享</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/static/bootstrap/js/bootstrap.min.js"></script>
 <script src="/static/scripts/stickUp.min.js"></script>

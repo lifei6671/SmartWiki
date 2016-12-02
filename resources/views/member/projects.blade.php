@@ -12,6 +12,7 @@
             $("[data-toggle='tooltip']").tooltip();
 
         });
+
     </script>
 @endsection
 @section('content')
@@ -56,20 +57,19 @@
                             <span class="hint--bottom" title="项目成员"  data-toggle="tooltip" data-placement="bottom"><i title="成员" class="fa fa-group"></i> {{$item->member_count}}</span>
                         </dd>
                         <dd class="operate">
-                            @if($item->role_type == 0)
+                            @if($item->role_type == 0 && $member->group_level != 0)
                                 <button class="btn btn-danger btn-sm" title="退出" data-id="{{$item->project_id}}" data-toggle="tooltip" data-placement="bottom">
                                     <i class="fa fa-power-off"></i>
                                     退出
                                 </button>
-                                <a href="javascript:;" class="btn btn-warning disabled btn-sm"  title="删除项目" data-toggle="tooltip" data-placement="bottom">删除项目</a>
-                            @elseif($item->role_type == 1)
+                            @elseif($item->role_type == 1 || $member->group_level == 0)
                                 <a href="{{route('project.members',['id'=>$item->project_id])}}" class="btn btn-danger btn-sm" title="管理文档成员" data-toggle="tooltip" data-placement="bottom">
                                     <i class="fa fa-gears"></i>
-                                    管理
+                                    管理用户
                                 </a>
-                                <a href="{{route('project.delete',['id'=>$item->project_id])}}" class="btn btn-warning btn-sm" title="删除项目" data-toggle="tooltip" data-placement="bottom">删除项目</a>
+                                <a href="{{route('project.edit',['id'=>$item->project_id])}}" class="btn btn-primary btn-sm" title="编辑项目" data-toggle="tooltip" data-placement="bottom"><span class="fa fa-pencil"></span> 编辑项目</a>
                             @endif
-                            <a href="{{route('project.edit',['id'=>$item->project_id])}}" class="btn btn-primary btn-sm" title="编辑项目" data-toggle="tooltip" data-placement="bottom"><span class="fa fa-pencil"></span> 编辑项目</a>
+
                             <a class="btn btn-default  btn-sm" href="{{route('document.index',['id'=>$item->project_id])}}" target="_blank" title="编辑文档" data-toggle="tooltip" data-placement="bottom"><span class="btn-input"><i class="fa fa-edit"></i> 编辑文档</span></a>
                         </dd>
                     </dl>

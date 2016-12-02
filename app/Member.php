@@ -5,6 +5,7 @@ namespace SmartWiki;
 use SmartWiki\Exceptions\ArgumentNullException;
 use SmartWiki\Exceptions\ArgumentOutOfRangeException;
 use SmartWiki\Exceptions\DataExistException;
+use SmartWiki\Exceptions\DataNullException;
 use SmartWiki\Exceptions\FormatException;
 use SmartWiki\Exceptions\ResultNullException;
 
@@ -111,6 +112,56 @@ class Member extends ModelBase
             }
         }
         return $member->save();
+    }
+
+    /**
+     * 会员登录
+     * @param string $account
+     * @param string $password
+     * @param string|null $ip
+     * @param string|null $userAgent
+     * @return bool|Member
+     * @throws DataNullException
+     */
+    public static function login($account,$password,$ip = null, $userAgent = null)
+    {
+        $member = Member::where('account','=',$account)->where('state','=',0)->take(1)->first();
+
+        if(empty($member) or password_verify($password,$member->member_passwd) === false){
+
+            throw new DataNullException(40401);
+        }
+        $original_data = json_encode($member,JSON_UNESCAPED_UNICODE);
+
+        $member->last_login_time = date('Y-m-d H:i:s');
+        $member->last_login_ip = $ip;
+        $member->user_agent = $userAgent;
+        $member->save();
+
+        $logs = "用户 {$account} 在 {$member->last_login_time} 登录成功.IP：{$ip}，User-Agent：{$userAgent}。";
+        $present_data = json_encode($member,JSON_UNESCAPED_UNICODE);
+
+        Logs::addLogs($logs,$member->member_id,$original_data,$present_data);
+
+        return $member;
+    }
+
+    /**
+     * 获取状态为正常的用户信息
+     * @param array $columns
+     * @param array $where
+     * @return Member|null
+     */
+    public static function findNormalMemberOfFirst($where = array(), $columns = ['*'])
+    {
+        $query = static::where('state','=',0);
+
+        if(empty($where) === false){
+            foreach ($where as $item){
+                $query = call_user_func_array([$query, 'where'], $item);
+            }
+        }
+        return $query->first($columns);
     }
 }
 

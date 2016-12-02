@@ -8,17 +8,18 @@
 
 namespace SmartWiki\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use SmartWiki\Member;
 use Mail;
 use Session;
 use SmartWiki\Passwords;
-
+use SmartWiki\Exceptions\DataNullException;
 
 class AccountController extends Controller
 {
     /**
      * 用户登录
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return JsonResponse|\Illuminate\View\View
      */
     public function login()
     {
@@ -36,7 +37,7 @@ class AccountController extends Controller
         }
         if($this->isPost()) {
             $account = $this->request->input('account');
-            $passwd = $this->request->input('passwd');
+            $password = $this->request->input('passwd');
 
             $captcha = $this->request->input('code');
 
@@ -46,31 +47,29 @@ class AccountController extends Controller
             if(empty($account) or strlen($account) > 20 or strlen($account) < 3){
                 return $this->jsonResult(40102);
             }
-            if(empty($passwd)){
+            if(empty($password)){
                 return $this->jsonResult(40103);
             }
-            $member = Member::where('account','=',$account)->where('state','=',0)->take(1)->first();
+            try {
+                $member = Member::login($account, $password);
 
-            if(empty($member) or password_verify($passwd,$member->member_passwd) === false){
+                $is_remember = $this->request->input('is_remember');
 
-                return $this->jsonResult(40401);
+                session_member($member);
+
+                $cookie = null;
+                if (strcasecmp($is_remember, 'on') === 0) {
+                    cookie_member($member);
+                }
+
+
+                return $this->jsonResult(20001);
+            }catch (DataNullException $ex){
+
+                return $this->jsonResult($ex->getCode());
+            }catch (\Exception $ex){
+                return $this->jsonResult($ex->getCode(),null,$ex->getMessage());
             }
-
-            $member->last_login_time = date('Y-m-d H:i:s');
-            $member->last_login_ip = $this->request->getClientIp();
-            $member->user_agent = $this->request->header('User-Agent');
-            $member->save();
-
-            $is_remember = $this->request->input('is_remember');
-
-            session_member($member);
-
-            $cookie = null;
-            if(strcasecmp($is_remember,'on') === 0){
-                cookie_member($member);
-            }
-
-            return $this->jsonResult(20001);
         }
 
         return view('account.login');
@@ -170,7 +169,7 @@ class AccountController extends Controller
 
         if($this->isPost()){
             if(empty($passwords)){
-                return $this->jsonResult(50001,null,'身份验证失败');
+                return $this->jsonResult(50001,null,'链接已失效');
             }
 
             $password = $this->request->input('passowrd');
@@ -207,8 +206,8 @@ class AccountController extends Controller
 
         if(empty($passwords)){
 
-            $this->data['title'] = '身份验证失败';
-            $this->data['message'] ='身份验证失败，请重新发送邮件';
+            $this->data['title'] = '链接已失效';
+            $this->data['message'] ='链接已失效，请重新发送邮件';
         }
 
         return view('account.modify_password',$this->data);

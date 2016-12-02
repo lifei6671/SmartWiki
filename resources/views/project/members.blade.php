@@ -17,6 +17,7 @@
         var addBtn = $("#add-member-btn");
 
         $("#form-member").ajaxForm({
+            dataType : "json",
            beforeSubmit : function () {
                var account = $.trim($("#account").val());
                if(!account){
@@ -31,6 +32,10 @@
                 }else{
                     showError(res.message);
                 }
+                addBtn.button('reset');
+            },
+            error :function () {
+                showError('服务器错误');
                 addBtn.button('reset');
             }
         });

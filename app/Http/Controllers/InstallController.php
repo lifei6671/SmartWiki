@@ -154,6 +154,8 @@ class InstallController extends Controller
             }
             $pdo->setAttribute(PDO::ATTR_AUTOCOMMIT,1);
 
+            @copy( base_path() . DIRECTORY_SEPARATOR . '.env.example',base_path() . DIRECTORY_SEPARATOR . '.env');
+
             $params = [
                 'DB_HOST' => $dataAddress,
                 'DB_PORT' => $dataPort,

@@ -3,7 +3,10 @@
 @section('styles')
     <link href="/static/webuploader/webuploader.css" rel="stylesheet">
     <link href="/static/cropper/cropper.css" rel="stylesheet">
-
+    <style type="text/css">
+        .box-operate{margin-top: 10px;}
+        .box-operate>a,.box-operate>label{display: inline-block;margin-left: 5px;}
+    </style>
 @endsection
 @section('scripts')
     <script type="text/javascript" src="/static/cropper/cropper.js"></script>
@@ -20,20 +23,20 @@
         }
 
         $(function () {
-            $("#basic-form").on('click','#projectPasswd1,#projectPasswd2',function () {
+            $("#basicForm").on('click','#projectPasswd1,#projectPasswd2',function () {
                 $("#btn-project-passwd").hide();
             });
-            $("#basic-form").on('click','#projectPasswd3',function () {
+            $("#basicForm").on('click','#projectPasswd3',function () {
                 $("#btn-project-passwd").show();
             });
-            $("#basic-form").ajaxForm({
+            $("#basicForm").ajaxForm({
                 beforeSubmit : function () {
                     var name = $.trim($("#name").val());
 
                     if(!name){
                         return showError("项目名称不能为空");
                     }
-                    $("#basic-form").find('button[type="submit"]').button('loading');
+                    $("#basicForm").find('button[type="submit"]').button('loading');
                 },
                 success : function (res) {
                     if(res.errcode == 0){
@@ -41,21 +44,82 @@
                     }else{
                         showError(res.message);
                     }
-                    $("#basic-form").find('button[type="submit"]').button('reset');
+                    $("#basicForm").find('button[type="submit"]').button('reset');
                 }
             });
+
+
         });
 
     </script>
+    @if(isset($is_owner) && $is_owner)
+        <script type="text/javascript">
+            $("#deleteForm").ajaxForm({
+                beforeSubmit : function () {
+                    var password = $.trim($("#deletePassword").val());
+
+                    if(!password){
+                        return showError("登录密码不能为空");
+                    }
+                    $("#delete-form").find('button[type="submit"]').button('loading');
+                },
+                success : function (res) {
+                    if(res.errcode == 0){
+                        self.location = "{{route('member.projects')}}";
+                    }else{
+                        layer.msg(res.message);
+                    }
+                    $("#deleteForm").find('button[type="submit"]').button('reset');
+                },
+                error : function () {
+                    layer.msg('服务器错误');
+                    $("#deleteForm").find('button[type="submit"]').button('reset');
+                }
+            });
+            $("#transferForm").ajaxForm({
+                dataType : "json",
+                beforeSubmit : function () {
+                    var password = $.trim($("#deletePassword").val());
+
+                    if(!password){
+                        return showError("登录密码不能为空");
+                    }
+                    $("#transferForm").find('button[type="submit"]').button('loading');
+                },
+                success : function (res) {
+                    if(res.errcode == 0){
+                        self.location = "{{route('member.projects')}}";
+                    }else{
+                        layer.msg(res.message);
+                    }
+                    $("#transferForm").find('button[type="submit"]').button('reset');
+                },
+                error : function () {
+                    layer.msg('服务器错误');
+                    $("#transferForm").find('button[type="submit"]').button('reset');
+                }
+            });
+        </script>
+    @endif
 @endsection
 @section('content')
-    <div class="member-box">
+<div class="member-box">
         <div class="box-head">
             <h4>{{$title}}</h4>
+            @if(isset($is_owner) && $is_owner)
+            <div class="box-operate pull-right">
+                <label class="btn btn-success btn-sm pull-right" title="删除项目" data-toggle="modal" data-target="#projectTransfer">
+                    转让项目
+                </label>
+                <label class="btn btn-danger btn-sm pull-right" title="删除项目" data-toggle="modal" data-target="#projectDelete">
+                    删除项目
+                </label>
+            </div>
+            @endif
         </div>
         <div class="box-body">
             <div class="form-left">
-                <form role="form" method="post" action="{{route('project.edit',['id'=>$project->project_id])}}" id="basic-form">
+                <form role="form" method="post" action="{{route('project.edit',['id'=>$project->project_id])}}" id="basicForm">
                     <input type="hidden" name="project_id" value="{{$project_id or ''}}">
                     <div class="form-group">
                         <label for="user-account">项目名称</label>
@@ -94,4 +158,59 @@
             </div>
         </div>
     </div>
+@if(isset($is_owner) && $is_owner)
+<!-- Delete Project Modal -->
+<div class="modal fade" id="projectDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" method="post" action="{{route('project.delete',['id'=>$project->project_id])}}" id="deleteForm">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">删除项目</h4>
+                </div>
+                <div class="modal-body">
+
+                        <input type="hidden" name="project_id" value="{{$project->project_id}}">
+                        <div class="form-group">
+                            <label for="password">登录密码</label><span style="font-size: 12px;color: #B4B4B4">&nbsp;(项目删除后将无法找回)</span>
+                            <input type="password" class="form-control" name="password"  id="deletePassword" placeholder="登录密码" title="登录密码">
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-danger" data-loading-text="正在删除...">确定删除</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Transfer Project Modal -->
+<div class="modal fade" id="projectTransfer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" method="post" action="{{route('project.transfer',['id'=>$project->project_id])}}" id="transferForm">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">转让项目</h4>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" name="project_id" value="{{$project->project_id}}">
+                    <div class="form-group">
+                        <label for="password">请输入要转让的用户名</label>
+                        <input type="text" class="form-control" name="account"  id="transferAccount" placeholder="用户账号" title="用户账号">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-success" data-loading-text="正在转让...">立即转让</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
 @endsection
