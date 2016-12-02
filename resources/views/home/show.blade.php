@@ -41,7 +41,7 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dLabel">
                     @if($project->project_open_state ==1 || $project->project_open_state ==2)
-                    <li><a href="javascript:">项目分享</a> </li>
+                    <li><a href="javascript:" data-toggle="modal" data-target="#shareProject">项目分享</a> </li>
                     @endif
                     <li role="presentation" class="divider"></li>
                     <li><a href="{{route('home.index')}}" title="返回首页">返回首页</a> </li>
@@ -69,7 +69,7 @@
 </article>
 @if($project->project_open_state ==1 || $project->project_open_state ==2)
 <!-- Share Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="shareProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -77,11 +77,16 @@
                 <h4 class="modal-title" id="myModalLabel">项目分享</h4>
             </div>
             <div class="modal-body">
-                ...
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">项目地址</label>
+                    <div class="col-sm-10">
+                        <input type="text" value="{{route('home.show',['id' => $project->project_id])}}" class="form-control" onmouseover="this.select()" id="projectUrl" title="项目地址">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>
