@@ -106,10 +106,10 @@
                             $("#captcha-img").click();
                             $("#code").val('');
                             layer.msg(res.message);
+                            $btn.button('reset');
                         }else{
                             window.location = res.data.url;
                         }
-                        $btn.button('reset');
                     },
                     error :function () {
                         $("#captcha-img").click();
