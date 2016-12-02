@@ -7,6 +7,7 @@ SmartWiki是一款针对IT团队开发的简单好用的文档管理系统。
 演示地址： [https://www.iminho.me](https://www.iminho.me)
 账号密码： test123@test123
 该演示账号移除了项目创建功能。
+QQ交流群： [190317359](//shang.qq.com/wpa/qunwpa?idkey=9a04393e101664709ed559e890b08fbfee5cac6979b027fe25fb44088bf52f12)
 
 ## 使用
 
