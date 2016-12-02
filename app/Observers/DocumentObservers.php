@@ -85,6 +85,12 @@ class DocumentObservers
      */
     public function deleted(Document $document)
     {
+        $project = Project::find($document->project_id);
+        if($project){
+            $project->doc_count = Document::where('project_id','=',$document->project_id)->count();
+            $project->save();
+        }
+        
         DocumentHistory::where('doc_id','=',$document->doc_id)->delete();
         $key = 'document.doc_id.'.$document->doc_id;
         Cache::forget($key);
