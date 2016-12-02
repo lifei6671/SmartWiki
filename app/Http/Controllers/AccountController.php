@@ -8,12 +8,11 @@
 
 namespace SmartWiki\Http\Controllers;
 
-use Carbon\Carbon;
 use SmartWiki\Member;
 use Mail;
-use Cache;
+use Session;
 use SmartWiki\Passwords;
-use Illuminate\Mail\Message;
+
 
 class AccountController extends Controller
 {
@@ -99,6 +98,10 @@ class AccountController extends Controller
     public function findPassword()
     {
         if($this->isPost()){
+            //如果没有启用邮件
+            if(!config('mail.enable')){
+                return $this->jsonResult(40609);
+            }
             $email = $this->request->input('email');
             $captcha = $this->request->input('code');
             if (empty($captcha) or strcasecmp(session('milkcaptcha'),$captcha) !== 0) {
@@ -130,6 +133,8 @@ class AccountController extends Controller
             }
 
             $url = route('account.modify_password',['key' => $key ]);
+
+
 
             Mail::queue('emails.find_password', ['url' => $url], function($message)use($passwords)
             {
@@ -201,11 +206,9 @@ class AccountController extends Controller
         }
 
         if(empty($passwords)){
-            session(['processs.data' => [
-                'title' => '身份验证失败',
-                'message' => '身份验证失败，请重新发送邮件'
-            ]]);
-            return redirect(route('account.process_result'));
+
+            $this->data['title'] = '身份验证失败';
+            $this->data['message'] ='身份验证失败，请重新发送邮件';
         }
 
         return view('account.modify_password',$this->data);
@@ -221,6 +224,7 @@ class AccountController extends Controller
         if(empty($data) || !is_array($data)){
             return redirect(route('home.index'));
         }
+        Session::forget('processs.data');
 
         return view('account.process_result',$data);
     }

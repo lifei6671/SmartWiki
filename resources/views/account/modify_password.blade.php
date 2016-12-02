@@ -30,6 +30,16 @@
 </header>
 <div class="container smart-container">
     <div class="row login">
+        @if(isset($message) && isset($title))
+            <div class="login-body" style="width: 600px;padding-top: 20px;">
+                <form role="form" method="post">
+                    <h3 class="text-center">{{$title}}</h3>
+                    <div class="form-group text-center" style="margin-top: 50px;">
+                        <p>{!! $message !!}</p>
+                    </div>
+                </form>
+            </div>
+        @else
         <div class="login-body">
             <form role="form" method="post">
                 <input type="hidden" name="token" value="{{$token}}">
@@ -58,6 +68,7 @@
                 </div>
             </form>
         </div>
+        @endif
     </div>
     <div class="clearfix"></div>
 </div>
