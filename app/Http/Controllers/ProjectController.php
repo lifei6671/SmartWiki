@@ -304,10 +304,12 @@ class ProjectController extends Controller
             return $this->jsonResult(40206);
         }
 
+
         //如果不是项目的拥有者并且不是超级管理员
         if (!Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {
             return $this->jsonResult(40305);
         }
+
         $member = Member::findNormalMemberOfFirst([['account', '=', $account]]);
 
         if (empty($member)) {
@@ -315,7 +317,7 @@ class ProjectController extends Controller
         }
 
         //将拥有用户降级为参与者
-        $rel = Relationship::where('project_id', '=', $project_id)->where('member_id', '=', $this->member_id)->first();
+        $rel = Relationship::where('project_id', '=', $project_id)->where('role_type', '=', 1)->first();
 
         $rel->role_type = 0;
 
