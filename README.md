@@ -94,6 +94,12 @@ composer install
 5. 忘记密码
 6. 实现系统日志
 
+## 参与开发
+
+我们欢迎您在 SmartWiki 项目的 GitHub 上报告 issue 或者 pull request。
+
+如果您还不熟悉GitHub的Fork and Pull开发模式，您可以阅读GitHub的文档（[https://help.github.com/articles/using-pull-requests](https://help.github.com/articles/using-pull-requests)） 获得更多的信息。
+
 ## 作者
 
 一个纯粹的PHPer。[SmartWiki 演示文档](https://wiki.iminho.me/docs/show/1)
