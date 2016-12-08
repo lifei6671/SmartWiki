@@ -11,6 +11,8 @@ QQ交流群： [190317359](//shang.qq.com/wpa/qunwpa?idkey=9a04393e101664709ed55
 
 ## 使用
 
+SmartWiki 需要运行在PHP5.6以上版本，且必须开启gd扩展。
+
 1.下载源码
 ```
 git clone https://github.com/lifei6671/SmartWiki.git
