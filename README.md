@@ -13,11 +13,47 @@ QQ交流群： [190317359](//shang.qq.com/wpa/qunwpa?idkey=9a04393e101664709ed55
 
 SmartWiki 需要运行在PHP5.6以上版本，且必须开启gd扩展。如果不需要使用Memcached做缓存的话，请删除config/cache.php中memcached相关配置。
 
-1.下载源码
+1. 配置PHP环境，以apache+php5为例
+
+第一步 安装Apache2
+
+```
+sudo apt-get install apache2
+sudo a2enmod rewrite
+sudo gedit /etc/apache2/apache2.conf&
+```
+添加：AddType application/x-httpd-php .php .htm .html
+
+第二步 安装PHP模块
+```
+sudo apt-get install php5
+```
+ 
+第三步 安装Mysql
+
+```
+sudo apt-get install mysql-server
+sudo apt-get install mysql-client
+```
+ 
+第四步 其他模块安装
+```
+sudo apt-get install libapache2-mod-php5
+sudo apt-get install libapache2-mod-auth-mysql
+sudo apt-get install php5-mysql
+sudo apt-get install php5-gd
+```
+
+第五步 测试Apache是否正常工作
+
+打开浏览器，输入localhost，看看是否有It Works!网页展示。目录为/var/www
+（默认目录是www/html，自己改配置文件）
+
+2. 下载源码
 ```
 git clone https://github.com/lifei6671/SmartWiki.git
 ```
-2.安装composer
+3. 安装composer
 
 ```
 sudo curl -sS https://getcomposer.org/installer | sudo php
@@ -31,14 +67,14 @@ mv composer.phar /usr/local/bin/composer
 ```
 具体可参考 [http://docs.phpcomposer.com/00-intro.html](http://docs.phpcomposer.com/00-intro.html)
 
-3.设置目录权限
+4. 设置目录权限
 
 ```
 sudo chmod -R 0777 storage
 
 ```
 
-4.恢复laravel的依赖
+5. 恢复laravel的依赖
 
 ```
 composer install
@@ -47,8 +83,33 @@ composer install
 
 如果不是root权限，可能会出现没有写权限的错误。解决方法是手动创建目录，或者是切换到root权限执行。
 
+6. 添加apache需要的.htaccess文件
 
-5.然后打开首页会自动跳转到安装页面。
+```
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
+```
+
+7. 配置apache的虚拟目录并指向 SmartWiki/public 目录
+
+```
+<VirtualHost 127.0.0.1:80>  
+    #你的网站目录  
+    DocumentRoot "/var/www/SmartWiki/public"  
+    #你网站的域名  
+    ServerName wiki.iminho.me  
+    ErrorLog "logs/dummy-host2.example.com-error.log"  
+    CustomLog "logs/dummy-host2.example.com-access.log" common  
+    #权限设置  
+    Order allow,deny  
+    Allow from all  
+</VirtualHost>  
+```
+8. 然后访问 http://wiki.iminho.me 会自动跳转到安装页面。
 
 
 ## 部分截图
