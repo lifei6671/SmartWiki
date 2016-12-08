@@ -21,6 +21,12 @@ git clone https://github.com/lifei6671/SmartWiki.git
 sudo curl -sS https://getcomposer.org/installer | sudo php
 sudo mv composer.phar /usr/local/bin/composer
 ```
+或者
+
+```
+php -r "readfile('https://getcomposer.org/installer');" | php
+mv composer.phar /usr/local/bin/composer
+```
 具体可参考 [http://docs.phpcomposer.com/00-intro.html](http://docs.phpcomposer.com/00-intro.html)
 
 3.设置目录权限
