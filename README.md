@@ -111,6 +111,9 @@ RewriteRule ^ index.php [L]
 ```
 8.然后访问 http://wiki.iminho.me 会自动跳转到安装页面。
 
+## 使用手册
+
+更多使用与配置可以访问 [https://wiki.iminho.me/show/1](https://wiki.iminho.me/show/1)
 
 ## 部分截图
 
