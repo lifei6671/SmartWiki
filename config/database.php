@@ -54,11 +54,11 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => env('DB_HOST', 'localhost')?:getenv('DB_HOST'),
+            'port' => env('DB_PORT', '3306')?:getenv('DB_PORT'),
+            'database' => env('DB_DATABASE', 'forge')?:getenv('DB_DATABASE'),
+            'username' => env('DB_USERNAME', 'forge')?:getenv('DB_USERNAME'),
+            'password' => env('DB_PASSWORD', '')?:getenv('DB_PASSWORD'),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => 'wk_',

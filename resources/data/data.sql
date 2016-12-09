@@ -129,7 +129,10 @@ CREATE TABLE IF NOT EXISTS `wk_config`(
   UNIQUE `key_uindex` (`key`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配置表';
 
-INSERT smart_wiki.wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('邮件有效期','MAIL_TOKEN_TIME','3600','system','找回密码邮件有效期,单位为秒',now());
+INSERT wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('启用文档历史','ENABLED_HISTORY','0','system','是否启用文档历史记录：0 否/1 是',now());
+INSERT wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('站点名称','SITE_NAME','SmartWiki','system','站点名称',now());
+INSERT wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('邮件有效期','MAIL_TOKEN_TIME','3600','system','找回密码邮件有效期,单位为秒',now());
+INSERT wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('启用匿名访问','ENABLE_ANONYMOUS','0','system','是否启用匿名访问：0 否/1 是',now());
 
 /*****************************************
 * 系统日志表

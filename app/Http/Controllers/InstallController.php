@@ -60,13 +60,15 @@ class InstallController extends Controller
                 if($pdo->beginTransaction()) {
                     $pdo->query('set names utf8');//设置编码
 
-                    $sqlStr = explode(';', $sqlContent);
+//                    $sqlStr = explode(';', $sqlContent);
 
-                    foreach ($sqlStr as $sql) {
-                        if(!empty($sql)){
-                            $pdo->exec($sql);
-                        }
-                    }
+//                    foreach ($sqlStr as $sql) {
+//                        if(!empty($sql)){
+//                            $pdo->exec($sql);
+//                        }
+//                    }
+                    $pdo->exec($sqlContent);
+
                     $sql = 'INSERT wk_member(account,member_passwd,group_level,nickname,email,create_time,state,headimgurl) 
                     VALUES (:account,:member_passwd,0,:nickname,:email,:create_time,0,:headimgurl);';
 
@@ -86,47 +88,47 @@ class InstallController extends Controller
                         throw new DataException('添加管理员时出错',1000004);
                     }
 
-                    $sql = 'INSERT wk_config(`name`,`key`,`value`,`config_type`,`remark`,`create_time`) VALUES(:name,:key,:value,:config_type,:remark,:create_time);';
-                    $sth = $pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+//                    $sql = 'INSERT wk_config(`name`,`key`,`value`,`config_type`,`remark`,`create_time`) VALUES(:name,:key,:value,:config_type,:remark,:create_time);';
+//                    $sth = $pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+//
+//                    $params = [
+//                      ':name' => '站点名称',
+//                        ':key' => 'SITE_NAME',
+//                        ':value' => 'SmartWiki',
+//                        ':config_type' => 'system',
+//                        ':remark' => '站点名称',
+//                        ':create_time' => date('Y-m-d H:i:s'),
+//                    ];
+//                    if($sth->execute($params) === false){
+//                        throw new DataException('添加系统配置时出错',1000004);
+//                    }
+//                    $sth = $pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+//                    $params = [
+//                        ':name' => '启用文档历史',
+//                        ':key' => 'ENABLED_HISTORY',
+//                        ':value' => '0',
+//                        ':config_type' => 'system',
+//                        ':remark' => '是否启用文档历史记录：0 否/1 是',
+//                        ':create_time' => date('Y-m-d H:i:s'),
+//                    ];
+//                    if($sth->execute($params) === false){
+//
+//                        throw new DataException('添加系统配置时出错',1000004);
+//                    }
 
-                    $params = [
-                      ':name' => '站点名称',
-                        ':key' => 'SITE_NAME',
-                        ':value' => 'SmartWiki',
-                        ':config_type' => 'system',
-                        ':remark' => '站点名称',
-                        ':create_time' => date('Y-m-d H:i:s'),
-                    ];
-                    if($sth->execute($params) === false){
-                        throw new DataException('添加系统配置时出错',1000004);
-                    }
-                    $sth = $pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
-                    $params = [
-                        ':name' => '启用文档历史',
-                        ':key' => 'ENABLED_HISTORY',
-                        ':value' => '0',
-                        ':config_type' => 'system',
-                        ':remark' => '是否启用文档历史记录：0 否/1 是',
-                        ':create_time' => date('Y-m-d H:i:s'),
-                    ];
-                    if($sth->execute($params) === false){
-
-                        throw new DataException('添加系统配置时出错',1000004);
-                    }
-
-                    $sth = $pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
-                    $params = [
-                        ':name' => '启用匿名访问',
-                        ':key' => 'ENABLE_ANONYMOUS',
-                        ':value' => '0',
-                        ':config_type' => 'system',
-                        ':remark' => '是否启用匿名访问：0 否/1 是',
-                        ':create_time' => date('Y-m-d H:i:s'),
-                    ];
-                    if($sth->execute($params) === false){
-
-                        throw new DataException('添加系统配置时出错',1000004);
-                    }
+//                    $sth = $pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+//                    $params = [
+//                        ':name' => '启用匿名访问',
+//                        ':key' => 'ENABLE_ANONYMOUS',
+//                        ':value' => '0',
+//                        ':config_type' => 'system',
+//                        ':remark' => '是否启用匿名访问：0 否/1 是',
+//                        ':create_time' => date('Y-m-d H:i:s'),
+//                    ];
+//                    if($sth->execute($params) === false){
+//
+//                        throw new DataException('添加系统配置时出错',1000004);
+//                    }
 
                     $pdo->commit();
 
