@@ -14,7 +14,7 @@ if (! function_exists('session_member')) {
         if($member == null){
             $member = session('member');
         }else{
-            session(['member' => $member]);
+            $result = session(['member' => $member]);
         }
 
         return $member;
@@ -66,6 +66,7 @@ if(!function_exists('session_project_role')){
         }
     }
 }
+
 if(!function_exists('wiki_config')){
     /**
      * 获取指定键名的值如果不存在则设置默认值
@@ -90,6 +91,9 @@ if(!function_exists('modify_env')) {
     {
         $envPath = base_path() . DIRECTORY_SEPARATOR . '.env';
 
+        if(!file_exists($envPath)){
+            @copy(base_path() . DIRECTORY_SEPARATOR . '.env.example', base_path() . DIRECTORY_SEPARATOR . '.env');
+        }
         $contentArray = collect(file($envPath, FILE_IGNORE_NEW_LINES));
 
         $contentArray->transform(function ($item) use ($data) {
@@ -103,6 +107,7 @@ if(!function_exists('modify_env')) {
         });
 
         $content = implode($contentArray->toArray(), "\n");
+
         file_put_contents($envPath, $content, 0);
     }
 }
@@ -125,5 +130,100 @@ if(!function_exists('wiki_version')) {
      */
     function wiki_version(){
         return env('APP_VERSION',null);
+    }
+}
+
+if(!function_exists('system_install')) {
+    /**
+     * @param string $dbHost 数据库地址
+     * @param string $dbName 数据库名称
+     * @param int $dbPort 端口号
+     * @param string $dbUser 数据库账号
+     * @param string $dbPassword 数据库密码
+     * @param string $account 管理员账号
+     * @param string $password 管理员密码
+     * @param string $email 管理员邮箱
+     * @return bool 是否成功
+     * @throws Exception
+     */
+    function system_install($dbHost,$dbName,$dbPort,$dbUser,$dbPassword, $account, $password, $email)
+    {
+
+        $matches = array();
+        if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]{4,19}$/', $account, $matches)) {
+            return $this->jsonResult(40508);
+        }
+        if (empty($password) || strlen($password) < 6 || strlen($password) > 18) {
+            return $this->jsonResult(1000001, null, '管理员密码必须在6-18字符之间');
+        }
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->jsonResult(40503);
+        }
+
+        $sqlContent = @file_get_contents(resource_path('data/data.sql'));
+
+        if (empty($sqlContent)) {
+            return $this->jsonResult(1000002, null, 'SQL文件不存在');
+        }
+
+        $pdo = new PDO('mysql:host=' . $dbHost . ';dbname=' . $dbName . ';port=' . $dbPort, $dbUser, $dbPassword, [PDO::ATTR_AUTOCOMMIT => 0]);
+
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+
+        try {
+
+            if ($pdo->beginTransaction()) {
+                $pdo->query('set names utf8');//设置编码
+
+                $pdo->exec($sqlContent);
+
+                $sql = 'INSERT wk_member(account,member_passwd,group_level,nickname,email,create_time,state,headimgurl) 
+                    VALUES (:account,:member_passwd,0,:nickname,:email,:create_time,0,:headimgurl);';
+
+
+                $params = [
+                    ':account' => $account,
+                    ':member_passwd' => password_hash($password, PASSWORD_DEFAULT),
+                    ':nickname' => $account,
+                    ':email' => $email,
+                    ':create_time' => date('Y-m-d H:i:s'),
+                    ':headimgurl' => '/static/images/middle.gif'];
+
+                $sth = $pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+
+                if ($sth->execute($params) === false) {
+
+                    throw new \Exception('添加管理员时出错', 1000004);
+                }
+
+                $pdo->commit();
+
+            } else {
+                throw new \Exception('执行数据库事物失败', 1000003);
+            }
+
+        } catch (\Exception $ex) {
+
+            $pdo->rollBack();
+
+            throw $ex;
+        }
+        $pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+
+
+
+        $params = [
+            'DB_HOST' => $dbHost,
+            'DB_PORT' => $dbPort,
+            'DB_DATABASE' => $dbName,
+            'DB_USERNAME' => $dbUser,
+            'DB_PASSWORD' => $dbPassword
+        ];
+        modify_env($params);
+
+        file_put_contents(public_path('install.lock'), 'true');
+        return true;
+
     }
 }

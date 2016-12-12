@@ -15,5 +15,8 @@ namespace SmartWiki\Exceptions;
  */
 class DataNullException extends DataException
 {
-
+    public function __construct($message, $code, \Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 }

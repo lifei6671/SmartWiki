@@ -129,7 +129,7 @@ class Member extends ModelBase
 
         if(empty($member) or password_verify($password,$member->member_passwd) === false){
 
-            throw new DataNullException(40401);
+            throw new DataNullException('账号或密码错误',40401);
         }
         $original_data = json_encode($member,JSON_UNESCAPED_UNICODE);
 

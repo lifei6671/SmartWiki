@@ -36,6 +36,7 @@ class AccountController extends Controller
             }
         }
         if($this->isPost()) {
+
             $account = $this->request->input('account');
             $password = $this->request->input('passwd');
 
@@ -62,13 +63,12 @@ class AccountController extends Controller
                     cookie_member($member);
                 }
 
-
                 return $this->jsonResult(20001);
             }catch (DataNullException $ex){
 
-                return $this->jsonResult($ex->getCode());
+                return $this->jsonResult($ex->getCode(),$ex->getMessage());
             }catch (\Exception $ex){
-                return $this->jsonResult($ex->getCode(),null,$ex->getMessage());
+                return $this->jsonResult('90'.$ex->getCode(),null,$ex->getMessage());
             }
         }
 

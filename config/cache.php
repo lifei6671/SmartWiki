@@ -57,20 +57,20 @@ return [
                 ],
             ],
         ],
-        'MemcachedExtend' => [
-            'driver' => 'MemcachedExtend',
-            'servers' => [
-                [
-                    'host' => env('MEMCACHED_EXTEND_HOST', '127.0.0.1'),
-                    'port' => env('MEMCACHED_EXTEND_PORT', 11211),
-                    'weight' => 100,
-                ],
-            ],
-            'options' => [
-                \Memcached::OPT_BINARY_PROTOCOL => true,
-                \Memcached::OPT_COMPRESSION => false
-            ]
-        ],
+//        'MemcachedExtend' => [
+//            'driver' => 'MemcachedExtend',
+//            'servers' => [
+//                [
+//                    'host' => env('MEMCACHED_EXTEND_HOST', '127.0.0.1'),
+//                    'port' => env('MEMCACHED_EXTEND_PORT', 11211),
+//                    'weight' => 100,
+//                ],
+//            ],
+//            'options' => [
+//                \Memcached::OPT_BINARY_PROTOCOL => true,
+//                \Memcached::OPT_COMPRESSION => false
+//            ]
+//        ],
         'redis' => [
             'driver' => 'redis',
             'connection' => 'default',

@@ -9,6 +9,7 @@
 namespace SmartWiki\Http\Controllers;
 
 
+use Illuminate\Http\Request;
 use SmartWiki\Member;
 use DB;
 use SmartWiki\Project;
@@ -19,6 +20,10 @@ class HomeController extends Controller
 {
     const PageSize = 20;
 
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+    }
 
     /**
      * 首页

@@ -8,6 +8,7 @@
 
 namespace SmartWiki\Exceptions;
 
+
 /**
  * 数据异常
  * Class DataException
@@ -15,5 +16,8 @@ namespace SmartWiki\Exceptions;
  */
 class DataException extends \Exception
 {
-
+    public function __construct($message, $code, \Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 }
