@@ -111,6 +111,39 @@ RewriteRule ^ index.php [L]
 ```
 8.然后访问 http://wiki.iminho.me 会自动跳转到安装页面。
 
+## 命令安装
+
+在SmartWiki根目录依次执行：
+
+```
+#恢复依赖库
+composer install
+
+#缓存配置
+artisan config:cache
+
+#缓存路由
+artisan route:cache
+
+#清除缓存
+php artisan clear-compiled
+
+#优化加载类
+php artisan optimize
+
+#安装SmartWiki
+php artisan smartwiki:install --dbHost=数据库地址 --dbName=数据库名称 --dbPort=数据库端口号 --dbUser=数据库账号 --dbPassword=数据库密码 --account=管理员账号 --password=管理员密码 --email=管理员邮箱
+
+```
+
+## SmartWiki迁移
+
+如果已存在完整的SmartWiki的数据，可以手动修改.env文件，设置新的数据库，也可以执行一下命令迁移到新数据库：
+
+```
+ php artisan smartwiki:migrate --dbHost=数据库地址 --dbName=数据库名称 --dbPort=数据库端口号 --dbUser=数据库账号 --dbPassword=数据库密码
+```
+
 ## 使用手册
 
 更多使用与配置可以访问 [https://wiki.iminho.me/show/1](https://wiki.iminho.me/show/1)
