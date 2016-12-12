@@ -120,10 +120,10 @@ RewriteRule ^ index.php [L]
 composer install
 
 #缓存配置
-artisan config:cache
+php artisan config:cache
 
 #缓存路由
-artisan route:cache
+php artisan route:cache
 
 #清除缓存
 php artisan clear-compiled
