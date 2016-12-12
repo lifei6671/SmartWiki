@@ -1,5 +1,8 @@
 <?php
 
+define('VERSION','v0.2.2');
+header('SmartWiki:'.VERSION);
+
 /**
  * Laravel - A PHP Framework For Web Artisans
  *

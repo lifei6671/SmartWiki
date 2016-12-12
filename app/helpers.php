@@ -178,6 +178,7 @@ if(!function_exists('system_install')) {
 
                 $pdo->exec($sqlContent);
 
+
                 $sql = 'INSERT wk_member(account,member_passwd,group_level,nickname,email,create_time,state,headimgurl) 
                     VALUES (:account,:member_passwd,0,:nickname,:email,:create_time,0,:headimgurl);';
 
