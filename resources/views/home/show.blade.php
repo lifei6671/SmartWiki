@@ -41,9 +41,10 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dLabel">
                     @if($project->project_open_state ==1 || $project->project_open_state ==2)
-                    <li><a href="javascript:" data-toggle="modal" data-target="#shareProject">项目分享</a> </li>
+                        <li><a href="javascript:" data-toggle="modal" data-target="#shareProject">项目分享</a> </li>
+                        <li role="presentation" class="divider"></li>
                     @endif
-                    <li role="presentation" class="divider"></li>
+
                     <li><a href="{{route('home.index')}}" title="返回首页">返回首页</a> </li>
                 </ul>
             </div>

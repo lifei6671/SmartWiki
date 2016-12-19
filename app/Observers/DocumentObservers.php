@@ -55,6 +55,9 @@ class DocumentObservers
     {
         $create_at = $document->modify_at;
 
+        if(empty($create_at)){
+            $create_at = 0;
+        }
         $enableHistory = wiki_config('ENABLED_HISTORY');
 
         $document = Cache::pull('document.'.$document->doc_id);

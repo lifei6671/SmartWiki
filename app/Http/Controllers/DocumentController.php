@@ -205,6 +205,7 @@ class DocumentController extends Controller
                     return $this->jsonResult(0, ['doc_id' => $doc_id, 'parent_id' => $document->parent_id, 'name' => $document->doc_name]);
                 }
                 $document->doc_content = $content;
+                $document->modify_at = $this->member_id;
             }else {
                 //如果是新建文档
                 if (Project::hasProjectEdit($project_id, $this->member_id) == false) {

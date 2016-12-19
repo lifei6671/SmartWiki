@@ -152,12 +152,12 @@ class MemberController extends Controller
             $key = trim($this->request->input('key'));
             $remark  = trim($this->request->input('remark'));
 
-            if(empty($name) or mb_strlen($name) <3 or mb_strlen($name) > 20){
+            if($config_id <= 0 && (empty($name) or mb_strlen($name) <3 or mb_strlen($name) > 20)){
                 return $this->jsonResult(40701);
             }
             $matches = [];
 
-            if(empty($key) or !preg_match('/^[a-zA-Z][a-zA-Z0-9_]{5,19}$/',$key,$matches)){
+            if($config_id <= 0 && (empty($key) or !preg_match('/^[a-zA-Z][a-zA-Z0-9_]{5,19}$/',$key,$matches))){
                 return $this->jsonResult(40702);
             }
             $result = WikiConfig::where('id','<>',$config_id)->where(function($query)use($name,$key){
