@@ -151,19 +151,19 @@ if(!function_exists('system_install')) {
 
         $matches = array();
         if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]{4,19}$/', $account, $matches)) {
-            return $this->jsonResult(40508);
+            throw new \Exception('管理员账号必须在4-19字符之间',40508);
         }
         if (empty($password) || strlen($password) < 6 || strlen($password) > 18) {
-            return $this->jsonResult(1000001, null, '管理员密码必须在6-18字符之间');
+            throw new \Exception('管理员密码必须在6-18字符之间',1000001);
         }
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return $this->jsonResult(40503);
+            throw new \Exception('邮箱地址格式不正确',40503);
         }
 
         $sqlContent = @file_get_contents(resource_path('data/data.sql'));
 
         if (empty($sqlContent)) {
-            return $this->jsonResult(1000002, null, 'SQL文件不存在');
+            throw new \Exception('SQL文件不存在',1000002);
         }
 
         $pdo = new PDO('mysql:host=' . $dbHost . ';dbname=' . $dbName . ';port=' . $dbPort, $dbUser, $dbPassword, [PDO::ATTR_AUTOCOMMIT => 0]);
