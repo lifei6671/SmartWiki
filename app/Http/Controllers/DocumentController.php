@@ -309,8 +309,17 @@ class DocumentController extends Controller
         if(Project::hasProjectEdit($doc->project_id,$this->member_id) == false){
             return $this->jsonResult(40305);
         }
-        $result = Document::where('doc_id','=',$doc_id)->orWhere('parent_id','=',$doc_id)->delete();
+        $result = Document::deleteDocument($doc_id);
+       // $result = Document::where('doc_id','=',$doc_id)->orWhere('parent_id','=',$doc_id)->delete();
+
+
         if($result){
+//            DocumentHistory::where('doc_id','=',$doc_id)->delete();
+//            $project = Project::find($doc->project_id);
+//            if($project){
+//                $project->doc_count = Document::where('project_id','=',$doc->project_id)->count();
+//                $project->save();
+//            }
             return $this->jsonResult(0);
         }else{
             return $this->jsonResult(500);

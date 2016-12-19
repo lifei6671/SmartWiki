@@ -93,4 +93,27 @@ class Document extends ModelBase
         }
         return $html;
     }
+
+    public static function deleteDocument($doc_id)
+    {
+        $documents = [];
+        $doc = Document::find($doc_id);
+        if (empty($doc) === false) {
+            $documents[] = $doc;
+            $recursion = function ($id, $callback) use (&$documents) {
+                $docs = Document::where('parent_id', '=', $id)->get();
+
+                foreach ($docs as $doc) {
+                    $documents[] = $doc;
+                    $callback($doc->doc_id, $callback);
+                }
+
+            };
+            $recursion($doc->doc_id, $recursion);
+        }
+        foreach ($documents as $document){
+            $document->delete();
+        }
+        return true;
+    }
 }
