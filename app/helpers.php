@@ -215,6 +215,8 @@ if(!function_exists('system_install')) {
 
 
         $params = [
+            'APP_DEBUG' => 'false',
+            'APP_URL'   => $_SERVER['REQUEST_SCHEME'] .'://' .$_SERVER['HTTP_HOST'],
             'DB_HOST' => $dbHost,
             'DB_PORT' => $dbPort,
             'DB_DATABASE' => $dbName,
