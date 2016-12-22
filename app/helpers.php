@@ -216,13 +216,16 @@ if(!function_exists('system_install')) {
 
         $params = [
             'APP_DEBUG' => 'false',
-            'APP_URL'   => $_SERVER['REQUEST_SCHEME'] .'://' .$_SERVER['HTTP_HOST'],
             'DB_HOST' => $dbHost,
             'DB_PORT' => $dbPort,
             'DB_DATABASE' => $dbName,
             'DB_USERNAME' => $dbUser,
             'DB_PASSWORD' => $dbPassword
         ];
+        if(isset($_SERVER['REQUEST_SCHEME']) && isset($_SERVER['HTTP_HOST'])){
+            $url = $_SERVER['REQUEST_SCHEME'] .'://' . $_SERVER['HTTP_HOST'];
+            $params['APP_URL'] = $url;
+        }
         modify_env($params);
 
         file_put_contents(public_path('install.lock'), 'true');
