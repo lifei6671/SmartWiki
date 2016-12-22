@@ -13,8 +13,12 @@ if (! function_exists('session_member')) {
     function session_member(Member $member = null){
         if($member == null){
             $member = session('member');
+            if(empty($member) === false){
+                $member->member_id = intval($member->member_id);
+                $member->group_level = intval($member->group_level);
+            }
         }else{
-            $result = session(['member' => $member]);
+            session(['member' => $member]);
         }
 
         return $member;
