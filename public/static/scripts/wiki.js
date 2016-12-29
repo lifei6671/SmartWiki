@@ -27,9 +27,11 @@ $(document).ready(function () {
     //弹出提示
     $("[data-toggle='tooltip']").tooltip();
 
+
+
 });
 
-;(function (win) {
+(function (win) {
 
     win.isEditorChange = false;
 
@@ -46,6 +48,7 @@ $(document).ready(function () {
         $btn.button('reset');
     });
 
+
     //初始化编辑器
     win.editor = editormd("editormd", {
         path : "/static/editormd/lib/",
@@ -53,7 +56,7 @@ $(document).ready(function () {
         imageUpload: true,
         imageFormats: ["jpg", "jpeg", "gif", "png", "JPG", "JPEG", "GIF", "PNG"],
         imageUploadURL: "/upload",
-        htmlDecode: 'script,div|on*|style,sub,sup',
+        tocStartLevel : 2,
         toolbarIcons : [ "back","save", "template","undo", "redo" , "h1", "h2","h3" ,"h4","bold", "hr", "italic","quote","list-ul","list-ol","link","reference-link","image","code","html-entities","preformatted-text","code-block","table","history"],
         toolbarIconsClass : {
             bold : "fa-bold"
@@ -123,7 +126,9 @@ $(document).ready(function () {
             },function () {
                 layer.close(index);
             });
-
+            if(window.CONFIG.selected){
+                window.loadDocument(window.CONFIG.selected);
+            }
         },
         onchange : function () {
             if(win.isEditorChange) {
@@ -206,8 +211,8 @@ $(document).ready(function () {
         $.get("/docs/edit/" + selected.node.id).done(function (data) {
             layer.close(index);
             $("#editormd-form").find("input[name='doc_id']").val(selected.node.id);
-            window.editor.clear();
-            if(data.errcode == 0){
+            window.editor.setValue("");
+            if(data.errcode == 0 && data.data.doc.content){
                 window.editor.insertValue(data.data.doc.content);
                 window.editor.setCursor({line:0, ch:0});
                 win.isEditorChange = true;

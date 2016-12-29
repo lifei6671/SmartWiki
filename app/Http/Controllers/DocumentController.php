@@ -9,11 +9,9 @@
 namespace SmartWiki\Http\Controllers;
 
 use League\Flysystem\Exception;
-use SebastianBergmann\Diff\Differ;
 use SmartWiki\Document;
 use SmartWiki\DocumentHistory;
 use SmartWiki\Project;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Auth\Access\AuthorizationException;
 
 
@@ -150,7 +148,7 @@ class DocumentController extends Controller
     public function edit($id)
     {
         if(empty($id) or $id <= 0){
-            throw new NotFoundHttpException();
+            abort(404);
         }
 
         if($this->isPost()){
@@ -310,16 +308,8 @@ class DocumentController extends Controller
             return $this->jsonResult(40305);
         }
         $result = Document::deleteDocument($doc_id);
-       // $result = Document::where('doc_id','=',$doc_id)->orWhere('parent_id','=',$doc_id)->delete();
-
 
         if($result){
-//            DocumentHistory::where('doc_id','=',$doc_id)->delete();
-//            $project = Project::find($doc->project_id);
-//            if($project){
-//                $project->doc_count = Document::where('project_id','=',$doc->project_id)->count();
-//                $project->save();
-//            }
             return $this->jsonResult(0);
         }else{
             return $this->jsonResult(500);

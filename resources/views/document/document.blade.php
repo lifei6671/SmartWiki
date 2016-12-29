@@ -25,7 +25,7 @@
     <script type="text/javascript">
         window.CONFIG = {
             "project_id" : "{{$project_id}}"
-        }
+        };
         window.treeCatalog = {};
     </script>
 </head>
@@ -240,11 +240,13 @@ PS：PHP是世界上最好的语言，没有之一(逃
 
 </script>
 <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-<script src="/static/editormd/editormd.min.js"></script>
+
+
 <script type="text/javascript" src="/static/jstree/jstree.js"></script>
 <script type="text/javascript" src="/static/scripts/jquery.form.js"></script>
 <script type="text/javascript" src="/static/layer/layer.js"></script>
 <script type="text/javascript" src="/static/scripts/json2.js"></script>
+<script type="text/javascript" src="/static/editormd/editormd.min.js"></script>
 <script type="text/javascript" src="/static/scripts/wiki.js"></script>
 <script type="text/javascript">
     $(function () {
@@ -310,7 +312,8 @@ PS：PHP是世界上最好的语言，没有之一(逃
             console.log(window.treeCatalog);
         }).on('select_node.jstree',function (node,selected,event) {
             console.log(selected.node.id);
-            window.loadDocument(selected);
+            window.CONFIG.selected = selected;
+
         }).on("move_node.jstree",function (node,parent) {
 
             var parentNode = window.treeCatalog.get_node(parent.parent);
@@ -325,7 +328,6 @@ PS：PHP是世界上最好的语言，没有之一(逃
                     nodeData = nodeData.concat(newNodeData);
                 }
             }
-            console.log(nodeData);
 
             var index = layer.load(1, {
                 shade: [0.1,'#fff'] //0.1透明度的白色背景
