@@ -21,7 +21,8 @@
         "erusev/parsedown": "^1.6",
         "intervention/image": "^2.3",
         "sebastian/diff": "^1.4",
-        "predis/predis": "1.0.3"
+        "predis/predis": "1.0.3",
+        "graham-campbell/markdown": "^7.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
