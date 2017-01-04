@@ -70,8 +70,9 @@
 }
 #page-title h1{
     color: #555;
-    font: 300 20px Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font: 300 24px Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-shadow: 1px 0 #eee;
+    font-weight: bold;;
     margin: 0px;
 }
 

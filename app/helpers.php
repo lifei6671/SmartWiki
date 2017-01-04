@@ -237,3 +237,27 @@ if(!function_exists('system_install')) {
 
     }
 }
+
+if(!function_exists('markdown_converter')) {
+    /**
+     * 解析 markdown 字符串
+     * @param $text
+     * @return string
+     */
+    function markdown_converter($text){
+
+        $environment = League\CommonMark\Environment::createCommonMarkEnvironment();
+        $environment->addExtension(new Webuni\CommonMark\TableExtension\TableExtension());
+        $environment->addExtension(new Webuni\CommonMark\AttributesExtension\AttributesExtension());
+        $environment->addBlockRenderer('League\CommonMark\Block\Element\Heading',new SmartWiki\Extentions\Markdown\HeadingRenderer());
+
+        $environment->addBlockRenderer('League\CommonMark\Block\Element\Document',new SmartWiki\Extentions\Markdown\TocRenderer());
+
+        $converter = new League\CommonMark\Converter(new League\CommonMark\DocParser($environment), new League\CommonMark\HtmlRenderer($environment));
+
+
+        $html = $converter->convertToHtml($text);
+
+        return $html;
+    }
+}

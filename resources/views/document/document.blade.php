@@ -247,44 +247,47 @@ PS：PHP是世界上最好的语言，没有之一(逃
 <script type="text/javascript" src="/static/layer/layer.js"></script>
 <script type="text/javascript" src="/static/scripts/json2.js"></script>
 <script type="text/javascript" src="/static/editormd/editormd.min.js"></script>
-<script type="text/javascript" src="/static/scripts/wiki.js"></script>
+
 <script type="text/javascript">
-    $(function () {
+    /**
+     * 初始化jstree
+     */
+    function initJsTree() {
         $("#sidebar").jstree({
-            'plugins':['state',"wholerow","types",'dnd','contextmenu'],
+            'plugins': ['state', "wholerow", "types", 'dnd', 'contextmenu'],
             "types": {
-                "default" : {
-                    "icon" : false  // 删除默认图标
+                "default": {
+                    "icon": false  // 删除默认图标
                 },
             },
-            'core' : {
-                'check_callback' : true,
-                'data' : {!! $json !!},
-                'animation' : 0,
-                "multiple" : false
+            'core': {
+                'check_callback': true,
+                'data': {!! $json !!},
+                'animation': 0,
+                "multiple": false
             },
-            "contextmenu":{
+            "contextmenu": {
                 show_at_node: false,
-                select_node : false,
-                "items" : {
+                select_node: false,
+                "items": {
                     "添加文档": {
                         "separator_before": false,
-                        "separator_after" : true,
-                        "_disabled"       : false,
+                        "separator_after": true,
+                        "_disabled": false,
                         "label": "添加文档",
                         "icon": "fa fa-plus",
                         "action": function (data) {
 
                             var inst = $.jstree.reference(data.reference),
-                                    node = inst.get_node(data.reference);
+                                node = inst.get_node(data.reference);
 
                             openCreateCatalogDialog(node);
                         }
                     },
-                    "编辑" : {
+                    "编辑": {
                         "separator_before": false,
-                        "separator_after" : true,
-                        "_disabled"       : false,
+                        "separator_after": true,
+                        "_disabled": false,
                         "label": "编辑",
                         "icon": "fa fa-edit",
                         "action": function (data) {
@@ -293,10 +296,10 @@ PS：PHP是世界上最好的语言，没有之一(逃
                             editDocumentDialog(node);
                         }
                     },
-                    "删除" : {
+                    "删除": {
                         "separator_before": false,
-                        "separator_after" : true,
-                        "_disabled"       : false,
+                        "separator_after": true,
+                        "_disabled": false,
                         "label": "删除",
                         "icon": "fa fa-trash-o",
                         "action": function (data) {
@@ -307,44 +310,45 @@ PS：PHP是世界上最好的语言，没有之一(逃
                     }
                 }
             }
-        }).on('loaded.jstree',function () {
+        }).on('loaded.jstree', function () {
             window.treeCatalog = $(this).jstree();
             console.log(window.treeCatalog);
-        }).on('select_node.jstree',function (node,selected,event) {
-            console.log(selected.node.id);
-            window.CONFIG.selected = selected;
+        }).on('select_node.jstree', function (node, selected, event) {
+            window.loadDocument(selected);
 
-        }).on("move_node.jstree",function (node,parent) {
+        }).on("move_node.jstree", function (node, parent) {
 
             var parentNode = window.treeCatalog.get_node(parent.parent);
 
             var nodeData = window.getSiblingSort(parentNode);
 
-            if(parent.parent != parent.old_parent){
+            if (parent.parent != parent.old_parent) {
                 parentNode = window.treeCatalog.get_node(parent.old_parent);
                 console.log(parentNode);
                 var newNodeData = window.getSiblingSort(parentNode);
-                if(newNodeData.length > 0){
+                if (newNodeData.length > 0) {
                     nodeData = nodeData.concat(newNodeData);
                 }
             }
 
             var index = layer.load(1, {
-                shade: [0.1,'#fff'] //0.1透明度的白色背景
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
             });
 
             $.post("{{route('document.sort',["id" => $project_id])}}", JSON.stringify(nodeData)).done(function (res) {
                 layer.close(index);
-                if(res.errcode != 0){
+                if (res.errcode != 0) {
                     layer.msg(res.message);
-                }else{
+                } else {
                     layer.msg("保存排序成功");
                 }
             }).fail(function () {
                 layer.close(index);
                 layer.msg("保存排序失败");
             });
-        }) ;
+        });
+    }
+    $(function () {
 
         $("#template-modal .section>a").on("click",function () {
             var type = $(this).attr('data-type');
@@ -356,5 +360,6 @@ PS：PHP是世界上最好的语言，没有之一(逃
         });
     });
 </script>
+<script type="text/javascript" src="/static/scripts/wiki.js"></script>
 </body>
 </html>

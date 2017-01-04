@@ -22,7 +22,9 @@
         "intervention/image": "^2.3",
         "sebastian/diff": "^1.4",
         "predis/predis": "1.0.3",
-        "graham-campbell/markdown": "^7.0"
+        "graham-campbell/markdown": "^7.0",
+        "webuni/commonmark-attributes-extension": "^0.5.0",
+        "webuni/commonmark-table-extension": "^0.6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

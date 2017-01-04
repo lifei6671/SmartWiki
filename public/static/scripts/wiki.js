@@ -56,7 +56,7 @@ $(document).ready(function () {
         imageUpload: true,
         imageFormats: ["jpg", "jpeg", "gif", "png", "JPG", "JPEG", "GIF", "PNG"],
         imageUploadURL: "/upload",
-        tocStartLevel : 2,
+        tocStartLevel : 1,
         toolbarIcons : [ "back","save", "template","undo", "redo" , "h1", "h2","h3" ,"h4","bold", "hr", "italic","quote","list-ul","list-ol","link","reference-link","image","code","html-entities","preformatted-text","code-block","table","history"],
         toolbarIconsClass : {
             bold : "fa-bold"
@@ -103,7 +103,7 @@ $(document).ready(function () {
                             if(window.SelectedId){
                                 var selected = {node:{
                                     id : window.SelectedId
-                                }}
+                                }};
                                 window.loadDocument(selected);
                                 window.SelectedId = null;
                             }
@@ -129,6 +129,7 @@ $(document).ready(function () {
             if(window.CONFIG.selected){
                 window.loadDocument(window.CONFIG.selected);
             }
+            initJsTree();
         },
         onchange : function () {
             if(win.isEditorChange) {

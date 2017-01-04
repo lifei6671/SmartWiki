@@ -4,7 +4,6 @@ namespace SmartWiki;
 
 use Cache;
 use Carbon\Carbon;
-use GrahamCampbell\Markdown\Facades\Markdown;
 
 /**
  * SmartWiki\Document
@@ -87,8 +86,7 @@ class Document extends ModelBase
 //
 //            $html  = $parsedown->text($document->doc_content);
 
-
-            $html = Markdown::convertToHtml($document->doc_content);
+            $html = markdown_converter($document->doc_content);
 
             $html = str_replace('class="language-','class="',$html);
             $expiresAt = Carbon::now()->addHour(12);
