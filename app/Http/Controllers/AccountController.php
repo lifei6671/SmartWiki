@@ -52,7 +52,7 @@ class AccountController extends Controller
                 return $this->jsonResult(40103);
             }
             try {
-                $member = Member::login($account, $password);
+                $member = Member::login($account, $password, $this->request->getClientIp(),$this->request->header('User-Agent'));
 
                 $is_remember = $this->request->input('is_remember');
 
