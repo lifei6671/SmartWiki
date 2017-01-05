@@ -57,6 +57,7 @@ $(document).ready(function () {
         imageFormats: ["jpg", "jpeg", "gif", "png", "JPG", "JPEG", "GIF", "PNG"],
         imageUploadURL: "/upload",
         tocStartLevel : 1,
+        tocm : true,
         toolbarIcons : [ "back","save", "template","undo", "redo" , "h1", "h2","h3" ,"h4","bold", "hr", "italic","quote","list-ul","list-ol","link","reference-link","image","code","html-entities","preformatted-text","code-block","table","history"],
         toolbarIconsClass : {
             bold : "fa-bold"
@@ -116,6 +117,7 @@ $(document).ready(function () {
             }
         },
         onload : function () {
+            console.log(editor.cm.$marked)
             editor.setToolbarAutoFixed(false);
             var index ;
             $(".editormd-menu>li>a").hover(function () {

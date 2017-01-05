@@ -71,7 +71,9 @@ class TocRenderer implements BlockRendererInterface
             if(empty($tree) === false){
                 $list = $this->tocRecursion(0,$tree);
 
-                $wholeDoc = str_replace('[TOC]',$list,$wholeDoc);
+                $tocList = '<div class="markdown-toc editormd-markdown-toc"><ul class="markdown-toc-list">'. substr($list,4) . '</div>';
+                $wholeDoc = str_replace('[TOC]',$tocList,$wholeDoc);
+
             }
         }
         return $wholeDoc === '' ? '' : $wholeDoc . "\n";
@@ -79,9 +81,9 @@ class TocRenderer implements BlockRendererInterface
 
     protected function tocRecursion($parent, array $values)
     {
-        static $_markdown_toc;
+        global $_markdown_toc;
 
-        $_markdown_toc .= '<div class="markdown-toc editormd-markdown-toc"><ul class="markdown-toc-list">';
+        $_markdown_toc .= '<ul>';
 
         foreach ($values as $item){
             if($item['parent'] == $parent) {
@@ -96,7 +98,7 @@ class TocRenderer implements BlockRendererInterface
                 $_markdown_toc .= '</li>';
             }
         }
-        $_markdown_toc .= '</ul></div>';
+        $_markdown_toc .= '</ul>';
         return $_markdown_toc;
     }
 }

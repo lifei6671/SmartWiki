@@ -246,7 +246,7 @@ PS：PHP是世界上最好的语言，没有之一(逃
 <script type="text/javascript" src="/static/scripts/jquery.form.js"></script>
 <script type="text/javascript" src="/static/layer/layer.js"></script>
 <script type="text/javascript" src="/static/scripts/json2.js"></script>
-<script type="text/javascript" src="/static/editormd/editormd.min.js"></script>
+<script type="text/javascript" src="/static/editormd/editormd.js"></script>
 
 <script type="text/javascript">
     /**

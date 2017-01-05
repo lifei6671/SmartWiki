@@ -9,7 +9,8 @@
     <!-- Bootstrap -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/static/highlight/styles/atelier-savanna-light.css" rel="stylesheet">
+    <link href="/static/highlight/styles/default.css" rel="stylesheet">
+    <link href="/static/highlight/styles/zenburn.css" rel="stylesheet">
     <link href="/static/jstree/themes/default/style.css" rel="stylesheet">
     <link href="/static/nprogress/nprogress.css" rel="stylesheet">
     <link href="/static/styles/styles.css" rel="stylesheet">
@@ -23,7 +24,7 @@
     <script src="/static/bootstrap/js/respond.min.js"></script>
     <![endif]-->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/static/scripts/jquery.min.js"></script>
+    <script src="/static/scripts/jquery.min.js" type="text/javascript"></script>
 
 </head>
 <body>
@@ -100,10 +101,18 @@
 <script type="text/javascript" src="/static/layer/layer.js"></script>
 <script type="text/javascript" src="/static/nprogress/nprogress.js"></script>
 <script type="text/javascript" src="/static/highlight/highlight.js"></script>
+<script type="text/javascript" src="/static/highlight/highlightjs-line-numbers.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+    hljs.initHighlightingOnLoad();
+
+    hljs.initLineNumbersOnLoad();
+
+});
+</script>
 <script type="text/javascript">
 
     $(function () {
-        hljs.initHighlightingOnLoad();
 
         $(document).ready(function () {
             $('#sidebar>ul').stickUp({
@@ -188,7 +197,7 @@
                 }
             });
         });
-    })
+    });
 </script>
 </body>
 </html>
