@@ -1,9 +1,22 @@
+#page-title{
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #cccccc;
+}
+#page-title h1{
+    color: #555;
+    font: 300 24px Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-shadow: 1px 0 #eee;
+    font-weight: 200;
+    margin: 0;
+}
+
 .editormd-html-preview{
     padding: 0 0 20px 0;
 }
 .markdown-body {
     font-size: 14px;
     margin-top : 20px;
+    line-height: 2em;
 }
 
 .markdown-body img {
@@ -77,9 +90,17 @@
 }
 
 .markdown-body h1,h2,h3,h4,h5,h6 {
-    color: #333
+    color: #333;
+    position: relative;
+    margin-top: 1em;
+    margin-bottom: 16px;
+    font-weight: 300;
+    line-height: 1.4
 }
 
+.markdown-body .http-method{
+    font-weight: 500;
+}
 
 .markdown-body pre{
     padding: 2px;

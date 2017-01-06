@@ -6,7 +6,7 @@
  * Time: 15:20
  */
 
-namespace SmartWiki\Extentions\Markdown;
+namespace SmartWiki\Extentions\Markdown\Renderer;
 
 
 use League\CommonMark\Block\Element\AbstractBlock;

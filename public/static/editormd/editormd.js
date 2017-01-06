@@ -148,6 +148,8 @@
         imageUpload          : false,
         imageFormats         : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
         imageUploadURL       : "",
+        fileUpload           : false,
+        fileUploadURL        : "",
         crossDomainUpload    : false,
         uploadCallbackURL    : "",
 
@@ -206,6 +208,7 @@
             link             : "fa-link",
             "reference-link" : "fa-anchor",
             image            : "fa-picture-o",
+            file             : "fa-cloud-upload",
             code             : "fa-code",
             "preformatted-text" : "fa-file-code-o",
             "code-block"     : "fa-file-code-o",
@@ -252,6 +255,7 @@
                 link             : "链接",
                 "reference-link" : "引用链接",
                 image            : "添加图片",
+                file             : "添加文件",
                 code             : "行内代码",
                 "preformatted-text" : "预格式文本 / 代码块（缩进风格）",
                 "code-block"     : "代码块（多语言风格）",
@@ -301,6 +305,14 @@
                     imageURLEmpty    : "错误：图片地址不能为空。",
                     uploadFileEmpty  : "错误：上传的图片不能为空。",
                     formatNotAllowed : "错误：只允许上传图片文件，允许上传的图片文件格式有："
+                },
+                file : {
+                    title   : "添加文件",
+                    url     : "文件地址",
+                    alt     : "文件说明",
+                    uploadButton : "本地上传",
+                    fileURLEmpty    : "错误：文件地址不能为空。",
+                    uploadFileEmpty  : "错误：上传的文件不能为空。"
                 },
                 preformattedText : {
                     title             : "添加预格式文本或代码块",
@@ -3109,6 +3121,9 @@
 
         image : function() {
             this.executePlugin("imageDialog", "image-dialog/image-dialog");
+        },
+        file : function (cm,icon,cursor,selection) {
+            editor.executePlugin("fileDialog", "file-dialog/file-dialog");
         },
 
         code : function() {

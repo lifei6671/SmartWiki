@@ -323,15 +323,34 @@ class DocumentController extends Controller
     public function upload()
     {
         $allowExt = ["jpg", "jpeg", "gif", "png"];
+        //如果上传的是图片
+        if(isset($_FILES['editormd-image-file'])){
+            //如果没有开启图片上传
+            if(!env('UPLOAD_IMAGE_ENABLE','0')){
+                $data['success'] = 0;
+                $data['message'] = '没有开启图片上传功能';
+                return $this->response->json($data);
+            }
+            $file = $this->request->file('editormd-image-file');
+            $allowExt = explode('|',env('UPLOAD_IMAGE_EXT','jpg|jpeg|gif|png'));
+        }elseif(isset($_FILES['editormd-file-file'])){
+            //如果没有开启文件上传
+            if(!env('UPLOAD_FILE_ENABLE','0')){
+                $data['success'] = 0;
+                $data['message'] = '没有开启文件上传功能';
+                return $this->response->json($data);
+            }
 
-        $file = $this->request->file('editormd-image-file');
+            $file = $this->request->file('editormd-file-file');
+            $allowExt = explode('|',env('UPLOAD_FILE_EXT','txt|doc|docx|xls|xlsx|ppt|pptx|pdf|7z|rar'));
+        }
         //校验文件
-        if($file->isValid()){
+        if(isset($file) && $file->isValid()){
             $ext = $file -> getClientOriginalExtension(); //上传文件的后缀
             //判断是否是图片
             if(empty($ext) or in_array(strtolower($ext),$allowExt) === false){
                 $data['success'] = 0;
-                $data['message '] = '不允许的文件类型';
+                $data['message'] = '不允许的文件类型';
 
                 return $this->response->json($data);
             }
@@ -343,21 +362,25 @@ class DocumentController extends Controller
                 $webPath = '/' . $path->getPath() . '/' . $fileName;
 
                 $data['success'] = 1;
-                $data['message '] = 'ok';
+                $data['message'] = 'ok';
+                $data['alt'] = $file->getClientOriginalName();
                 $data['url'] = url($webPath);
+                if(isset($_FILES['editormd-file-file'])){
+                    $data['icon'] = resolve_attachicons($ext);
+                }
 
                 return $this->response->json($data);
 
             }catch (Exception $ex){
                 $data['success'] = 0;
-                $data['message '] = $ex->getMessage();
+                $data['message'] = $ex->getMessage();
 
                 return $this->response->json($data);
             }
 
         }
         $data['success'] = 0;
-        $data['message '] = '文件校验失败';
+        $data['message'] = '文件校验失败';
 
         return $this->response->json($data);
     }
@@ -401,6 +424,7 @@ class DocumentController extends Controller
             unset($this->data['project']);
             unset($this->data['tree']);
             $this->data['doc_title'] = $doc->doc_name;
+
 
             return $this->jsonResult(0,$this->data);
         }

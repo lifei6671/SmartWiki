@@ -1,5 +1,8 @@
 <?php
 
+use SmartWiki\Extentions\Markdown\Parser\AutoLinkParser;
+use SmartWiki\Extentions\Markdown\Parser\HttpMethodParser;
+use SmartWiki\Extentions\Markdown\Renderer\HttpMethodRenderer;
 use SmartWiki\Member;
 use SmartWiki\WikiConfig;
 
@@ -249,9 +252,13 @@ if(!function_exists('markdown_converter')) {
         $environment = League\CommonMark\Environment::createCommonMarkEnvironment();
         $environment->addExtension(new Webuni\CommonMark\TableExtension\TableExtension());
         $environment->addExtension(new Webuni\CommonMark\AttributesExtension\AttributesExtension());
-        $environment->addBlockRenderer('League\CommonMark\Block\Element\Heading',new SmartWiki\Extentions\Markdown\HeadingRenderer());
 
-        $environment->addBlockRenderer('League\CommonMark\Block\Element\Document',new SmartWiki\Extentions\Markdown\TocRenderer());
+        $environment->addBlockParser(new HttpMethodParser());
+        $environment->addInlineParser(new AutoLinkParser());
+
+        $environment->addBlockRenderer('League\CommonMark\Block\Element\Heading',new SmartWiki\Extentions\Markdown\Renderer\HeadingRenderer());
+        $environment->addBlockRenderer('League\CommonMark\Block\Element\Document',new SmartWiki\Extentions\Markdown\Renderer\TocRenderer());
+        $environment->addBlockRenderer('SmartWiki\Extentions\Markdown\Element\HttpMethodBlock', new HttpMethodRenderer());
 
         $converter = new League\CommonMark\Converter(new League\CommonMark\DocParser($environment), new League\CommonMark\HtmlRenderer($environment));
 
@@ -260,4 +267,24 @@ if(!function_exists('markdown_converter')) {
 
         return $html;
     }
+}
+
+if(!function_exists('resolve_attachicons')) {
+    /**
+     * 获取对应扩展名的小图标
+     * @param $ext
+     * @return string|null
+     */
+    function resolve_attachicons($ext){
+        $ext = strtolower($ext);
+        $config =  config('attachicons');
+        if(is_array($config) && isset($config[$ext])){
+            return $config[$ext];
+        }
+        if(is_array($config) && isset($config['default'])){
+            return $config['default'];
+        }
+        return null;
+    }
+
 }

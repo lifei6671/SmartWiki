@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"><link rel="shortcut icon" href="/favicon.ico">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -170,35 +170,41 @@
 PS：PHP是世界上最好的语言，没有之一(逃
 </script>
 <script type="text/plain" id="template-api">
-**简要描述：**
+### 简要描述：
 
 - 用户登录接口
 
-**请求域名:**
+### 请求域名:
 
 - http://xx.com
 
-**请求URL：**
+### 请求URL:
 
-<span class="default get">GET</span>/api/login
-<span class="default post">POST</span>/api/login
-<span class="default put">PUT</span>/api/login
-<span class="default del">DEL</span>/api/login
-<span class="default del">TRACE</span>/api/login
-<span class="default">CONNECT</span>/api/login
+GET:/api/login
 
-**参数：**
+POST:/api/login
 
-|参数名|必选|类型|说明|
+PUT:/api/login
+
+DELETE:/api/login
+
+TRACE:/api/login
+
+
+### 参数:
+
+|参数名|是否必须|类型|说明|
 |:----    |:---|:----- |-----   |
 |username |是  |string |用户名   |
 |password |是  |string | 密码    |
 
- **返回示例**
+### 返回示例:
+
+**正确时返回:**
 
 ```
   {
-    "error_code": 0,
+    "errcode": 0,
     "data": {
       "uid": "1",
       "account": "admin",
@@ -210,13 +216,23 @@ PS：PHP是世界上最好的语言，没有之一(逃
   }
 ```
 
- **返回参数说明**
+**错误时返回:**
+
+
+```
+  {
+    "errcode": 500,
+    "errmsg": "invalid appid"
+  }
+```
+
+### 返回参数说明:
 
 |参数名|类型|说明|
 |:-----  |:-----|-----                           |
 |group_level |int   |用户组id，1：超级管理员；2：普通用户  |
 
- **备注**
+### 备注:
 
 - 更多返回错误代码请看首页的错误代码描述
 
@@ -224,7 +240,8 @@ PS：PHP是世界上最好的语言，没有之一(逃
 
 </script>
 <script type="text/plain" id="template-code">
--  用户表，储存用户信息
+### 数据库字典
+#### 用户表，储存用户信息
 
 |字段|类型|空|默认|注释|
 |:----    |:-------    |:--- |-- -|------      |
@@ -234,7 +251,7 @@ PS：PHP是世界上最好的语言，没有之一(逃
 |name     |varchar(15) |是   |    |    昵称     |
 |reg_time |int(11)     |否   | 0  |   注册时间  |
 
-- 备注：无
+#### 备注：无
 
 
 

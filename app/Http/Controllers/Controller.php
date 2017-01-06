@@ -91,6 +91,8 @@ class Controller extends BaseController
         }
 
         $this->response = $this->response->json($content);
+        $this->response->header('Pragma','no-cache')
+        ->header('Cache-Control','no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         return $this->response;
     }
 }

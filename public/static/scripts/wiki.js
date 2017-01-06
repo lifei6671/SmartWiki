@@ -56,9 +56,11 @@ $(document).ready(function () {
         imageUpload: true,
         imageFormats: ["jpg", "jpeg", "gif", "png", "JPG", "JPEG", "GIF", "PNG"],
         imageUploadURL: "/upload",
+        fileUpload: true,
+        fileUploadURL : '/upload',
         tocStartLevel : 1,
         tocm : true,
-        toolbarIcons : [ "back","save", "template","undo", "redo" , "h1", "h2","h3" ,"h4","bold", "hr", "italic","quote","list-ul","list-ol","link","reference-link","image","code","html-entities","preformatted-text","code-block","table","history"],
+        toolbarIcons : [ "back","save", "template","undo", "redo" , "h1", "h2","h3" ,"h4","bold", "hr", "italic","quote","list-ul","list-ol","link","reference-link","image","file","code","html-entities","preformatted-text","code-block","table","history"],
         toolbarIconsClass : {
             bold : "fa-bold"
         } ,
@@ -68,7 +70,6 @@ $(document).ready(function () {
         toolbarCustomIcons:{
             back : '<a href="javascript:;" title="返回"> <i class="fa fa-mail-reply" name="back"></i></a>',
             save : '<a href="javascript:;" title="保存" id="markdown-save" class="disabled"> <i class="fa fa-save" name="save"></i></a>',
-            upload : '<a href="javascript:;" title="上传文件"><i class="fa fa-cloud-upload" name="upload"></i></a>',
             history : '<a href="javascript:;" title="历史版本"> <i class="fa fa-history" name="history"></i></a>',
             template : '<a href="javascript:;" title="模板"> <i class="fa fa-tachometer" name="template"></i></a>'
         },
@@ -80,7 +81,13 @@ $(document).ready(function () {
              * @param {String}      selection  编辑器选中的文本
              */
             back : function (cm, icon, cursor, selection) {
-                window.history.back();
+                if(document.referer){
+                    window.history.back();
+                }else{
+                    window.location = '/member/projects';
+                }
+
+                return false;
             },
             save : function (cm, icon, cursor, selection) {
                 if($("#markdown-save").hasClass('change')) {
