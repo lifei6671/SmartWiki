@@ -72,8 +72,11 @@ class TocRenderer implements BlockRendererInterface
                 $list = $this->tocRecursion(0,$tree);
 
                 $tocList = '<div class="markdown-toc editormd-markdown-toc"><ul class="markdown-toc-list">'. substr($list,4) . '</div>';
-                //$wholeDoc = str_replace('[TOC]',$tocList,$wholeDoc);
-                $wholeDoc = preg_replace('/^\[TOC\]$/',$tocList,$wholeDoc);
+                $wholeDoc = str_replace('<p>[TOC]</p>',$tocList,$wholeDoc);
+
+                //$wholeDoc .= preg_replace('/^\[TOC\]$/',$tocList,$wholeDoc);
+
+
             }
         }
         return $wholeDoc === '' ? '' : $wholeDoc . "\n";
