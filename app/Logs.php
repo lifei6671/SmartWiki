@@ -46,6 +46,7 @@ class Logs extends ModelBase
         $logs->content = $content;
         $logs->original_data = $original_data;
         $logs->present_data = $present_data;
+        $logs->create_time = date('Y-m-d H:i:s');
 
         return $logs->save();
     }

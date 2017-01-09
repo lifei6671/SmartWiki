@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
+    <link rel="shortcut icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{$title}} - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
     <!-- Bootstrap -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/static/highlight/styles/atelier-savanna-light.css" rel="stylesheet">
+    <link href="/static/highlight/styles/default.css" rel="stylesheet">
+    <link href="/static/highlight/styles/zenburn.css" rel="stylesheet">
     <link href="/static/jstree/themes/default/style.css" rel="stylesheet">
     <link href="/static/nprogress/nprogress.css" rel="stylesheet">
     <link href="/static/styles/styles.css" rel="stylesheet">
@@ -23,7 +25,7 @@
     <script src="/static/bootstrap/js/respond.min.js"></script>
     <![endif]-->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/static/scripts/jquery.min.js"></script>
+    <script src="/static/scripts/jquery.min.js" type="text/javascript"></script>
 
 </head>
 <body>
@@ -100,10 +102,22 @@
 <script type="text/javascript" src="/static/layer/layer.js"></script>
 <script type="text/javascript" src="/static/nprogress/nprogress.js"></script>
 <script type="text/javascript" src="/static/highlight/highlight.js"></script>
+<script type="text/javascript" src="/static/highlight/highlightjs-line-numbers.min.js"></script>
 <script type="text/javascript">
+    var events = $("body");
+    var catalog = null;
+    /**
+     * 初始化高亮插件
+     */
+    function initHighlighting() {
+        $('pre code').each(function (i, block) {
+            hljs.highlightBlock(block);
+        });
 
+        hljs.initLineNumbersOnLoad();
+    }
     $(function () {
-        hljs.initHighlightingOnLoad();
+        initHighlighting();
 
         $(document).ready(function () {
             $('#sidebar>ul').stickUp({
@@ -122,7 +136,7 @@
             $("#sidebar").css('height',height + 'px');
         });
 
-        $("#sidebar").jstree({
+        catalog = $("#sidebar").jstree({
             'plugins':["wholerow","types"],
             "types": {
                 "default" : {
@@ -145,9 +159,9 @@
                url : url,
                 type : "GET",
                 beforeSend :function (xhr) {
-                    var body = $("body").data('body_' + selected.node.id);
-                    var title = $("body").data('title_' + selected.node.id);
-                    var doc_title = $("body").data('doc_title_' + selected.node.id);
+                    var body = events.data('body_' + selected.node.id);
+                    var title = events.data('title_' + selected.node.id);
+                    var doc_title = events.data('doc_title_' + selected.node.id);
 
                     if(body && title && doc_title){
 
@@ -155,9 +169,8 @@
                         $("#page-title h1").text(doc_title);
                         $("title").text(title);
 
-                        if(history.pushState){
-                            history.pushState({ title: doc_title }, doc_title, url);
-                        }
+                        events.trigger('article.open',url,true);
+
                         return false;
                     }
                     NProgress.start();
@@ -173,12 +186,12 @@
                         $("#page-title h1").text(doc_title);
                         $("title").text(title);
 
-                        $("body").data('body_' + selected.node.id,body);
-                        $("body").data('title_' + selected.node.id,title);
-                        $("body").data('doc_title_' + selected.node.id,doc_title);
-                        if(history.pushState){
-                            history.pushState({ title: doc_title }, doc_title, url);
-                        }
+                        events.data('body_' + selected.node.id,body);
+                        events.data('title_' + selected.node.id,title);
+                        events.data('doc_title_' + selected.node.id,doc_title);
+
+                        events.trigger('article.open',url,false);
+
                     }else{
                         layer.msg("加载失败");
                     }
@@ -188,7 +201,23 @@
                 }
             });
         });
-    })
+    });
+
+    events.on('article.open', function (event, url,init) {
+        if ('pushState' in history) {
+
+                if (init == false) {
+                    history.replaceState({}, '', url);
+                    init = true;
+                } else {
+                    history.pushState({}, '', url);
+                }
+
+        } else {
+            location.hash = url;
+        }
+        initHighlighting();
+    });
 </script>
 </body>
 </html>

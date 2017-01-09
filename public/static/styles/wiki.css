@@ -64,16 +64,6 @@
     background-position: -36px -4px !important;
 }
 
-#page-title{
-    padding-bottom: 20px;
-    border-bottom: 1px dashed #cccccc;
-}
-#page-title h1{
-    color: #555;
-    font: 300 20px Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    text-shadow: 1px 0 #eee;
-    margin: 0px;
-}
 
 .jstree-contextmenu{
     z-index: 999999;

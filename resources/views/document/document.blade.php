@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"><link rel="shortcut icon" href="/favicon.ico">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,7 +25,7 @@
     <script type="text/javascript">
         window.CONFIG = {
             "project_id" : "{{$project_id}}"
-        }
+        };
         window.treeCatalog = {};
     </script>
 </head>
@@ -170,35 +170,41 @@
 PS：PHP是世界上最好的语言，没有之一(逃
 </script>
 <script type="text/plain" id="template-api">
-**简要描述：**
+### 简要描述：
 
 - 用户登录接口
 
-**请求域名:**
+### 请求域名:
 
 - http://xx.com
 
-**请求URL：**
+### 请求URL:
 
-<span class="default get">GET</span>/api/login
-<span class="default post">POST</span>/api/login
-<span class="default put">PUT</span>/api/login
-<span class="default del">DEL</span>/api/login
-<span class="default del">TRACE</span>/api/login
-<span class="default">CONNECT</span>/api/login
+GET:/api/login
 
-**参数：**
+POST:/api/login
 
-|参数名|必选|类型|说明|
+PUT:/api/login
+
+DELETE:/api/login
+
+TRACE:/api/login
+
+
+### 参数:
+
+|参数名|是否必须|类型|说明|
 |:----    |:---|:----- |-----   |
 |username |是  |string |用户名   |
 |password |是  |string | 密码    |
 
- **返回示例**
+### 返回示例:
+
+**正确时返回:**
 
 ```
   {
-    "error_code": 0,
+    "errcode": 0,
     "data": {
       "uid": "1",
       "account": "admin",
@@ -210,13 +216,23 @@ PS：PHP是世界上最好的语言，没有之一(逃
   }
 ```
 
- **返回参数说明**
+**错误时返回:**
+
+
+```
+  {
+    "errcode": 500,
+    "errmsg": "invalid appid"
+  }
+```
+
+### 返回参数说明:
 
 |参数名|类型|说明|
 |:-----  |:-----|-----                           |
 |group_level |int   |用户组id，1：超级管理员；2：普通用户  |
 
- **备注**
+### 备注:
 
 - 更多返回错误代码请看首页的错误代码描述
 
@@ -224,7 +240,8 @@ PS：PHP是世界上最好的语言，没有之一(逃
 
 </script>
 <script type="text/plain" id="template-code">
--  用户表，储存用户信息
+### 数据库字典
+#### 用户表，储存用户信息
 
 |字段|类型|空|默认|注释|
 |:----    |:-------    |:--- |-- -|------      |
@@ -234,55 +251,60 @@ PS：PHP是世界上最好的语言，没有之一(逃
 |name     |varchar(15) |是   |    |    昵称     |
 |reg_time |int(11)     |否   | 0  |   注册时间  |
 
-- 备注：无
+#### 备注：无
 
 
 
 </script>
 <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-<script src="/static/editormd/editormd.min.js"></script>
+
+
 <script type="text/javascript" src="/static/jstree/jstree.js"></script>
 <script type="text/javascript" src="/static/scripts/jquery.form.js"></script>
 <script type="text/javascript" src="/static/layer/layer.js"></script>
 <script type="text/javascript" src="/static/scripts/json2.js"></script>
-<script type="text/javascript" src="/static/scripts/wiki.js"></script>
+<script type="text/javascript" src="/static/editormd/editormd.js"></script>
+
 <script type="text/javascript">
-    $(function () {
+    /**
+     * 初始化jstree
+     */
+    function initJsTree() {
         $("#sidebar").jstree({
-            'plugins':['state',"wholerow","types",'dnd','contextmenu'],
+            'plugins': ['state', "wholerow", "types", 'dnd', 'contextmenu'],
             "types": {
-                "default" : {
-                    "icon" : false  // 删除默认图标
+                "default": {
+                    "icon": false  // 删除默认图标
                 },
             },
-            'core' : {
-                'check_callback' : true,
-                'data' : {!! $json !!},
-                'animation' : 0,
-                "multiple" : false
+            'core': {
+                'check_callback': true,
+                'data': {!! $json !!},
+                'animation': 0,
+                "multiple": false
             },
-            "contextmenu":{
+            "contextmenu": {
                 show_at_node: false,
-                select_node : false,
-                "items" : {
+                select_node: false,
+                "items": {
                     "添加文档": {
                         "separator_before": false,
-                        "separator_after" : true,
-                        "_disabled"       : false,
+                        "separator_after": true,
+                        "_disabled": false,
                         "label": "添加文档",
                         "icon": "fa fa-plus",
                         "action": function (data) {
 
                             var inst = $.jstree.reference(data.reference),
-                                    node = inst.get_node(data.reference);
+                                node = inst.get_node(data.reference);
 
                             openCreateCatalogDialog(node);
                         }
                     },
-                    "编辑" : {
+                    "编辑": {
                         "separator_before": false,
-                        "separator_after" : true,
-                        "_disabled"       : false,
+                        "separator_after": true,
+                        "_disabled": false,
                         "label": "编辑",
                         "icon": "fa fa-edit",
                         "action": function (data) {
@@ -291,10 +313,10 @@ PS：PHP是世界上最好的语言，没有之一(逃
                             editDocumentDialog(node);
                         }
                     },
-                    "删除" : {
+                    "删除": {
                         "separator_before": false,
-                        "separator_after" : true,
-                        "_disabled"       : false,
+                        "separator_after": true,
+                        "_disabled": false,
                         "label": "删除",
                         "icon": "fa fa-trash-o",
                         "action": function (data) {
@@ -305,44 +327,45 @@ PS：PHP是世界上最好的语言，没有之一(逃
                     }
                 }
             }
-        }).on('loaded.jstree',function () {
+        }).on('loaded.jstree', function () {
             window.treeCatalog = $(this).jstree();
             console.log(window.treeCatalog);
-        }).on('select_node.jstree',function (node,selected,event) {
-            console.log(selected.node.id);
+        }).on('select_node.jstree', function (node, selected, event) {
             window.loadDocument(selected);
-        }).on("move_node.jstree",function (node,parent) {
+
+        }).on("move_node.jstree", function (node, parent) {
 
             var parentNode = window.treeCatalog.get_node(parent.parent);
 
             var nodeData = window.getSiblingSort(parentNode);
 
-            if(parent.parent != parent.old_parent){
+            if (parent.parent != parent.old_parent) {
                 parentNode = window.treeCatalog.get_node(parent.old_parent);
                 console.log(parentNode);
                 var newNodeData = window.getSiblingSort(parentNode);
-                if(newNodeData.length > 0){
+                if (newNodeData.length > 0) {
                     nodeData = nodeData.concat(newNodeData);
                 }
             }
-            console.log(nodeData);
 
             var index = layer.load(1, {
-                shade: [0.1,'#fff'] //0.1透明度的白色背景
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
             });
 
             $.post("{{route('document.sort',["id" => $project_id])}}", JSON.stringify(nodeData)).done(function (res) {
                 layer.close(index);
-                if(res.errcode != 0){
+                if (res.errcode != 0) {
                     layer.msg(res.message);
-                }else{
+                } else {
                     layer.msg("保存排序成功");
                 }
             }).fail(function () {
                 layer.close(index);
                 layer.msg("保存排序失败");
             });
-        }) ;
+        });
+    }
+    $(function () {
 
         $("#template-modal .section>a").on("click",function () {
             var type = $(this).attr('data-type');
@@ -354,5 +377,6 @@ PS：PHP是世界上最好的语言，没有之一(逃
         });
     });
 </script>
+<script type="text/javascript" src="/static/scripts/wiki.js"></script>
 </body>
 </html>

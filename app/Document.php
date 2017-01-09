@@ -71,7 +71,7 @@ class Document extends ModelBase
     {
         $key = 'document.html.' . $doc_id;
 
-        $html = $update or Cache::get($key);
+        $html = null;//$update or Cache::get($key);
 
         if(empty($html)) {
             $document = self::getDocumentFromCache($doc_id, $update);
@@ -82,9 +82,11 @@ class Document extends ModelBase
             if(empty($document->doc_content)){
                 return '';
             }
-            $parsedown = new \Parsedown();
+//            $parsedown = new \Parsedown();
+//
+//            $html  = $parsedown->text($document->doc_content);
 
-            $html  = $parsedown->text($document->doc_content);
+            $html = markdown_converter($document->doc_content);
 
             $html = str_replace('class="language-','class="',$html);
             $expiresAt = Carbon::now()->addHour(12);

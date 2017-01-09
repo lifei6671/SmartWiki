@@ -2,6 +2,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8">
+    <link rel="shortcut icon" href="/favicon.ico">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -103,13 +104,13 @@
                         <label class="col-sm-2 control-label">项目权限</label>
                         <div class="col-sm-10 btn-group" data-toggle="buttons" id="project-passwd-buttons">
                             <label class="btn btn-default active"  id="projectPasswd1" data-toggle="tooltip" data-placement="auto" title="私密">
-                                <input type="radio" name="projectPasswd"  autocomplete="off" checked value="1"><i class="fa fa-lock"></i>
+                                <input type="radio" name="projectPasswd"  autocomplete="off" checked value="0"><i class="fa fa-lock"></i>
                             </label>
                             <label class="btn btn-default" title="完全公开" id="projectPasswd2" data-toggle="tooltip" data-placement="auto">
-                                <input type="radio" name="projectPasswd" autocomplete="off" value="2"><i class="fa fa-unlock"></i>
+                                <input type="radio" name="projectPasswd" autocomplete="off" value="1"><i class="fa fa-unlock"></i>
                             </label>
                             <label class="btn btn-default" title="加密公开" id="projectPasswd3" data-toggle="tooltip" data-placement="auto">
-                                <input type="radio" name="projectPasswd" autocomplete="off" value="3"><i class="fa fa-unlock-alt"></i>
+                                <input type="radio" name="projectPasswd" autocomplete="off" value="2"><i class="fa fa-unlock-alt"></i>
                             </label>
                             <input type="password" name="projectPasswdInput" class="form-control" style="width: 200px;margin-left: 110px;display: none" id="btn-project-passwd" placeholder="项目密码" maxlength="20"  autocomplete="off">
                         </div>

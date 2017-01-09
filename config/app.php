@@ -156,7 +156,8 @@ return [
         SmartWiki\Providers\EventServiceProvider::class,
         SmartWiki\Providers\RouteServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        SmartWiki\Providers\MemcachedExtendServiceProvider::class
+        SmartWiki\Providers\MemcachedExtendServiceProvider::class,
+        GrahamCampbell\Markdown\MarkdownServiceProvider::class
     ],
 
     /*
@@ -203,6 +204,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class
     ],
 
 ];

@@ -86,7 +86,7 @@ class HomeController extends Controller
 
         $this->data['tree'] = Project::getProjectHtmlTree($id);
 
-        $this->data['body'] = '';
+        $this->data['body'] = $project->description;
 
         return view('home.show',$this->data);
     }
