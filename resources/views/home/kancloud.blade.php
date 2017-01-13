@@ -87,7 +87,7 @@
 
                             </div>
                             <div class="col-md-8 text-center">
-                                <h1>{{$title}}</h1>
+                                <h1 id="article-title">{{$title}}</h1>
                             </div>
                             <div class="col-md-2">
 
@@ -194,8 +194,8 @@
                     if(body && title && doc_title){
 
                         $("#page-content").html(body);
-                        $("#page-title h1").text(doc_title);
                         $("title").text(title);
+                        $("#article-title").text(doc_title);
 
                         events.trigger('article.open',url,true);
 
@@ -210,9 +210,8 @@
                         var title = res.data.title;
 
                         $("#page-content").html(body);
-
-                        $("#page-title h1").text(doc_title);
                         $("title").text(title);
+                        $("#article-title").text(doc_title);
 
                         events.data('body_' + selected.node.id,body);
                         events.data('title_' + selected.node.id,title);
