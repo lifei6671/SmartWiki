@@ -27,8 +27,8 @@
     <div class="container">
         <div class="navbar-header">
             <a href="{{route('home.index')}}" class="navbar-brand">SmartWiki</a>
-            <div class="btn-group dropdown-menu-right pull-right">
-                <button class="btn btn-default slidebar dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-align-justify"></i></button>
+            <div class="btn-group dropdown-menu-right pull-right slidebar">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-align-justify"></i></button>
                 <ul class="dropdown-menu" role="menu">
                     @if(isset($member))
                         <li>

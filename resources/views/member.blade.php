@@ -28,8 +28,8 @@
     <div class="container">
         <div class="navbar-header">
             <a href="{{route('home.index')}}" class="navbar-brand">SmartWiki</a>
-            <div class="btn-group dropdown-menu-right pull-right">
-                <button class="btn btn-default slidebar dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-align-justify"></i></button>
+            <div class="btn-group dropdown-menu-right pull-right slidebar">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-align-justify"></i></button>
                 <ul class="dropdown-menu" role="menu">
                     <li{!! (isset($member_index) ? ' class="active"' : '') !!}><a href="{{route('member.index')}}" class="item"><i class="fa fa-user"></i> 个人资料</a> </li>
                     <li{!! (isset($member_account) ? ' class="active"' : '') !!}><a href="{{route('member.account')}}" class="item"><i class="fa fa-lock"></i> 修改密码</a> </li>

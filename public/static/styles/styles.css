@@ -28,6 +28,9 @@ body {
     font-weight: 500;
     color: #563d7c
 }
+.smart-nav .slidebar{
+    display: none;
+}
 .smart-nav .navbar-nav>li>a{
     padding: 15px 20px;
 }
@@ -402,6 +405,7 @@ body {
 
 @media screen and (max-width: 840px) {
     .manual-reader .slidebar{
+        display: block;
         float: right;
         height: 40px;
         margin: 5px;

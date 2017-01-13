@@ -106,7 +106,9 @@ h6 {
     -o-transition-timing-function: linear;
     -o-transition-delay: 0s
 }
-
+.m-manual .slidebar{
+    display: none;
+}
 .m-manual .manual-head .manual-title{
     display: inline-block;
     height: 30px;
@@ -273,6 +275,7 @@ h6 {
 
 .manual-article .article-content .article-body{
     min-height: 90px;
+    padding: 5px;
 }
 .m-manual .manual-progress {
     position: fixed;
