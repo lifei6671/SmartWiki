@@ -446,6 +446,7 @@ h6 {
 }
 .editor-content pre>code{
     word-break: break-all;
+    white-space: inherit;
 }
 .editor-content blockquote {
     border-color: inherit;
