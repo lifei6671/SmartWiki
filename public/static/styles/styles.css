@@ -420,7 +420,7 @@ body {
         width: 100%;
     }
     .smart-container .summary{
-        width: 100%;
+        display: none;
     }
     .smart-container .text{
         width: 100%;
