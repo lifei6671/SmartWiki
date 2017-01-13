@@ -2,6 +2,9 @@ body {
     position: relative;
     font-family: Verdana, "Lantinghei SC", "Hiragino Sans GB", "Microsoft Yahei", Helvetica, arial, \5b8b\4f53, sans-serif;
 }
+.dropdown-menu li>a{
+    line-height: 2em;
+}
 .error-message{
     font-size: 13px;
     color: red;
@@ -130,6 +133,7 @@ body {
     width: 25%;
     float: left;
     overflow: hidden;
+    min-width: 200px;
 }
 .smart-container li:hover {
     cursor: pointer;
@@ -165,6 +169,9 @@ body {
     margin-top: 70px;
     font-size: 12px;
     background-color: #ffffff;
+}
+.footer ul{
+    padding: 0;
 }
 .footer li{
     display: inline-block;
@@ -353,6 +360,9 @@ body {
     opacity : 0.8;
     font-size: 13px;
 }
+.member-footer ul{
+    padding: 0;
+}
 .member-footer li{
     display: inline-block;
 }
@@ -387,4 +397,50 @@ body {
 }
  .login .login-body .tooltip-inner,.has-error .tooltip-inner{
     background-color: #a94442;
+}
+
+
+@media screen and (max-width: 840px) {
+    .manual-reader .slidebar{
+        float: right;
+        height: 40px;
+        margin: 5px;
+        line-height: 18px;
+        border: 0;
+    }
+    .smart-container .project-box li{
+        margin-left: 5px;
+        width: 90%;
+    }
+    .smart-container .box{
+        width: 100%;
+    }
+    .smart-container .summary{
+        width: 100%;
+    }
+    .smart-container .text{
+        width: 100%;
+    }
+    .login .login-body{
+        width: 95%;
+        margin: 0 auto;
+    }
+    .member .page-left{
+        display: none;
+    }
+    .member .page-right,.member-footer .container .row{
+        margin: 0 auto;
+    }
+    .member .page-right{
+        padding: 15px;
+    }
+    .member .page-right .box-body .form-right{
+        display: none;
+    }
+    .member .page-right .box-body{
+        padding: 0;
+    }
+    .article-edit-btn,.project-user-btn{
+        display: none;
+    }
 }

@@ -88,7 +88,7 @@ class HomeController extends Controller
 
         $this->data['body'] = $project->description;
 
-        return view('home.show',$this->data);
+        return view('home.kancloud',$this->data);
     }
 
     /**

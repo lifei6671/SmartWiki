@@ -4,28 +4,28 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
-    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{$title}} - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
     <!-- Bootstrap -->
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/static/highlight/styles/default.css" rel="stylesheet">
-    <link href="/static/highlight/styles/zenburn.css" rel="stylesheet">
-    <link href="/static/jstree/themes/default/style.css" rel="stylesheet">
-    <link href="/static/nprogress/nprogress.css" rel="stylesheet">
-    <link href="/static/styles/styles.css" rel="stylesheet">
-    <link href="/static/styles/wiki.css" rel="stylesheet">
-    <link href="/static/styles/markdown.css" rel="stylesheet">
+    <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('static/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="{{asset('static/highlight/styles/default.css')}}" rel="stylesheet">
+    <link href={{asset('static/highlight/styles/zenburn.css')}} rel="stylesheet">
+    <link href="{{asset('static/jstree/themes/default/style.css')}}" rel="stylesheet">
+    <link href="{{asset('static/nprogress/nprogress.css')}}" rel="stylesheet">
+    <link href="{{asset('static/styles/styles.css')}}" rel="stylesheet">
+    <link href="{{asset('static/styles/wiki.css')}}" rel="stylesheet">
+    <link href="{{asset('static/styles/markdown.css')}}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="/static/bootstrap/js/html5shiv.min.js"></script>
-    <script src="/static/bootstrap/js/respond.min.js"></script>
+    <script src="{{asset('static/bootstrap/js/html5shiv.min.js')}}"></script>
+    <script src="{{asset('static/bootstrap/js/respond.min.js')}}"></script>
     <![endif]-->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/static/scripts/jquery.min.js" type="text/javascript"></script>
+    <script src="{{asset('static/scripts/jquery.min.js')}}" type="text/javascript"></script>
 
 </head>
 <body>
@@ -96,13 +96,13 @@
 </div>
 @endif
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/static/bootstrap/js/bootstrap.min.js"></script>
-<script src="/static/scripts/stickUp.min.js"></script>
-<script type="text/javascript" src="/static/jstree/jstree.min.js"></script>
-<script type="text/javascript" src="/static/layer/layer.js"></script>
-<script type="text/javascript" src="/static/nprogress/nprogress.js"></script>
-<script type="text/javascript" src="/static/highlight/highlight.js"></script>
-<script type="text/javascript" src="/static/highlight/highlightjs-line-numbers.min.js"></script>
+<script src="{{asset('static/bootstrap/js/bootstrap.min.js')}}"></script>
+<script src="{{asset('static/scripts/stickUp.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/jstree/jstree.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/layer/layer.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/nprogress/nprogress.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/highlight/highlight.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/highlight/highlightjs-line-numbers.min.js')}}"></script>
 <script type="text/javascript">
     var events = $("body");
     var catalog = null;

@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <meta charset="utf-8"><link rel="shortcut icon" href="/favicon.ico">
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>编辑文档 - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/editormd/css/editormd.min.css" rel="stylesheet">
-    <link href="/static/jstree/themes/default/style.css" rel="stylesheet">
+    <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('static/editormd/css/editormd.min.css')}}" rel="stylesheet">
+    <link href="{{asset('static/jstree/themes/default/style.css')}}" rel="stylesheet">
 
-    <link href="/static/styles/wiki.css" rel="stylesheet">
-    <link href="/static/styles/wikiedit.css" rel="stylesheet">
-    <link href="/static/styles/markdown.css" rel="stylesheet">
+    <link href="{{asset('static/styles/wiki.css')}}" rel="stylesheet">
+    <link href="{{asset('static/styles/wikiedit.css')}}" rel="stylesheet">
+    <link href="{{asset('static/styles/markdown.css')}}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="/static/bootstrap/js/html5shiv.min.js"></script>
-    <script src="/static/bootstrap/js/respond.min.js"></script>
+    <script src="{{asset('static/bootstrap/js/html5shiv.min.js')}}"></script>
+    <script src="{{asset('static/bootstrap/js/respond.min.js')}}"></script>
     <![endif]-->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/static/scripts/jquery.min.js"></script>
+    <script src="{{asset('static/scripts/jquery.min.js')}}"></script>
     <script type="text/javascript">
         window.CONFIG = {
             "project_id" : "{{$project_id}}"
@@ -256,14 +257,12 @@ TRACE:/api/login
 
 
 </script>
-<script src="/static/bootstrap/js/bootstrap.min.js"></script>
-
-
-<script type="text/javascript" src="/static/jstree/jstree.js"></script>
-<script type="text/javascript" src="/static/scripts/jquery.form.js"></script>
-<script type="text/javascript" src="/static/layer/layer.js"></script>
-<script type="text/javascript" src="/static/scripts/json2.js"></script>
-<script type="text/javascript" src="/static/editormd/editormd.js"></script>
+<script src="{{asset('static/bootstrap/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/jstree/jstree.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/scripts/jquery.form.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/layer/layer.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/scripts/json2.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/editormd/editormd.js')}}"></script>
 
 <script type="text/javascript">
     /**
@@ -377,6 +376,6 @@ TRACE:/api/login
         });
     });
 </script>
-<script type="text/javascript" src="/static/scripts/wiki.js"></script>
+<script type="text/javascript" src="{{asset('static/scripts/wiki.js')}}"></script>
 </body>
 </html>

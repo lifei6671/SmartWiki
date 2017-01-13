@@ -429,7 +429,7 @@ class DocumentController extends Controller
             return $this->jsonResult(0,$this->data);
         }
 
-        return view('home.show',$this->data);
+        return view('home.kancloud',$this->data);
     }
 
     /**

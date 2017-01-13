@@ -124,8 +124,13 @@
 }
 .markdown-body .markdown-toc{
     padding: 15px 5px;
-    background: #eeeeee;
+    background-color: #FFFFFF;
     line-height: 25px;
+    border: 1px solid #CCCCCC;
+    width: 300px;
+    float: right;
+    overflow-x: auto;
+    margin: 0 0 10px 10px;
 }
 .markdown-body ul li {
     font-size: 14px

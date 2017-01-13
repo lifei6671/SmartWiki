@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <meta charset="utf-8"><link rel="shortcut icon" href="/favicon.ico">
+    <meta charset="utf-8"><link rel="shortcut icon" href="{{asset('favicon.ico')}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> {{wiki_config('SITE_NAME','SmartWiki')}}</title>
 
     <!-- Bootstrap -->
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/static/styles/styles.css" rel="stylesheet">
+    <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('static/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="{{asset('static/styles/styles.css')}}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="/static/bootstrap/js/html5shiv.min.js"></script>
-    <script src="/static/bootstrap/js/respond.min.js"></script>
+    <script src="{{asset('static/bootstrap/js/html5shiv.min.js')}}"></script>
+    <script src="{{asset('static/bootstrap/js/respond.min.js')}}"></script>
     <![endif]-->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/static/scripts/jquery.min.js"></script>
+    <script src="{{asset('static/scripts/jquery.min.js')}}"></script>
 </head>
 <body>
 <header class="navbar navbar-static-top smart-nav navbar-fixed-top" role="banner">
@@ -74,9 +74,9 @@
 </div>
 @include('widget.footer')
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="/static/layer/layer.js"></script>
-<script src="/static/scripts/scripts.js" type="text/javascript"></script>
+<script src="{{asset('static/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
+<script type="text/javascript" src="{{asset('static/layer/layer.js')}}"></script>
+<script src="{{asset('static/scripts/scripts.js')}}" type="text/javascript"></script>
 <script type="text/javascript">
     $(function () {
         $("#newPassword,#confirmPassword,#code").on('focus',function () {

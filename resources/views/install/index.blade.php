@@ -2,13 +2,13 @@
 <html>
 <head>
     <title>Laravel</title>
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <!--[if lt IE 9]>
-    <script src="/static/bootstrap/js/html5shiv.min.js"></script>
-    <script src="/static/bootstrap/js/respond.min.js"></script>
+    <script src="{{asset('static/bootstrap/js/html5shiv.min.js')}}"></script>
+    <script src="{{asset('static/bootstrap/js/respond.min.js')}}"></script>
     <![endif]-->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/static/scripts/jquery.min.js"></script>
+    <script src="{{asset('static/scripts/jquery.min.js')}}"></script>
     <style>
         html, body {
             height: 100%;
@@ -99,8 +99,8 @@
         </div>
     </form>
 </div>
-<script src="/static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="/static/scripts/jquery.form.js"></script>
+<script src="{{asset('static/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
+<script type="text/javascript" src="{{asset('static/scripts/jquery.form.js')}}"></script>
 <script type="text/javascript">
     $(function () {
         function showMessage($msg) {
