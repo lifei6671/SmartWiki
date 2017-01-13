@@ -119,8 +119,7 @@ RewriteRule ^ index.php [L]
 #恢复依赖库
 composer install
 
-#设置加密密钥
-php artisan key:generate
+
 
 # 缓存配置【Windows平台请勿执行该命令】
 php artisan config:cache
@@ -137,6 +136,8 @@ php artisan optimize
 #安装SmartWiki
 php artisan smartwiki:install --dbHost=数据库地址 --dbName=数据库名称 --dbPort=数据库端口号 --dbUser=数据库账号 --dbPassword=数据库密码 --account=管理员账号 --password=管理员密码 --email=管理员邮箱
 
+#设置加密密钥
+php artisan key:generate
 ```
 
 ## SmartWiki迁移
