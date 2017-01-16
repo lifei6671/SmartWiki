@@ -411,4 +411,33 @@ class Project extends ModelBase
         }
         return $project;
     }
+
+    /**
+     * 搜索项目
+     * @param string $keyword 关键字
+     * @param int $pageIndex
+     * @param int $pageSize
+     * @return bool|\Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public static function search($keyword,$pageIndex= 1, $pageSize = 20)
+    {
+        if(empty($keyword)) {
+            return false;
+        }
+        $keyword = '%'. preg_replace('/\s+/','%',trim($keyword)).'%';
+
+       // print_r(trim($keyword));exit;
+
+        $searchResult = DB::table('project')->select(['*'])
+            ->where('project_name','like', $keyword )
+            ->orWhere('description','like',$keyword)
+            ->orderBy('project_id','DESC')
+            ->paginate($pageSize,['*'],'page',$pageIndex)
+            ->appends([
+                'keyword' => $keyword
+            ]);
+
+
+        return $searchResult;
+    }
 }

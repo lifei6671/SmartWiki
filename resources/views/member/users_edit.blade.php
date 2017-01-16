@@ -1,8 +1,8 @@
 @extends('member')
 @section('title')编辑用户@endsection
 @section('styles')
-    <link href="/static/webuploader/webuploader.css" rel="stylesheet">
-    <link href="/static/cropper/cropper.css" rel="stylesheet">
+    <link href="{{asset('static/webuploader/webuploader.css')}}" rel="stylesheet">
+    <link href="{{asset('static/cropper/cropper.css')}}" rel="stylesheet">
 
 @endsection
 @section('scripts')

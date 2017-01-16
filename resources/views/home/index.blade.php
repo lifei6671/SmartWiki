@@ -27,6 +27,14 @@
     <div class="container">
         <div class="navbar-header">
             <a href="{{route('home.index')}}" class="navbar-brand">SmartWiki</a>
+            <div class="searchbar pull-left">
+                <form class="form-inline" action="{{route('search.search')}}" method="get">
+                    <input class="form-control" name="keyword" type="search" placeholder="请输入关键词...">
+                    <button class="search-btn">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+            </div>
             <div class="btn-group dropdown-menu-right pull-right slidebar">
                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-align-justify"></i></button>
                 <ul class="dropdown-menu" role="menu">
@@ -81,14 +89,15 @@
 <div class="container smart-container">
     <div class="row">
         @if(count($lists) > 0)
-        <ul class="project-box">
-            @foreach($lists as $item)
-                @include('widget.project',(array)$item)
-            @endforeach
-        </ul>
-        <div>
-            <?php echo $lists->render();?>
-        </div>
+            <ul class="project-box">
+                @foreach($lists as $item)
+                    @include('widget.project',(array)$item)
+                @endforeach
+            </ul>
+            <div class="clearfix"></div>
+            <div class="manual-page">
+                <?php echo $lists->render();?>
+            </div>
         @else
             <div class="text-center" style="font-size: 20px;">暂无项目</div>
         @endif

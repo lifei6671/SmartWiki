@@ -1,8 +1,8 @@
 @extends('member')
 @section('title')个人资料@endsection
 @section('styles')
-<link href="/static/webuploader/webuploader.css" rel="stylesheet">
-<link href="/static/cropper/cropper.css" rel="stylesheet">
+<link href="{{asset('static/webuploader/webuploader.css')}}" rel="stylesheet">
+<link href="{{asset('static/cropper/cropper.css')}}" rel="stylesheet">
     <style type="text/css">
         #upload-logo-panel .wraper{
             float: left;

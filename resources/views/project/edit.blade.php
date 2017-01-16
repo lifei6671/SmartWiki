@@ -1,8 +1,8 @@
 @extends('member')
 @section('title'){{$title}}@endsection
 @section('styles')
-    <link href="/static/webuploader/webuploader.css" rel="stylesheet">
-    <link href="/static/cropper/cropper.css" rel="stylesheet">
+    <link href="{{asset('static/webuploader/webuploader.css')}}" rel="stylesheet">
+    <link href="{{asset('static/cropper/cropper.css')}}" rel="stylesheet">
     <style type="text/css">
         .box-operate{margin-top: 10px;}
         .box-operate>a,.box-operate>label{display: inline-block;margin-left: 5px;}

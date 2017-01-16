@@ -13,4 +13,6 @@ CREATE TABLE `wk_project_types` (
   KEY `type_id_index` (`type_id`),
   KEY `type_sort_index` (`type_sort`),
   KEY `wk_project_types_parent_id_index` (`parent_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目分类表'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目分类表';
+
+INSERT wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('启用登录验证码','ENABLED_CAPTCHA','0','system','是否启用登录验证码：0 否/1 是',now());

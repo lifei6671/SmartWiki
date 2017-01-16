@@ -1,14 +1,7 @@
 @extends('member')
 @section('title')编辑配置@endsection
-@section('styles')
-    <link href="/static/webuploader/webuploader.css" rel="stylesheet">
-    <link href="/static/cropper/cropper.css" rel="stylesheet">
 
-@endsection
 @section('scripts')
-    <script type="text/javascript" src="/static/cropper/cropper.js"></script>
-    <script type="text/javascript" src="/static/webuploader/webuploader.js"></script>
-
     <script type="text/javascript">
         function showError($msg) {
             $("#error-message").addClass("error-message").removeClass("success-message").text($msg);

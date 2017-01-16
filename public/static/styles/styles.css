@@ -28,6 +28,21 @@ body {
     font-weight: 500;
     color: #563d7c
 }
+.navbar-header .searchbar{
+    padding: 8px;
+}
+.navbar-header .searchbar .search-btn {
+    display: inline-block;
+    line-height: 100%;
+    cursor: pointer;
+    margin-top: -10px;
+    margin-left: -45px;
+    border: 0;
+    background-color: transparent
+}
+.navbar-header .searchbar .search-btn>i.fa{
+    padding: 10px;
+}
 .smart-nav .slidebar{
     display: none;
 }
@@ -168,10 +183,15 @@ body {
 .footer {
     color: #777;
     padding: 30px 0;
-    border-top: 1px solid #e5e5e5;
-    margin-top: 70px;
+
+
     font-size: 12px;
     background-color: #ffffff;
+}
+.footer .container{
+    margin-top: 70px;
+    border-top: 2px solid #e5e5e5;
+    padding-top: 30px;
 }
 .footer ul{
     padding: 0;
@@ -182,6 +202,7 @@ body {
 .footer li a{
     color: #222;
     text-decoration: none;
+    font-size: 14px;
 }.footer li a:hover {
      color: #2b85ae
  }
@@ -401,7 +422,39 @@ body {
  .login .login-body .tooltip-inner,.has-error .tooltip-inner{
     background-color: #a94442;
 }
-
+ .manual-page{
+     margin: 10px auto;
+     text-align: center;
+ }
+/**********搜索样式**********/
+.manual-search-reader .search-head{
+    margin: 10px auto;
+    padding-bottom: 15px;
+    line-height: 1.5em;
+    border-bottom: 3px solid #EEEEEE;
+}
+.manual-search-reader .search-head .search-title{
+    font-size: 22px;
+    font-weight: 300;
+}
+.manual-search-reader .search-body{
+    margin-top: 80px;
+}
+.manual-search-reader .search-body .empty-image{
+    margin: 5px auto;
+    display: block;
+    text-align: center;
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+}
+.manual-search-reader .search-body .empty-text{
+    font-size: 18px;
+    display: block;
+    text-align: center;
+    margin: 10px auto;
+    opacity: 0.5;
+    filter: alpha(opacity=20);
+}
 
 @media screen and (max-width: 840px) {
     .manual-reader .slidebar{
@@ -411,6 +464,9 @@ body {
         margin: 5px;
         line-height: 18px;
         border: 0;
+    }
+    .manual-reader .searchbar{
+        display: none;
     }
     .smart-container .project-box li{
         margin-left: 5px;

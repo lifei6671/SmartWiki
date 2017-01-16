@@ -42,6 +42,9 @@ Route::post('/send_mail',['uses' => 'MailController@sendMail'])->name('mail.send
 Route::get('/',[
      'as' => 'home.index', 'uses' => 'HomeController@index'
 ]);
+Route::get('/search',[
+    'uses' => 'SearchController@search'
+])->name('search.search');
 //查看文档
 Route::get('/show/{id}',[
     'as' => 'home.show', 'uses' => 'HomeController@show'
@@ -77,6 +80,16 @@ Route::group(['middleware' => 'super.member','prefix' => 'member'],function (){
     Route::post('users/delete/{id?}',[
         'uses' => 'MemberController@deleteUser'
     ])->name('member.users.delete');
+
+});
+/**
+ * 网站设置
+ */
+Route::group(['middleware' => 'super.member','prefix' => 'setting'],function (){
+    //站点设置
+    Route::match(['get','post'],'site',[
+        'uses' => 'SettingController@site'
+    ])->name('setting.site');
 });
 
 Route::group(['middleware' => 'authorize','prefix' => 'project'],function (){
