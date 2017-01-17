@@ -426,7 +426,54 @@ body {
      margin: 10px auto;
      text-align: center;
  }
-/**********搜索样式**********/
+/***项目首页样式****/
+.manual-project{
+    padding-top: 10px;
+
+}
+.manual-project .manual-project-box .manual-project-box-img{
+    float: left;
+}
+.manual-project .manual-project-box .manual-project-box-title{
+    float: left;
+    font-size: 25px;
+    font-weight: 300;
+    color: #4a4a4a;
+    line-height: 2em;
+    margin-left: 15px;
+}
+.manual-project .manual-project-box .manual-project-box-qrcode{
+    float: right;
+}
+.manual-project .manual-project-box .author{
+    display: block;
+    width: 100%;
+}
+.manual-project .manual-project-body .tab-head{
+    border-bottom:1px solid #DDDDD9;
+}
+.manual-project .manual-project-body{
+    background: #ffffff;
+}
+.manual-project .manual-project-body .tab-head .tab-item{
+    margin-right: 15px;
+    cursor: pointer;
+    float: left;
+    min-width: 48px;
+    text-align: center;
+    margin-bottom: -5px;
+    padding: 15px;
+    font-size: 18px;
+    color: #999
+}
+.manual-project .manual-project-body .tab-head .tab-item.active {
+    color: #333;
+    border-bottom: 2px solid #44B035;
+    padding-bottom: 8px;
+    margin-bottom: -1px
+}
+
+    /**********搜索样式**********/
 .manual-search-reader .search-head{
     margin: 10px auto;
     padding-bottom: 15px;

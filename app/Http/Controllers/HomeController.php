@@ -83,16 +83,17 @@ class HomeController extends Controller
                 return view('home.password',$this->data);
             }
         }
-
+        $member = Member::find($project->create_at);
+        $this->data['author'] = '未知';
+        if(empty($member) === false) {
+            $this->data['author'] = $member->nickname?:$member->account;
+        }
         $this->data['title'] = $project->project_name;
-
         $this->data['project'] = $project;
-
         $this->data['tree'] = Project::getProjectHtmlTree($id);
-
         $this->data['body'] = $project->description;
 
-        return view('home.kancloud',$this->data);
+        return view('home.project',$this->data);
     }
 
     /**

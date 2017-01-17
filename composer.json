@@ -24,7 +24,8 @@
         "graham-campbell/markdown": "^7.0",
         "webuni/commonmark-attributes-extension": "^0.5.0",
         "webuni/commonmark-table-extension": "^0.6.0",
-        "lifei6671/php-captcha": "0.1.*"
+        "lifei6671/php-captcha": "0.1.*",
+        "simplesoftwareio/simple-qrcode": "1.3.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

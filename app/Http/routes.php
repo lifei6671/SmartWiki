@@ -36,6 +36,9 @@ Route::get('/process_result')->name('account.process_result')->uses('AccountCont
 Route::get('/verify',[
     'as' => 'captcha.verify', 'uses' => 'CaptchaController@verify'
 ]);
+Route::get('/qrcode',[
+    'as' => 'qrcode.index', 'uses' => 'QrCodeController@index'
+]);
 //发送邮件
 Route::post('/send_mail',['uses' => 'MailController@sendMail'])->name('mail.send_mail');
 //首页
