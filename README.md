@@ -119,8 +119,6 @@ RewriteRule ^ index.php [L]
 #恢复依赖库
 composer install
 
-
-
 # 缓存配置【Windows平台请勿执行该命令】
 php artisan config:cache
 
