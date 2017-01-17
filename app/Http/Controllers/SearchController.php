@@ -23,7 +23,7 @@ class SearchController extends Controller
         $keyword = $this->request->get('keyword');
         $pageIndex = intval($this->request->input('page',1));
 
-        $this->data['lists'] =  Project::search($keyword,$pageIndex);
+        $this->data['lists'] =  Project::search($keyword,$pageIndex,20,$this->member_id);
         $this->data['keyword'] = $keyword;
 
 

@@ -71,9 +71,13 @@ class HomeController extends Controller
             $member_id = $this->member->member_id;
 
         }
-        //校验是否有权限访问文档
 
-        if(Project::hasProjectShow($id,$member_id) === false){
+        $permissions = Project::hasProjectShow($id,$member_id);
+
+        //校验是否有权限访问文档
+        if($permissions === 0){
+            abort(404);
+        }elseif($permissions === 2){
             $role = session_project_role($id);
             if(empty($role)){
                 return view('home.password',$this->data);

@@ -216,25 +216,31 @@ class Project extends ModelBase
         $project = Project::getProjectFromCache($project_id);
 
         if(empty($project)){
-            return false;
+            return 0;
         }
-        if($project->project_open_state == 1){
-            return true;
-        }
-        if(empty($passwd) === false and $project->project_open_state == 2 and strcasecmp($passwd,$project->project_password) === 0){
-            return true;
-        }
+
         if(empty($member_id) === false){
             if($project->create_at == $member_id){
-                return true;
+                return 1;
             }
             $rel = Relationship::where('project_id','=',$project_id)
                 ->where('member_id','=',$member_id)
                 ->first();
-
-            return empty($rel) === false;
+            return intval(empty($rel) === false);
         }
-        return false;
+
+        if($project->project_open_state == 1){
+
+            return 1;
+        }elseif ($project->project_open_state == 2) {
+
+            if(empty($passwd)) {
+                return 2;
+            }elseif (strcasecmp($passwd,$project->project_password) === 0){
+                return 1;
+            }
+        }
+        return 0;
     }
 
     /**
@@ -419,25 +425,48 @@ class Project extends ModelBase
      * @param int $pageSize
      * @return bool|\Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public static function search($keyword,$pageIndex= 1, $pageSize = 20)
+    public static function search($keyword,$pageIndex= 1, $pageSize = 20, $memberId = null)
     {
         if(empty($keyword)) {
             return false;
         }
         $keyword = '%'. preg_replace('/\s+/','%',trim($keyword)).'%';
 
-       // print_r(trim($keyword));exit;
+       if(empty($memberId) === false) {
 
-        $searchResult = DB::table('project')->select(['*'])
-            ->where('project_name','like', $keyword )
-            ->orWhere('description','like',$keyword)
-            ->orderBy('project_id','DESC')
-            ->paginate($pageSize,['*'],'page',$pageIndex)
-            ->appends([
-                'keyword' => $keyword
-            ]);
+           $searchResult = DB::table('project as pro')->select(['pro.*'])
+               ->leftJoin('relationship as rel',function($join)use($memberId){
+                   $join->on('pro.project_id','=','rel.project_id')
+                       ->where('rel.member_id','=',$memberId);
+               })
+               ->where(function($query){
+                   $query->where('rel_id','>',0)
+                       ->orWhere('project_open_state', '<>', 0);
+               })
 
+               ->where(function ($query) use ($keyword) {
+                   $query->where('project_name', 'like', $keyword)
+                       ->orWhere('description', 'like', $keyword);
+               })
+               ->orderBy('project_id', 'DESC')
+               ->paginate($pageSize, ['*'], 'page', $pageIndex)
+               ->appends([
+                   'keyword' => $keyword
+               ]);
 
+       }else {
+           $searchResult = DB::table('project')->select(['*'])
+               ->where('project_open_state', '<>', 0)
+               ->where(function ($query) use ($keyword) {
+                   $query->where('project_name', 'like', $keyword)
+                       ->orWhere('description', 'like', $keyword);
+               })
+               ->orderBy('project_id', 'DESC')
+               ->paginate($pageSize, ['*'], 'page', $pageIndex)
+               ->appends([
+                   'keyword' => $keyword
+               ]);
+       }
         return $searchResult;
     }
 }

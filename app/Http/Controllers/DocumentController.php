@@ -403,9 +403,22 @@ class DocumentController extends Controller
         if(empty($doc) ){
             abort(404);
         }
+        $project = Project::getProjectFromCache($doc->project_id);
 
-        if(Project::hasProjectShow($doc->project_id,$this->member_id) == false){
-            abort(403);
+        if(empty($project)){
+            abort(404);
+        }
+
+        $permissions = Project::hasProjectShow($project->project_id,$this->member_id);
+
+        //校验是否有权限访问文档
+        if($permissions === 0){
+            abort(404);
+        }elseif($permissions === 2){
+            $role = session_project_role($project->project_id);
+            if(empty($role)){
+                return view('home.password',$this->data);
+            }
         }
 
         $this->data['project'] = Project::getProjectFromCache($doc->project_id);
