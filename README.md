@@ -146,6 +146,10 @@ php artisan key:generate
  php artisan smartwiki:migrate --dbHost=数据库地址 --dbName=数据库名称 --dbPort=数据库端口号 --dbUser=数据库账号 --dbPassword=数据库密码
 ```
 
+## 使用Docker部署
+
+Dockerfile 文件请参考 [https://github.com/lifei6671/docker-smartwiki](https://github.com/lifei6671/docker-smartwiki)
+
 ## 使用手册
 
 更多使用与配置可以访问 [https://wiki.iminho.me/show/1](https://wiki.iminho.me/show/1)
@@ -196,12 +200,9 @@ php artisan key:generate
 
 ## 待实现
 
-1. 项目转让
-2. 项目导出
-3. 角色细分
-4. 项目文档树生成
-5. 忘记密码
-6. 实现系统日志
+1. 项目导出
+2. 角色细分
+3. 实现系统日志
 
 ## 参与开发
 
@@ -211,7 +212,7 @@ php artisan key:generate
 
 ## 作者
 
-一个纯粹的PHPer。[SmartWiki 演示文档](https://wiki.iminho.me/docs/show/1)
+一个纯粹的PHPer。[SmartWiki 演示文档](https://wiki.iminho.me)
 
 
 
