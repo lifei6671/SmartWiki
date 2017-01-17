@@ -258,8 +258,8 @@
                 </div>
                 <div class="modal-footer">
                     <span id="error-message"></span>
-                    <button type="button" id="filePicker">选择</button>
-                    <button type="button" id="saveImage" class="btn btn-success" style="margin-top: -32px;height: 40px;width: 77px;" data-loading-text="上传中...">上传</button>
+                    <div id="filePicker" class="btn">选择</div>
+                    <button type="button" id="saveImage" class="btn btn-success" style="height: 40px;width: 77px;" data-loading-text="上传中...">上传</button>
                 </div>
             </div>
         </div>

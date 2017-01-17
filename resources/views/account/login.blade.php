@@ -50,6 +50,7 @@
                         <input type="password" class="form-control" placeholder="密码" name="passwd" id="passwd">
                     </div>
                 </div>
+                @if(wiki_config('ENABLED_CAPTCHA'))
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">
@@ -59,6 +60,7 @@
                         <img id="captcha-img" src="{{route('captcha.verify')}}" onclick="this.src='/verify?key=login&t='+(new Date()).getTime();" title="点击换一张">
                     </div>
                 </div>
+                @endif
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" name="is_remember"> 保持登录
@@ -86,7 +88,7 @@ $(function () {
 
     $(document).keydown(function (e) {
         var event = document.all ? window.event : e;
-        if(event.keyCode == 13){
+        if(event.keyCode === 13){
             $("#btn-login").click();
         }
     });
@@ -95,21 +97,21 @@ $(function () {
 
        var account = $.trim($("#account").val());
        var passwd = $.trim($("#passwd").val());
-       var code = $.trim($("#code").val());
-       if(account == ""){
+       var code = $("#code").val();
+       if(account === ""){
            $("#account").tooltip({placement:"auto",title : "账号不能为空",trigger : 'manual'})
                    .tooltip('show')
                    .parents('.form-group').addClass('has-error');
            $btn.button('reset');
            return false;
 
-       }else if(passwd == ""){
+       }else if(passwd === ""){
            $("#passwd").tooltip({title : '密码不能为空',trigger : 'manual'})
                    .tooltip('show')
                    .parents('.form-group').addClass('has-error');
            $btn.button('reset');
            return false;
-       }else if(code == ""){
+       }else if(code !== undefined && code === ""){
            $("#code").tooltip({title : '验证码不能为空',trigger : 'manual'})
                    .tooltip('show')
                    .parents('.form-group').addClass('has-error');

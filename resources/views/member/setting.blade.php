@@ -1,5 +1,5 @@
 @extends('member')
-@section('title')网站设置@endsection
+@section('title')网站常量@endsection
 @section('scripts')
 <script type="text/javascript">
     $(function () {
@@ -21,9 +21,9 @@
 @section('content')
     <div class="setting-box">
         <div class="box-head">
-            <h4>网站设置</h4>
+            <h4>网站常量</h4>
             <a href="{{route('member.setting.edit')}}" class="btn btn-success btn-sm pull-right" style="margin-top: 10px;">
-                添加配置
+                添加常量
             </a>
         </div>
         <div class="box-body" style="padding-right: 0">
