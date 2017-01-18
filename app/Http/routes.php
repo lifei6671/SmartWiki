@@ -45,6 +45,7 @@ Route::post('/send_mail',['uses' => 'MailController@sendMail'])->name('mail.send
 Route::get('/',[
      'as' => 'home.index', 'uses' => 'HomeController@index'
 ]);
+//搜索
 Route::get('/search',[
     'uses' => 'SearchController@search'
 ])->name('search.search');
@@ -52,6 +53,7 @@ Route::get('/search',[
 Route::get('/show/{id}',[
     'as' => 'home.show', 'uses' => 'HomeController@show'
 ]);
+//检查项目权限
 Route::post('/check_document_auth',[
     'as' => 'home.check_document_auth' , 'uses' => 'HomeController@checkDocumentAuth'
 ]);
@@ -117,19 +119,23 @@ Route::group(['middleware' => 'authorize','prefix' => 'project'],function (){
     Route::post('members/add/{id}',[
         'as' => 'project.members.add', 'uses' => 'ProjectController@addMember'
     ]);
+    //退出项目
+    Route::post('quit/{id}',[
+       'as' => 'project.quit', 'uses' => 'ProjectController@quit'
+    ]);
     //转让项目
     Route::post('transfer/{id}')->uses('ProjectController@transfer')->name('project.transfer');
 });
 
 Route::group(['middleware' => 'authorize','prefix' => 'docs'],function (){
     //文档编辑首页
-    Route::get('{id}',[
+    Route::get('edit/{id}',[
         'as' => 'document.index', 'uses' => 'DocumentController@index'
     ])->where('id', '[0-9]+');
 
     //编辑文档
-    Route::get('edit/{id}',[
-        'as' => 'document.edit' , 'uses' => 'DocumentController@edit'
+    Route::get('content/{id}',[
+        'as' => 'document.edit' , 'uses' => 'DocumentController@getContent'
     ])->where('id', '[0-9]+');
     //保存文档
     Route::post('save',[

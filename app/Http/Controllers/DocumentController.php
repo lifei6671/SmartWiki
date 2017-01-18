@@ -31,6 +31,7 @@ class DocumentController extends Controller
         if(empty($id)){
             abort(404);
         }
+        //判断是否有编辑权限
         if(Project::hasProjectEdit($id,$this->member->member_id) === false){
             abort(403);
         }
@@ -145,31 +146,28 @@ class DocumentController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function edit($id)
+    public function getContent($id)
     {
-        if(empty($id) or $id <= 0){
+        if (empty($id) or $id <= 0) {
             abort(404);
         }
 
-        if($this->isPost()){
-
-        }else{
-            $doc = Document::find($id);
-            if(empty($doc)){
-                return $this->jsonResult(40301);
-            }
-            $role = Project::hasProjectShow($doc->project_id,$this->member_id);
-            if($role == false){
-                return $this->jsonResult(40305);
-            }
-            $this->data['doc']['doc_id'] = $doc->doc_id;
-            $this->data['doc']['name'] = $doc->doc_name;
-            $this->data['doc']['project_id'] = $doc->project_id;
-            $this->data['doc']['parent_id'] = $doc->parent_id;
-            $this->data['doc']['content'] = $doc->doc_content;
+        $doc = Document::find($id);
+        if (empty($doc)) {
+            return $this->jsonResult(40301);
         }
+        $role = Project::hasProjectShow($doc->project_id, $this->member_id);
+        if ($role == false) {
+            return $this->jsonResult(40305);
+        }
+        $this->data['doc']['doc_id'] = $doc->doc_id;
+        $this->data['doc']['name'] = $doc->doc_name;
+        $this->data['doc']['project_id'] = $doc->project_id;
+        $this->data['doc']['parent_id'] = $doc->parent_id;
+        $this->data['doc']['content'] = $doc->doc_content;
+
         unset($this->data['member']);
-        return $this->jsonResult(0,$this->data);
+        return $this->jsonResult(0, $this->data);
     }
 
     /**

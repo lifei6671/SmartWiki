@@ -284,6 +284,7 @@ body {
     right: 0;
     top: 34px
 }
+/**项目列表**/
 .member .page-right .project-list .project-item{
     padding: 15px 0 0 0;
     border-bottom: 1px dotted #eee;
@@ -340,6 +341,38 @@ body {
 .member .page-right .project-list .project-item:hover ,.member .page-right .user-list .user-item:hover{
     background-color: #f9f9f9
 }
+.member .page-right .project-list ul{
+    margin: 0;
+    padding: 0;
+}
+.member .page-right .project-list ul>li{
+    display: block;
+    width: 100%;
+    margin: 0;
+    border-bottom: 1px solid #dddddd;
+    padding: 15px 10px;
+}
+.member .page-right .project-list ul>li:hover{
+    background: #eaeaea;
+}
+.member .page-right .project-list ul>li a{
+    color: #666666;
+    font-size: 16px;
+    text-decoration: none;
+}
+.member .page-right .project-list ul>li a:hover{
+    text-decoration: none;
+    color: #428bca;
+}
+.member .page-right .project-list .desc-text{
+    font-size: 12px;
+    margin: 5px;
+}
+.member .page-right .project-list .info{
+    font-size: 12px;
+    color: #666666;
+}
+
 /***用户管理***/
 .member .page-right .user-list .user-item{
     border-bottom: 1px dotted #eee;
@@ -448,6 +481,12 @@ body {
 .manual-project .manual-project-box .author{
     display: block;
     width: 100%;
+    line-height: 2em;
+    padding: 10px 0;
+    clear: both;
+}
+.manual-project .manual-project-box .author .author-name{
+    padding-left: 10px;
 }
 .manual-project .manual-project-body .tab-head{
     border-bottom:1px solid #DDDDD9;
@@ -471,6 +510,24 @@ body {
     border-bottom: 2px solid #44B035;
     padding-bottom: 8px;
     margin-bottom: -1px
+}
+.manual-project .manual-project-body .tab-content{
+    margin: 15px auto;
+    line-height: 1.8em;
+}
+.manual-project .manual-project-body .tab-content .tab-item{
+    display: none;
+}
+.manual-project .manual-project-body .tab-content #tab-catalog>ul{
+    border-left: 3px solid #dddddd;
+    list-style: none;
+}
+.manual-project .manual-project-body .tab-content #tab-catalog ul{
+    list-style: none;
+    padding-left: 25px;
+}
+.manual-project .manual-project-body .tab-content .tab-item.active{
+    display: block;
 }
 
     /**********搜索样式**********/

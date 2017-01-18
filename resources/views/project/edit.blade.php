@@ -79,11 +79,6 @@
             $("#transferForm").ajaxForm({
                 dataType : "json",
                 beforeSubmit : function () {
-                    var password = $.trim($("#deletePassword").val());
-
-                    if(!password){
-                        return showError("登录密码不能为空");
-                    }
                     $("#transferForm").find('button[type="submit"]').button('loading');
                 },
                 success : function (res) {
@@ -106,7 +101,7 @@
 <div class="member-box">
         <div class="box-head">
             <h4>{{$title}}</h4>
-            @if(isset($is_owner) && $is_owner)
+            @if((isset($is_owner) && $is_owner) || $member->group_level === 0)
             <div class="box-operate pull-right">
                 <label class="btn btn-success btn-sm pull-right" title="删除项目" data-toggle="modal" data-target="#projectTransfer">
                     转让项目
@@ -158,7 +153,7 @@
             </div>
         </div>
     </div>
-@if(isset($is_owner) && $is_owner)
+@if((isset($is_owner) && $is_owner) || $member->group_level === 0)
 <!-- Delete Project Modal -->
 <div class="modal fade" id="projectDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -169,13 +164,11 @@
                     <h4 class="modal-title" id="myModalLabel">删除项目</h4>
                 </div>
                 <div class="modal-body">
-
-                        <input type="hidden" name="project_id" value="{{$project->project_id}}">
-                        <div class="form-group">
-                            <label for="password">登录密码</label><span style="font-size: 12px;color: #B4B4B4">&nbsp;(项目删除后将无法找回)</span>
-                            <input type="password" class="form-control" name="password"  id="deletePassword" placeholder="登录密码" title="登录密码">
-                        </div>
-
+                    <input type="hidden" name="project_id" value="{{$project->project_id}}">
+                    <div class="form-group">
+                        <label for="password">登录密码</label><span style="font-size: 12px;color: #B4B4B4">&nbsp;(项目删除后将无法找回)</span>
+                        <input type="password" class="form-control" name="password"  id="deletePassword" placeholder="登录密码" title="登录密码">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

@@ -10,6 +10,7 @@ namespace SmartWiki\Http\Controllers;
 
 
 use Illuminate\Http\Request;
+use SmartWiki\Document;
 use SmartWiki\Member;
 use DB;
 use SmartWiki\Project;
@@ -64,8 +65,6 @@ class HomeController extends Controller
             abort(404);
         }
 
-        $this->data = $project;
-
         $member_id = null;
         if(empty($this->member) === false){
             $member_id = $this->member->member_id;
@@ -84,14 +83,29 @@ class HomeController extends Controller
             }
         }
         $member = Member::find($project->create_at);
+
         $this->data['author'] = '未知';
-        if(empty($member) === false) {
-            $this->data['author'] = $member->nickname?:$member->account;
-        }
+        $this->data['author_headimgurl'] = asset('static/images/middle.gif');
+        $this->data['modify_time'] = $project->modify_time?:$project->create_time;
         $this->data['title'] = $project->project_name;
         $this->data['project'] = $project;
         $this->data['tree'] = Project::getProjectHtmlTree($id);
         $this->data['body'] = $project->description;
+        $this->data['first_document'] = Document::where('project_id','=',$id)->where('parent_id','=',0)->orderBy('doc_sort','ASC')->limit(1)->first(['doc_id','doc_name','parent_id']);
+
+
+        //查询作者信息
+        if(empty($member) === false) {
+            $this->data['author'] = $member->nickname?:$member->account;
+            $this->data['author_headimgurl'] = $member->headimgurl ?: $member->headimgurl;
+        }
+        //查询最后修改时间
+        $lastModifyDoc = Document::where('project_id','=',$id)->orderBy('modify_time','DESC')->first();
+        if($lastModifyDoc && $lastModifyDoc->modify_time) {
+            $this->data['modify_time'] = $lastModifyDoc->modify_time;
+        }
+
+
 
         return view('home.project',$this->data);
     }

@@ -138,7 +138,8 @@ class ProjectController extends Controller
         }
 
         //如果没有编辑权限
-        if($project_id > 0 && Project::hasProjectEdit($project_id,$this->member_id) === false){
+        if($project_id > 0 &&  $this->member->group_level != 0 && Project::hasProjectEdit($project_id,$this->member_id) === false){
+
             if($this->isPost()){
                 return $this->jsonResult(40305);
             }else{
@@ -146,9 +147,11 @@ class ProjectController extends Controller
             }
         }
         //如果不是项目的拥有者并且不是超级管理员
-        if (!Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {
+        if ($project_id > 0 && !Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {
+
             abort(403);
         }
+
         //如果是修改项目
         if($this->isPost()){
             $name = trim($this->request->input('name'));
@@ -287,6 +290,32 @@ class ProjectController extends Controller
     }
 
     /**
+     * 退出项目
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function quit($id)
+    {
+        $project_id = intval($id);
+        if (empty($project_id)) {
+            return $this->jsonResult(50502);
+        }
+        $project = Project::find($project_id);
+        if (empty($project)) {
+            return $this->jsonResult(40206);
+        }
+        $relationship = Relationship::where('project_id','=',$project_id)->where('member_id','=',$this->member_id)->first();
+
+
+        //如果是项目参与者，则退出
+        if(empty($relationship) === false && $relationship->role_type === 0){
+
+            $result = $relationship->delete();
+            return $result ? $this->jsonResult(0) : $this->jsonResult(500);
+        }
+        return $this->jsonResult(500,null,'非参与者无法退出');
+    }
+    /**
      * 项目转让
      * @param int $id
      * @return JsonResponse
@@ -303,7 +332,6 @@ class ProjectController extends Controller
         if (empty($project)) {
             return $this->jsonResult(40206);
         }
-
 
         //如果不是项目的拥有者并且不是超级管理员
         if (!Project::isOwner($project_id,$this->member->member_id) && $this->member->group_level != 0) {

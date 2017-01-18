@@ -124,7 +124,6 @@ $(document).ready(function () {
             }
         },
         onload : function () {
-            console.log(editor.cm.$marked)
             editor.setToolbarAutoFixed(false);
             var index ;
             $(".editormd-menu>li>a").hover(function () {
@@ -183,7 +182,7 @@ $(document).ready(function () {
             });
 
         });
-    }
+    };
 
     win.editDocumentDialog = function (node) {
         var doc_id = node ? node.id : 0;
@@ -211,14 +210,14 @@ $(document).ready(function () {
             };
         }
         return data;
-    }
+    };
     //加载指定的文档
     win.loadDocument = function (selected) {
         var index = layer.load(1, {
             shade: [0.1,'#fff'] //0.1透明度的白色背景
         });
 
-        $.get("/docs/edit/" + selected.node.id).done(function (data) {
+        $.get("/docs/content/" + selected.node.id + '?dataType=json').done(function (data) {
             layer.close(index);
             $("#editormd-form").find("input[name='doc_id']").val(selected.node.id);
             window.editor.setValue("");
@@ -231,7 +230,7 @@ $(document).ready(function () {
             layer.close(index);
             layer.msg("加载文档失败");
         });
-    }
+    };
     /**
      * 实现添加文档
      */

@@ -117,11 +117,9 @@ class MemberController extends Controller
 
         $page = max(intval($this->request->input('page',1)),1);
 
-        $this->data['lists'] = Project::getParticipationProjectList($this->member_id,$page);
+        $this->data['lists'] = Project::getParticipationProjectList($this->member_id,$page,10);
 
-        if(empty($this->data['lists']) === false){
 
-        }
 
         return view('member.projects',$this->data);
     }

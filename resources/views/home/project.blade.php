@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> {{$project->title}} - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
+    <title> {{$title}} - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
 
     <!-- Bootstrap -->
     <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -93,10 +93,18 @@
                     <img src="{{asset('static/images/project_default.png')}}" width="50">
                 </div>
                 <div class="manual-project-box-title">
-                    {{$project->title}}
+                    {{$title}}
                 </div>
                 <div class="author">
-                    {{$author}}
+                   <img src="{{$author_headimgurl}}" width="30" class="img-circle"> <span class="author-name">{{$author}}</span>
+                    <span class="modify-time">最后更新时间 {!! date('Y年m月d日',strtotime($project->modify_time)) !!}</span>
+                </div>
+                <div class="manual-action">
+                    @if(empty($first_document))
+                        <a href="javascript:;" class="btn btn-warning">暂未发布文档</a>
+                    @else
+                        <a href="{{route('document.show',['id' => $first_document->doc_id])}}" class="btn btn-success">阅读</a>
+                    @endif
                 </div>
             </div>
             <div class="pull-right">
@@ -110,13 +118,25 @@
 
         <div class="manual-project-body">
             <div class="tab-head">
-                <a href="javascript:;" class="tab-item active">概要</a>
-                <a href="javascript:;" class="tab-item">目录</a>
-                <a href="javascript:;" class="tab-item">记录</a>
+                <a href="javascript:;" class="tab-item active" data-target="#tab-description">概要</a>
+                <a href="javascript:;" class="tab-item" data-target="#tab-catalog">目录</a>
+                @if(empty($records) === false)
+                <a href="javascript:;" class="tab-item" data-target="#tab-records">更新记录</a>
+                @endif
                 <div class="clearfix"></div>
             </div>
-            <div class="tab-body">
+            <div class="tab-content">
+                <div class="tab-item active" id="tab-description">
+                    {{$body}}
+                </div>
+                <div class="tab-item" id="tab-catalog">
+                    {!! $tree !!}
+                </div>
+                @if(empty($records) === false)
+                    <div class="tab-item" id="tab-records">
 
+                    </div>
+                @endif
             </div>
         </div>
         <div class="clearfix"></div>
@@ -129,7 +149,15 @@
 
 
 <script type="text/javascript">
-
+$(function () {
+   $(".tab-head>.tab-item").on('click',function () {
+       $(this).closest('.tab-head').children('.tab-item').removeClass('active');
+       $(this).addClass('active');
+       $(".tab-content>.tab-item").removeClass('active');
+       var target = $(this).attr('data-target');
+       $(target).addClass('active');
+   }) ;
+});
 
 </script>
 </body>

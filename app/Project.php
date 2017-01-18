@@ -136,30 +136,54 @@ class Project extends ModelBase
     public static function getParticipationProjectList($member_id, $pageIndex = 1, $pageSize = 20)
     {
         $query = DB::table('project as pro')
-            ->select('pro.*','rel.role_type')
+            ->select(['pro.*','rel.role_type','rel.member_id as rel_member_id','m.account','m.nickname'])
             ->leftJoin('relationship as rel','rel.project_id','=','pro.project_id')
-            ->where('rel.member_id','=',$member_id)
-            ->orderBy('pro.project_id','DESC')
-            ->paginate($pageSize,['*'],'page',$pageIndex);
+            ->leftJoin('member as m','m.member_id','=','pro.create_at')
+            ->orderBy('pro.project_id','DESC');
+
+
+        $member = Member::find($member_id);
+
+        //如果用户不是超级管理员，超级管理员不限制项目列表的展示
+        if(empty($member) || $member->group_level !== 0){
+            $query = $query->where('rel.member_id','=',$member_id);
+        }
+        $query =  $query->paginate($pageSize,['*'],'page',$pageIndex);
 
         if($query->isEmpty() === false){
             foreach ($query as &$item){
-                $item->member_count = Relationship::where('project_id','=',$item->project_id)->count();
+                //$item->member_count = Relationship::where('project_id','=',$item->project_id)->count();
+
+                $doc = Document::where('project_id','=',$item->project_id)
+                    ->select(['document.modify_time','document.create_time','m.account','m.nickname'])
+                    ->leftJoin('member as m','m.member_id','=','document.create_at')
+                    ->limit(1)->orderBy('modify_time','DESC')->first();
+                if($doc) {
+                    $item->last_document_time = $doc->modify_time ?: $doc->create_time;
+                    $item->last_document_user = $doc->nickname?:$doc->account;
+                }
             }
         }
         return $query;
     }
+
     /**
      * 查询可查看的项目列表
      * @param int $pageIndex
      * @param int $pageSize
      * @param null $member_id
-     * @return array|static[]
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public static function getProjectByMemberId($pageIndex = 1, $pageSize = 20, $member_id = null)
     {
         if(empty($member_id) === false){
 
+
+            $member = Member::find($member_id);
+            if(empty($member) === false && $member->group_level === 0){
+                return DB::table('project')->select(['*']) -> orderBy('project_id','DESC')
+                    ->paginate($pageSize,['*'],'page',$pageIndex);
+            }
             $query = DB::table('project as pro')
                 ->select('pro.*')
                 ->leftJoin('relationship as rel',function($join)use($member_id){
@@ -195,6 +219,12 @@ class Project extends ModelBase
         if(empty($project_id) or empty($member_id)){
             return false;
         }
+        //超级管理员不限制权限
+        $member = Member::find($member_id);
+
+        if(empty($member) === false && $member->group_level == 0){
+            return true;
+        }
         $project = DB::table('relationship as ship')
             ->select('pro.*')
             ->leftJoin('project as pro','ship.project_id','=','pro.project_id')
@@ -220,7 +250,9 @@ class Project extends ModelBase
         }
 
         if(empty($member_id) === false){
-            if($project->create_at == $member_id){
+            //超级管理员不限制权限
+            $member = Member::find($member_id);
+            if(empty($member) === false && $member->group_level == 0){
                 return 1;
             }
             $rel = Relationship::where('project_id','=',$project_id)

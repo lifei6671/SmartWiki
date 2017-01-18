@@ -22,6 +22,7 @@ class AuthorizeMiddleware
         if(empty($member)){
             return redirect(route('account.login'));
         }
+
         return $next($request);
     }
 }
