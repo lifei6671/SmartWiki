@@ -39,7 +39,8 @@ class DocumentController extends Controller
         $jsonArray = Project::getProjectTree($id);
 
         if(empty($jsonArray) === false){
-            $jsonArray[0]['state']['selected'] = 'true';
+            $jsonArray[0]['state']['selected'] = true;
+            $jsonArray[0]['state']['opened'] = true;
         }
         $this->data['project_id'] = $id;
         $this->data['project'] = $project;

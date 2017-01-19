@@ -26,7 +26,7 @@
                     @endif
                 </div>
             </div>
-            <div class="pull-right">
+            <div class="pull-right hidden-xs">
                 <div class="manual-project-box-qrcode">
                     <img src="{{route('qrcode.index',['id'=>$project->project_id])}}">
                     <div class="text-center">扫一扫用手机阅读</div>

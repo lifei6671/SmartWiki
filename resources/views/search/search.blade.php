@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" >
+    <meta name="renderer" content="webkit" >
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> 显示"{{$keyword}}"的搜索结果 - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
 
@@ -12,22 +12,19 @@
     <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('static/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
     <link href="{{asset('static/styles/styles.css')}}" rel="stylesheet">
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="{{asset('static/bootstrap/js/html5shiv.min.js')}}"></script>
-    <script src="{{asset('static/bootstrap/js/respond.min.js')}}"></script>
+    <script src="{{asset('static/bootstrap/js/html5shiv.min.js')}}" type="text/javascript"></script>
+    <script src="{{asset('static/bootstrap/js/respond.min.js')}}" type="text/javascript"></script>
     <![endif]-->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="{{asset('static/scripts/jquery.min.js')}}"></script>
+    <script src="{{asset('static/scripts/jquery.min.js')}}" type="text/javascript"></script>
 </head>
 <body>
 <div class="manual-reader manual-search-reader">
     <header class="navbar navbar-static-top smart-nav navbar-fixed-top" role="banner">
         <div class="container">
             <div class="navbar-header">
-                <a href="{{route('home.index')}}" class="navbar-brand">SmartWiki</a>
-                <div class="searchbar pull-left">
+                <a href="{{route('home.index')}}" class="navbar-brand">{{wiki_config('SITE_NAME','SmartWiki')}}</a>
+                <div class="searchbar pull-left visible-lg-inline-block visible-md-inline-block">
                     <form class="form-inline" action="{{route('search.search')}}" method="get">
                         <input class="form-control" name="keyword" type="search" placeholder="请输入关键词..." value="{!! $keyword !!}">
                         <button class="search-btn">
@@ -36,16 +33,10 @@
                     </form>
                 </div>
                 @include('widget.usermenu')
-
             </div>
 
             <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav navbar-right">
-                    @if(isset($member) && ($member->group_level == 0 || $member->group_level == 1))
-                        <li>
-                            <a href="javascript:;" data-toggle="modal" data-target="#create-project" title="创建项目"><i class="fa fa-plus"></i></a>
-                        </li>
-                    @endif
                     @if(isset($member))
                         <li>
                             <a href="{{route('account.logout')}}" title="退出登录">
@@ -53,7 +44,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{route('member.index')}}" class="img" title="个人中心">
+                            <a href="{{route('member.projects')}}" class="img" title="个人中心">
                                 <img src="{{$member['headimgurl']}}" class="img-circle" style="width: 43px;">
                             </a>
                         </li>

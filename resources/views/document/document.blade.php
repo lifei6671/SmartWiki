@@ -271,11 +271,11 @@ TRACE:/api/login
      */
     function initJsTree() {
         $("#sidebar").jstree({
-            'plugins': ['state', "wholerow", "types", 'dnd', 'contextmenu'],
+            'plugins': [ "wholerow", "types", 'dnd', 'contextmenu'],
             "types": {
                 "default": {
                     "icon": false  // 删除默认图标
-                },
+                }
             },
             'core': {
                 'check_callback': true,
@@ -336,13 +336,14 @@ TRACE:/api/login
                     $select_node.node = {
                         id: $select_node.id
                     };
+
                     window.loadDocument($select_node);
                 }
-                //console.log($select_node);
+                console.log($select_node);
             }
 
         }).on('select_node.jstree', function (node, selected, event) {
-            window.loadDocument(selected);
+             window.loadDocument(selected);
 
         }).on("move_node.jstree", function (node, parent) {
 
@@ -352,7 +353,7 @@ TRACE:/api/login
 
             if (parent.parent != parent.old_parent) {
                 parentNode = window.treeCatalog.get_node(parent.old_parent);
-                console.log(parentNode);
+                //console.log(parentNode);
                 var newNodeData = window.getSiblingSort(parentNode);
                 if (newNodeData.length > 0) {
                     nodeData = nodeData.concat(newNodeData);

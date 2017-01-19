@@ -57,7 +57,7 @@
                             <td>角色</td>
                             <td class="col-sm-3">邮箱</td>
                             <td>状态</td>
-                            <td>添加时间</td>
+                            <td class="hidden-xs hidden-sm hidden-md">注册时间</td>
                             <td>操作</td>
                         </tr>
                         </thead>
@@ -84,7 +84,7 @@
                                         <span class="label label-danger user-state">禁用</span>
                                     @endif
                                 </td>
-                                <td>{{$item->create_time}}</td>
+                                <td class="hidden-xs hidden-sm hidden-md">{{$item->create_time}}</td>
                                 <td>
                                     @if($item->group_level == 0)
                                         <button class="btn btn-danger btn-sm disabled-btn" data-id="{{$item->member_id}}" disabled>

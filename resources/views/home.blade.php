@@ -27,7 +27,7 @@
         <div class="container">
             <div class="navbar-header">
                 <a href="{{route('home.index')}}" class="navbar-brand"> {{wiki_config('SITE_NAME','SmartWiki')}}</a>
-                <div class="searchbar pull-left">
+                <div class="searchbar pull-left visible-lg-inline-block visible-md-inline-block">
                     <form class="form-inline" action="{{route('search.search')}}" method="get">
                         <input class="form-control" name="keyword" type="search" placeholder="请输入关键词...">
                         <button class="search-btn">
@@ -52,7 +52,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{route('member.index')}}" class="img" title="个人中心">
+                            <a href="{{route('member.projects')}}" class="img" title="个人中心">
                                 <img src="{{$member['headimgurl']}}" class="img-circle" style="width: 43px;">
                             </a>
                         </li>

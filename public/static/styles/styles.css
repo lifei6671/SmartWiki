@@ -560,7 +560,7 @@ body {
     filter: alpha(opacity=20);
 }
 
-@media screen and (max-width: 840px) {
+@media screen and (max-width: 768px) {
     .manual-reader .slidebar{
         display: block;
         float: right;
@@ -570,7 +570,7 @@ body {
         border: 0;
     }
     .manual-reader .searchbar{
-        display: none;
+        /*display: none;*/
     }
     .smart-container .project-box li{
         margin-left: 5px;
@@ -579,9 +579,7 @@ body {
     .smart-container .box{
         width: 100%;
     }
-    .smart-container .summary{
-        display: none;
-    }
+
     .smart-container .text{
         width: 100%;
     }
@@ -590,7 +588,7 @@ body {
         margin: 0 auto;
     }
     .member .page-left{
-        display: none;
+       /* display: none;*/
     }
     .member .page-right,.member-footer .container .row{
         margin: 0 auto;

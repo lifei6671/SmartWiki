@@ -1,4 +1,4 @@
-<div class="btn-group dropdown-menu-right pull-right slidebar">
+<div class="btn-group dropdown-menu-right pull-right slidebar visible-xs-inline-block">
     <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-align-justify"></i></button>
     <ul class="dropdown-menu" role="menu">
         @if(isset($member))
@@ -8,7 +8,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{route('member.index')}}" class="img" title="个人中心">
+                <a href="{{route('member.projects')}}" class="img" title="个人中心">
                     <i class="fa fa-user"></i> 个人中心
                 </a>
             </li>
