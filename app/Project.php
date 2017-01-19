@@ -135,18 +135,27 @@ class Project extends ModelBase
      */
     public static function getParticipationProjectList($member_id, $pageIndex = 1, $pageSize = 20)
     {
-        $query = DB::table('project as pro')
-            ->select(['pro.*','rel.role_type','rel.member_id as rel_member_id','m.account','m.nickname'])
-            ->leftJoin('relationship as rel','rel.project_id','=','pro.project_id')
-            ->leftJoin('member as m','m.member_id','=','pro.create_at')
-            ->orderBy('pro.project_id','DESC');
-
-
         $member = Member::find($member_id);
 
-        //如果用户不是超级管理员，超级管理员不限制项目列表的展示
-        if(empty($member) || $member->group_level !== 0){
-            $query = $query->where('rel.member_id','=',$member_id);
+        //如果是超级管理员则无限制
+        if(empty($member) === false && $member->group_level === 0){
+            $query = DB::table('project as pro')
+                ->select(['pro.*','rel.role_type','rel.member_id as rel_member_id','m.account','m.nickname'])
+                ->leftJoin('relationship as rel',function($join)use($member_id){
+                    $join->on('rel.project_id','=','pro.project_id')
+                        ->where('rel.member_id','=',$member_id);
+                })
+                ->leftJoin('member as m','m.member_id','=','pro.create_at')
+                ->orderBy('pro.project_id','DESC');
+
+
+        }else{
+            $query = DB::table('project as pro')
+                ->select(['pro.*','rel.role_type','rel.member_id as rel_member_id','m.account','m.nickname'])
+                ->leftJoin('relationship as rel','rel.project_id','=','pro.project_id')
+                ->leftJoin('member as m','m.member_id','=','pro.create_at')
+                ->where('rel.member_id','=',$member_id)
+                ->orderBy('pro.project_id','DESC');
         }
         $query =  $query->paginate($pageSize,['*'],'page',$pageIndex);
 
@@ -248,11 +257,12 @@ class Project extends ModelBase
         if(empty($project)){
             return 0;
         }
-
+        if($project->project_open_state == 1){
+            return 1;
+        }
         if(empty($member_id) === false){
             //超级管理员不限制权限
-            $member = Member::find($member_id);
-            if(empty($member) === false && $member->group_level == 0){
+            if(Member::isSuperMember($member_id)){
                 return 1;
             }
             $rel = Relationship::where('project_id','=',$project_id)
@@ -261,10 +271,7 @@ class Project extends ModelBase
             return intval(empty($rel) === false);
         }
 
-        if($project->project_open_state == 1){
-
-            return 1;
-        }elseif ($project->project_open_state == 2) {
+        if ($project->project_open_state == 2) {
 
             if(empty($passwd)) {
                 return 2;
@@ -466,26 +473,38 @@ class Project extends ModelBase
 
        if(empty($memberId) === false) {
 
-           $searchResult = DB::table('project as pro')->select(['pro.*'])
-               ->leftJoin('relationship as rel',function($join)use($memberId){
-                   $join->on('pro.project_id','=','rel.project_id')
-                       ->where('rel.member_id','=',$memberId);
-               })
-               ->where(function($query){
-                   $query->where('rel_id','>',0)
-                       ->orWhere('project_open_state', '<>', 0);
-               })
-
-               ->where(function ($query) use ($keyword) {
-                   $query->where('project_name', 'like', $keyword)
-                       ->orWhere('description', 'like', $keyword);
-               })
-               ->orderBy('project_id', 'DESC')
-               ->paginate($pageSize, ['*'], 'page', $pageIndex)
-               ->appends([
-                   'keyword' => $keyword
-               ]);
-
+            //如果是管理员，则不限制
+           if(Member::isSuperMember($memberId)) {
+               $searchResult = DB::table('project')->select(['*'])
+                   ->where(function ($query) use ($keyword) {
+                       $query->where('project_name', 'like', $keyword)
+                           ->orWhere('description', 'like', $keyword);
+                   })
+                   ->orderBy('project_id', 'DESC')
+                   ->paginate($pageSize, ['*'], 'page', $pageIndex)
+                   ->appends([
+                       'keyword' => $keyword
+                   ]);
+           }else {
+               $searchResult = DB::table('project as pro')->select(['pro.*'])
+                   ->leftJoin('relationship as rel', function ($join) use ($memberId) {
+                       $join->on('pro.project_id', '=', 'rel.project_id')
+                           ->where('rel.member_id', '=', $memberId);
+                   })
+                   ->where(function ($query) {
+                       $query->where('rel_id', '>', 0)
+                           ->orWhere('project_open_state', '<>', 0);
+                   })
+                   ->where(function ($query) use ($keyword) {
+                       $query->where('project_name', 'like', $keyword)
+                           ->orWhere('description', 'like', $keyword);
+                   })
+                   ->orderBy('project_id', 'DESC')
+                   ->paginate($pageSize, ['*'], 'page', $pageIndex)
+                   ->appends([
+                       'keyword' => $keyword
+                   ]);
+           }
        }else {
            $searchResult = DB::table('project')->select(['*'])
                ->where('project_open_state', '<>', 0)

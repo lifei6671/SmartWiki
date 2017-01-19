@@ -31,7 +31,7 @@ class QrCodeController extends Controller
             }
             $url = route('home.show', ['id' => $projectId]);
 
-            $png = QrCode::format('png')->size(150)->generate($url);
+            $png = QrCode::format('png')->margin(1)->size(160)->generate($url);
           // var_dump(dirname($path));exit;
 
             @mkdir(dirname($path),0766,true);

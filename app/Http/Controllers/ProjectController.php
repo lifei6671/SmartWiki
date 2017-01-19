@@ -170,8 +170,11 @@ class ProjectController extends Controller
             $project->create_at = $this->member_id;
 
             try{
-                $project->addOrUpdate();
-                return $this->jsonResult(0);
+                if($project->addOrUpdate()) {
+                    return $this->jsonResult(0);
+                }else{
+                    return $this->jsonResult(500);
+                }
             }catch (\Exception $ex){
                 if($ex->getCode() == 500){
                     return $this->jsonResult(40205,null,$ex->getMessage());

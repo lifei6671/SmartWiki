@@ -10,6 +10,7 @@ namespace SmartWiki\Observers;
 
 use Cache;
 use Carbon\Carbon;
+use SmartWiki\Document;
 use SmartWiki\Project;
 
 /**
@@ -46,6 +47,15 @@ class ProjectObservers
         $expiresAt = Carbon::now()->addHour(12);
 
         Cache::put($key,$project,$expiresAt);
+
+        $document = new Document();
+        $document->doc_name = '空白文档';
+        $document->create_at = $project->create_at;
+        $document->create_time = $project->create_time;
+        $document->doc_sort = 0;
+        $document->parent_id = 0;
+        $document->project_id = $project->project_id;
+        $document->save();
     }
 
     public function deleted(Project $project)

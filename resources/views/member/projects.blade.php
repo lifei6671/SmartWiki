@@ -67,11 +67,16 @@
                                     </div>
                                     <div class="pull-right">
                                         <a href="{{route('home.show',['id'=>$item->project_id])}}" title="查看文档" style="font-size: 12px;" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-eye"></i> 查看</a>
-                                        @if($item->role_type == 0 && $member->group_level != 0)
-                                        <a class="project-quit-btn" title="退出项目" data-url="{{route('project.quit',['id' => $item->project_id])}}" data-toggle="tooltip" data-placement="bottom"  style="font-size: 12px;"><i class="fa fa-power-off"></i> 退出</a>
-                                        @elseif($item->role_type == 1 || $member->group_level == 0)
-                                        <a href="{{route('project.members',['id'=>$item->project_id])}}" class="project-user-btn" title="管理文档成员" data-toggle="tooltip" data-placement="bottom"  style="font-size: 12px;"><i class="fa fa-user-plus"></i> 用户</a>
-                                        <a href="{{route('project.edit',['id'=>$item->project_id])}}" title="编辑项目" data-toggle="tooltip" data-placement="left"  style="font-size: 12px;"><i class="fa fa-pencil"></i> 编辑</a>
+                                        @if($member->group_level === 0)
+                                            <a href="{{route('project.members',['id'=>$item->project_id])}}" class="project-user-btn" title="管理文档成员" data-toggle="tooltip" data-placement="bottom"  style="font-size: 12px;"><i class="fa fa-user-plus"></i> 用户</a>
+                                            <a href="{{route('project.edit',['id'=>$item->project_id])}}" title="编辑项目" data-toggle="tooltip" data-placement="left"  style="font-size: 12px;"><i class="fa fa-pencil"></i> 编辑</a>
+                                        @else
+                                            @if($item->role_type == 0 && $member->group_level != 0)
+                                            <a class="project-quit-btn" title="退出项目" data-url="{{route('project.quit',['id' => $item->project_id])}}" data-toggle="tooltip" data-placement="bottom"  style="font-size: 12px;"><i class="fa fa-power-off"></i> 退出</a>
+                                            @elseif($item->role_type == 1 || $member->group_level == 0)
+                                            <a href="{{route('project.members',['id'=>$item->project_id])}}" class="project-user-btn" title="管理文档成员" data-toggle="tooltip" data-placement="bottom"  style="font-size: 12px;"><i class="fa fa-user-plus"></i> 用户</a>
+                                            <a href="{{route('project.edit',['id'=>$item->project_id])}}" title="编辑项目" data-toggle="tooltip" data-placement="left"  style="font-size: 12px;"><i class="fa fa-pencil"></i> 编辑</a>
+                                            @endif
                                         @endif
                                     </div>
                                     <div class="clearfix"></div>
@@ -88,18 +93,18 @@
                                 </div>
                                 <div class="info">
                                     <span title="创建时间" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-clock-o"></i> {!! date('Y/m/d H:i',strtotime($item->create_time)) !!}</span>
-                                    <span style="display: inline-block;padding-left: 10px;" title="所有者" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-user"></i> {!! empty($item->nickname) ? $item->account : $item->nickname !!}</span>
+                                    <span style="display: inline-block;padding-left: 10px;" title="创建者" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-user"></i> {!! empty($item->nickname) ? $item->account : $item->nickname !!}</span>
 
                                     <span style="display: inline-block;padding-left: 10px;" title="文档数量" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-pie-chart"></i> {!! empty($item->doc_count) ? '0' : $item->doc_count !!}</span>
 
                                     <span style="display: inline-block;padding-left: 10px;" title="项目角色" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-user-secret"></i>
-                                        @if($member->group_level == 0)
-                                            @if($item->role_type == 0 && $member->member_id != $item->rel_member_id)
+                                        @if($member->group_level === 0)
+                                            @if(isset($item->role_type) && $item->role_type == 0)
                                                 参与者
-                                            @elseif($item->role_type == 1 && $member->member_id == $item->rel_member_id)
+                                            @elseif(isset($item->role_type) && $item->role_type == 1)
                                                 拥有者
                                             @else
-                                                超级管理员
+                                                超级管理员{{ $item->role_type}}
                                             @endif
                                         @else
                                             @if($item->role_type == 0)

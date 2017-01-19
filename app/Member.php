@@ -163,5 +163,21 @@ class Member extends ModelBase
         }
         return $query->first($columns);
     }
+
+    /**
+     * 判断用户是否是超级管理员
+     * @param int $memberId
+     * @return bool
+     */
+    public static function isSuperMember($memberId)
+    {
+        $memberId = intval($memberId);
+        if($memberId <= 0){
+            return false;
+        }
+        $member = Member::find($memberId);
+        //如果是管理员，则不限制
+        return (empty($member) === false && $member->group_level === 0);
+    }
 }
 
