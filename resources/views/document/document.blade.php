@@ -330,16 +330,16 @@ TRACE:/api/login
         }).on('loaded.jstree', function () {
             window.treeCatalog = $(this).jstree();
             $select_node_id = window.treeCatalog.get_selected();
-
-            $select_node  = window.treeCatalog.get_node($select_node_id[0])
-            if($select_node){
-                $select_node.node = {
-                  id : $select_node.id
-                };
+            if($select_node_id) {
+                $select_node = window.treeCatalog.get_node($select_node_id[0])
+                if ($select_node) {
+                    $select_node.node = {
+                        id: $select_node.id
+                    };
+                    window.loadDocument($select_node);
+                }
+                //console.log($select_node);
             }
-
-            window.loadDocument($select_node);
-            //console.log($select_node);
 
         }).on('select_node.jstree', function (node, selected, event) {
             window.loadDocument(selected);

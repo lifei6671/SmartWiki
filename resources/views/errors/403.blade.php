@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>没有权限 - SmartWiki</title>
-
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>权限不足 - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
+    <link href="{{asset('static/fonts/lato-100.css')}}" rel="stylesheet" type="text/css">
 
     <style>
         html, body {
@@ -41,7 +45,7 @@
 <body>
 <div class="container">
     <div class="content">
-        <div class="title">HTTP 403 : 没有编辑权限</div>
+        <div class="title">HTTP 403 : 权限不足</div>
     </div>
 </div>
 </body>

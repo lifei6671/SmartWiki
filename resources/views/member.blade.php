@@ -33,7 +33,7 @@
                     <li{!! (isset($member_index) ? ' class="active"' : '') !!}><a href="{{route('member.index')}}" class="item"><i class="fa fa-user"></i> 个人资料</a> </li>
                     <li{!! (isset($member_account) ? ' class="active"' : '') !!}><a href="{{route('member.account')}}" class="item"><i class="fa fa-lock"></i> 修改密码</a> </li>
                     @if(isset($member->group_level) and $member->group_level === 0)
-                        <li{!! (isset($member_setting) ? ' class="active"' : '') !!}><a href="{{route('member.setting')}}" class="item"><i class="fa fa-gear"></i> 网站常量</a> </li>
+                        <li{!! (isset($member_setting) ? ' class="active"' : '') !!}><a href="{{route('member.setting')}}" class="item"><i class="fa fa-gear"></i> 开发配置</a> </li>
                         <li{!! (isset($setting_site) ? ' class="active"' : '') !!}><a href="{{route('setting.site')}}" class="item"><i class="fa fa-cogs"></i> 网站设置</a> </li>
                         <li{!! (isset($member_users) ? ' class="active"' : '') !!}><a href="{{route('member.users')}}" class="item"><i class="fa fa-group"></i> 用户管理</a> </li>
                     @endif

@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>服务器异常 - SmartWiki</title>
-
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-
-        <style>
+        <meta charset="utf-8">
+        <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="renderer" content="webkit" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>服务器异常 - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
+        <link href="{{asset('static/fonts/lato-100.css')}}" rel="stylesheet" type="text/css">
+        <style type="text/css">
             html, body {
                 height: 100%;
             }

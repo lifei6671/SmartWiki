@@ -72,8 +72,8 @@
     </style>
 @endsection
 @section('scripts')
-    <script type="text/javascript" src="/static/cropper/cropper.js"></script>
-    <script type="text/javascript" src="/static/webuploader/webuploader.js"></script>
+    <script type="text/javascript" src="{{asset('static/cropper/cropper.js')}}"></script>
+    <script type="text/javascript" src="{{asset('static/webuploader/webuploader.js')}}"></script>
 
     <script type="text/javascript">
         function showError($msg) {
@@ -113,7 +113,7 @@
     try {
         var uploader = WebUploader.create({
             auto: false,
-            swf: '/static/webuploader/Uploader.swf',
+            swf: '{{asset('static/webuploader/Uploader.swf')}}',
             server: '{{route('member.upload')}}',
             pick: "#filePicker",
             fileVal : "image-file",
@@ -223,14 +223,14 @@
             <div class="form-right">
                 <label>
                     <a href="javascript:;" data-toggle="modal" data-target="#upload-logo-panel">
-                        <img src="{{$member->headimgurl}}" onerror="this.src='/static/images/middle.gif'" class="img-circle" alt="头像" style="max-width: 120px;max-height: 120px;" id="headimgurl">
+                        <img src="{{$member->headimgurl}}" onerror="this.src='{{asset('static/images/middle.gif')}}'" class="img-circle" alt="头像" style="max-width: 120px;max-height: 120px;" id="headimgurl">
                     </a>
                 </label>
             </div>
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="upload-logo-panel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="upload-logo-panel" tabindex="-1" role="dialog" aria-labelledby="修改头像" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

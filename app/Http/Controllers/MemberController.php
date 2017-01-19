@@ -124,6 +124,10 @@ class MemberController extends Controller
         return view('member.projects',$this->data);
     }
 
+    /**
+     * 开发设置
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function setting()
     {
         $this->data['member_setting'] = true;
@@ -141,7 +145,6 @@ class MemberController extends Controller
      */
     public function editSetting($id = null)
     {
-
         if($this->isPost()){
 
             $config_id = intval($this->request->input('config_id'));
@@ -212,7 +215,8 @@ class MemberController extends Controller
      * @param null $id
      * @return JsonResponse
      */
-    public function deleteSetting($id = null){
+    public function deleteSetting($id = null)
+    {
         $config_id = intval($id);
 
         if($config_id <= 0){

@@ -54,6 +54,19 @@ use SmartWiki\Exceptions\ResultNullException;
  */
 class Member extends ModelBase
 {
+    /**
+     * 超级管理员
+     */
+    const SuperMember = 0;
+    /**
+     * 一般用户
+     */
+    const GeneralMember = 1;
+    /**
+     * 访客
+     */
+    const VisitorsMember = 2;
+
     protected $table = 'member';
     protected $primaryKey = 'member_id';
     protected $dateFormat = 'Y-m-d H:i:s';
