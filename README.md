@@ -119,10 +119,10 @@ RewriteRule ^ index.php [L]
 #恢复依赖库
 composer install
 
-# 缓存配置【Windows平台请勿执行该命令】
+# 缓存配置【仅限Linux】
 php artisan config:cache
 
-# 缓存路由【Windows平台请勿执行该命令】
+# 缓存路由【仅限Linux】
 php artisan route:cache
 
 #清除缓存
