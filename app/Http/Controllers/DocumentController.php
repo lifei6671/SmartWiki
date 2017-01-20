@@ -419,6 +419,7 @@ class DocumentController extends Controller
         }elseif($permissions === 2){
             $role = session_project_role($project->project_id);
             if(empty($role)){
+                $this->data = $project;
                 return view('home.password',$this->data);
             }
         }

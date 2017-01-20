@@ -79,6 +79,7 @@ class HomeController extends Controller
         }elseif($permissions === 2){
             $role = session_project_role($id);
             if(empty($role)){
+                $this->data = $project;
                 return view('home.password',$this->data);
             }
         }

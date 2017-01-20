@@ -99,9 +99,10 @@
                 if(!email){
                     return showError('邮箱不能为空');
                 }
-
+                var $btn = $("button[type='submit']").button('loading');
             },
             success : function (res) {
+                $("button[type='submit']").button('reset');
                 if(res.errcode == 0){
                     showSuccess("保存成功");
                 }else{
@@ -215,7 +216,7 @@
                         <p style="color: #999;font-size: 12px;">描述不能超过500字</p>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-success">保存修改</button>
+                        <button type="submit" class="btn btn-success" data-loading-text="保存中...">保存修改</button>
                         <span id="form-error-message" class="error-message"></span>
                     </div>
                 </form>

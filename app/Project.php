@@ -211,6 +211,7 @@ class Project extends ModelBase
             $query = DB::table('project')
                 ->select('*')
                 ->where('project_open_state','<>',0)
+                ->orderBy('project_id','DESC')
                 ->paginate($pageSize,['*'],'page',$pageIndex);
 
             return $query;

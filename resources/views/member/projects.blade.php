@@ -63,16 +63,16 @@
                                         <i class="fa fa-unlock-alt" title="加密文档"></i>
                                         </span>
                                         @endif
-                                        <a href="{{route('document.index',['id'=>$item->project_id])}}" title="编辑文档" data-toggle="tooltip" data-placement="bottom">{{$item->project_name}}</a>
+                                        <a href="{{route('document.index',['id'=>$item->project_id])}}" title="编辑文档" data-toggle="tooltip" data-placement="bottom" target="_blank">{{$item->project_name}}</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="{{route('home.show',['id'=>$item->project_id])}}" title="查看文档" style="font-size: 12px;" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-eye"></i> 查看</a>
+                                        <a href="{{route('home.show',['id'=>$item->project_id])}}" title="查看文档" style="font-size: 12px;" data-toggle="tooltip" data-placement="bottom"  target="_blank"><i class="fa fa-eye"></i> 查看</a>
                                         @if($member->group_level === 0)
                                             <a href="{{route('project.members',['id'=>$item->project_id])}}" class="project-user-btn" title="管理文档成员" data-toggle="tooltip" data-placement="bottom"  style="font-size: 12px;"><i class="fa fa-user-plus"></i> 用户</a>
                                             <a href="{{route('project.edit',['id'=>$item->project_id])}}" title="编辑项目" data-toggle="tooltip" data-placement="left"  style="font-size: 12px;"><i class="fa fa-pencil"></i> 编辑</a>
                                         @else
                                             @if($item->role_type == 0 && $member->group_level != 0)
-                                            <a class="project-quit-btn" title="退出项目" data-url="{{route('project.quit',['id' => $item->project_id])}}" data-toggle="tooltip" data-placement="bottom"  style="font-size: 12px;"><i class="fa fa-power-off"></i> 退出</a>
+                                            <a class="project-quit-btn" title="退出" data-url="{{route('project.quit',['id' => $item->project_id])}}" data-toggle="tooltip" data-placement="bottom"  style="font-size: 12px;"><i class="fa fa-power-off"></i> 退出</a>
                                             @elseif($item->role_type == 1 || $member->group_level == 0)
                                             <a href="{{route('project.members',['id'=>$item->project_id])}}" class="project-user-btn" title="管理文档成员" data-toggle="tooltip" data-placement="bottom"  style="font-size: 12px;"><i class="fa fa-user-plus"></i> 用户</a>
                                             <a href="{{route('project.edit',['id'=>$item->project_id])}}" title="编辑项目" data-toggle="tooltip" data-placement="left"  style="font-size: 12px;"><i class="fa fa-pencil"></i> 编辑</a>
@@ -85,7 +85,7 @@
                                     @if(empty($item->description))
                                         &nbsp;
                                     @else
-                                        <a href="{{route('document.index',['id'=>$item->project_id])}}" title="编辑文档" style="font-size: 12px;">
+                                        <a href="{{route('document.index',['id'=>$item->project_id])}}" title="编辑文档" style="font-size: 12px;"  target="_blank">
                                             {{$item->description}}
                                         </a>
                                     @endif
