@@ -111,7 +111,7 @@ RewriteRule ^ index.php [L]
 ```
 8.然后访问 http://wiki.iminho.me 会自动跳转到安装页面。
 
-## 命令安装
+## 命令安装【推荐】
 
 在SmartWiki根目录依次执行：
 
@@ -124,12 +124,6 @@ php artisan smartwiki:install --dbHost=数据库地址 --dbName=数据库名称 
 
 #设置加密密钥
 php artisan key:generate
-
-# 缓存配置【仅限Linux】
-php artisan config:cache
-
-# 缓存路由【仅限Linux】
-php artisan route:cache
 
 #清除缓存
 php artisan clear-compiled
