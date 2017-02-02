@@ -186,8 +186,8 @@ if(!function_exists('system_install')) {
                 $pdo->exec($sqlContent);
 
 
-                $sql = 'INSERT wk_member(account,member_passwd,group_level,nickname,email,create_time,state,headimgurl) 
-                    VALUES (:account,:member_passwd,0,:nickname,:email,:create_time,0,:headimgurl);';
+                $sql = 'INSERT INTO wk_member(account,member_passwd,group_level,nickname,email,create_time,state,headimgurl) 
+                    SELECT (:account,:member_passwd,0,:nickname,:email,:create_time,0,:headimgurl) FROM dual WHERE NOT exists(SELECT * FROM wk_member WHERE `key` = :account);';
 
 
                 $params = [
@@ -196,7 +196,7 @@ if(!function_exists('system_install')) {
                     ':nickname' => $account,
                     ':email' => $email,
                     ':create_time' => date('Y-m-d H:i:s'),
-                    ':headimgurl' => '/static/images/middle.gif'];
+                    ':headimgurl' => asset('/static/images/middle.gif')];
 
                 $sth = $pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
 
