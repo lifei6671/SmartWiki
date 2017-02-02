@@ -158,19 +158,19 @@ if(!function_exists('system_install')) {
 
         $matches = array();
         if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]{4,19}$/', $account, $matches)) {
-            throw new \Exception('管理员账号必须在4-19字符之间',40508);
+            throw new \Exception('Account is required, and should have more than 4 characters and less than 19 characters',40508);
         }
         if (empty($password) || strlen($password) < 6 || strlen($password) > 18) {
-            throw new \Exception('管理员密码必须在6-18字符之间',1000001);
+            throw new \Exception('Password is required, and should have more than 6 characters and less than 18 characters',1000001);
         }
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new \Exception('邮箱地址格式不正确',40503);
+            throw new \Exception('A valid email is required',40503);
         }
 
         $sqlContent = @file_get_contents(resource_path('data/data.sql'));
 
         if (empty($sqlContent)) {
-            throw new \Exception('SQL文件不存在',1000002);
+            throw new \Exception('SQL file not exist',1000002);
         }
 
         $pdo = new PDO('mysql:host=' . $dbHost . ';dbname=' . $dbName . ';port=' . $dbPort, $dbUser, $dbPassword, [PDO::ATTR_AUTOCOMMIT => 0]);
@@ -202,13 +202,13 @@ if(!function_exists('system_install')) {
 
                 if ($sth->execute($params) === false) {
 
-                    throw new \Exception('添加管理员时出错', 1000004);
+                    throw new \Exception('sql error', 1000004);
                 }
 
                 $pdo->commit();
 
             } else {
-                throw new \Exception('执行数据库事物失败', 1000003);
+                throw new \Exception('sql error', 1000003);
             }
 
         } catch (\Exception $ex) {
