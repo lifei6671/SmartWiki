@@ -1,0 +1,22 @@
+{
+  "name": "lifei6671/php-captcha",
+  "description": "One php captcha",
+  "keywords": ["captcha"],
+  "homepage": "https://github.com/lifei6671/php-captcha",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Minho",
+      "email": "lifei6671@163.com",
+      "homepage": "https://www.iminho.me",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "ext-gd": "*"
+  },
+  "autoload": {
+    "psr-4": { "Minho\\Captcha\\": "src/" }
+  }
+}

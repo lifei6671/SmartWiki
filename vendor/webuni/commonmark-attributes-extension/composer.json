@@ -1,0 +1,36 @@
+{
+    "name": "webuni/commonmark-attributes-extension",
+    "type": "library",
+    "description": "The attributes extension adds a syntax to define attributes on the various HTML elements in CommonMark PHP implementation.",
+    "keywords": ["markdown","attributes","commonmark"],
+    "homepage": "https://github.com/webuni/commonmark-attributes-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martin Hasoň",
+            "email": "martin.hason@gmail.com",
+            "role": "Lead Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "league/commonmark": "^0.14|^0.15"
+    },
+    "require-dev": {
+        "webuni/commonmark-table-extension": "~0.4",
+        "phpunit/phpunit": "^4.3|^5.0",
+        "friendsofphp/php-cs-fixer": "^1.9",
+        "sllh/php-cs-fixer-styleci-bridge": "^2.0",
+        "symfony/var-dumper": "^2.8|^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webuni\\CommonMark\\AttributesExtension\\": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.6-dev"
+        }
+    }
+}
