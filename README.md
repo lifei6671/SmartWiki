@@ -145,6 +145,16 @@ php artisan optimize
 
 Dockerfile 文件请参考 [https://github.com/lifei6671/docker-smartwiki](https://github.com/lifei6671/docker-smartwiki)
 
+## 不依赖 Composer
+
+在release分支中包含的所有包，可以不依赖Composer，不熟悉Composer的小伙伴可以拉去该分支。release分支和master分支保持同步，只是多了vendor目录。
+```
+git clone -b release https://github.com/lifei6671/SmartWiki.git
+```
+
+更多细节请访问使用手册 [https://wiki.iminho.me/docs/show/1](https://wiki.iminho.me)
+
+
 ## 使用手册
 
 更多使用与配置可以访问 [https://wiki.iminho.me/show/1](https://wiki.iminho.me/show/1)
