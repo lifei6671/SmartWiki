@@ -185,22 +185,14 @@ if(!function_exists('system_install')) {
 
                 $pdo->exec($sqlContent);
 
+                $password = password_hash($password, PASSWORD_DEFAULT);
+                $headimgurl = asset('/static/images/middle.gif');
 
-                $sql = 'INSERT INTO wk_member(account,member_passwd,group_level,nickname,email,create_time,state,headimgurl) 
-                    SELECT (:account,:member_passwd,0,:nickname,:email,:create_time,0,:headimgurl) FROM dual WHERE NOT exists(SELECT * FROM wk_member WHERE `key` = :account);';
-
-
-                $params = [
-                    ':account' => $account,
-                    ':member_passwd' => password_hash($password, PASSWORD_DEFAULT),
-                    ':nickname' => $account,
-                    ':email' => $email,
-                    ':create_time' => date('Y-m-d H:i:s'),
-                    ':headimgurl' => asset('/static/images/middle.gif')];
+                $sql = "INSERT INTO wk_member(account,member_passwd,group_level,nickname,email,create_time,state,headimgurl) SELECT '{$account}','{$password}',0,'{$account}','{$email}',now(),0,'{$headimgurl}' FROM dual WHERE NOT exists(SELECT * FROM wk_member WHERE `account` = '{$account}');";
 
                 $sth = $pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
 
-                if ($sth->execute($params) === false) {
+                if ($sth->execute() === false) {
 
                     throw new \Exception('sql error', 1000004);
                 }
