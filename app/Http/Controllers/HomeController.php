@@ -82,6 +82,10 @@ class HomeController extends Controller
                 $this->data = $project;
                 return view('home.password',$this->data);
             }
+        }else if($permissions === 3 && empty($member_id)){
+            return redirect(route("account.login"));
+        }elseif($permissions === 3) {
+            abort(403);
         }
         $member = Member::find($project->create_at);
 

@@ -249,7 +249,7 @@ class Project extends ModelBase
      * @param $project_id
      * @param int|null $member_id
      * @param string|null $passwd
-     * @return int
+     * @return int 0 项目不存在；1 有权限； 2 需要密码； 3 没有权限
      */
     public static function hasProjectShow($project_id,$member_id = null,$passwd = null)
     {
@@ -282,7 +282,7 @@ class Project extends ModelBase
                 ->first();
             return intval(empty($rel) === false);
         }
-        return 0;
+        return 3;
     }
 
     /**

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
+    <meta name="author" content="SmartWiki" />
     <meta charset="utf-8"><link rel="shortcut icon" href="{{asset('favicon.ico')}}">
     <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />

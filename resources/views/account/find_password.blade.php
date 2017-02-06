@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> {{wiki_config('SITE_NAME','SmartWiki')}}</title>
+    <title>找回密码 - {{wiki_config('SITE_NAME','SmartWiki')}} - Powered by SmartWiki</title>
 
     <!-- Bootstrap -->
     <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">

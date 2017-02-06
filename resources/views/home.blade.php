@@ -2,6 +2,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8">
+    <meta name="author" content="SmartWiki" />
     <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
