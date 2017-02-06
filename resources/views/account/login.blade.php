@@ -71,6 +71,11 @@
                 <div class="form-group">
                     <button type="button" id="btn-login" class="btn btn-success" style="width: 100%"  data-loading-text="正在登录..." autocomplete="off">立即登录</button>
                 </div>
+                @if(wiki_config("ENABLED_REGISTER"))
+                <div class="form-group">
+                    还没有账号？<a href="{{route("account.register")}}">立即注册</a>
+                </div>
+                @endif
             </form>
         </div>
     </div>

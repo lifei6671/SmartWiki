@@ -277,10 +277,10 @@ class Project extends ModelBase
             }
         }
         if(empty($member_id) === false) {
-            $rel = Relationship::where('project_id','=',$project_id)
-                ->where('member_id','=',$member_id)
+            $rel = Relationship::where('project_id', '=', $project_id)
+                ->where('member_id', '=', $member_id)
                 ->first();
-            return intval(empty($rel) === false);
+            return empty($rel) ? 3 : 1;
         }
         return 3;
     }

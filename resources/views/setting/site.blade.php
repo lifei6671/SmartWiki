@@ -76,6 +76,15 @@
                         </label>
                     </div>
                     <div class="form-group">
+                        <label for="ENABLED_CAPTCHA">启用注册</label><br/>
+                        <label>
+                            <input type="radio" name="ENABLED_REGISTER" value="1" id="ENABLED_REGISTER" {{($ENABLED_REGISTER) ? 'checked' : ''}}>是
+                        </label>
+                        <label>
+                            <input type="radio" name="ENABLED_REGISTER" value="0" id="ENABLED_REGISTER" {{(!$ENABLED_REGISTER) ? 'checked' : ''}}>否
+                        </label>
+                    </div>
+                    <div class="form-group">
                         <button type="submit" class="btn btn-success" data-loading-text="保存中...">立即保存</button>
                         <span id="error-message" style="vertical-align: baseline"></span>
                     </div>

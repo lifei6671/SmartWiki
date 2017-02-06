@@ -19,6 +19,11 @@ Route::match(['get','post'],'/login',[
 Route::get('/logout',[
     'as' => 'account.logout', 'uses' => 'AccountController@logout'
 ]);
+//用户注册
+Route::match(['get','post'],'/register',[
+    'uses' => 'AccountController@register'
+])->name('account.register');
+
 //找回密码
 Route::match(['get','post'],'/find_password',[
     'uses' => 'AccountController@findPassword'

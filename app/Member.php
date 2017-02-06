@@ -120,7 +120,10 @@ class Member extends ModelBase
             }
 
         }else{
-            if(empty(Member::where('email','=',$member->email)->first()) === false){
+            if(Member::where('account','=',$member->account)->exists()){
+                throw new DataExistException('账号已存在',40513);
+            }
+            if(Member::where('email','=',$member->email)->exists()){
                 throw new DataExistException('邮箱已存在',40509);
             }
         }
