@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laravel</title>
+    <title>SmartWiki</title>
     <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <!--[if lt IE 9]>
     <script src="{{asset('static/bootstrap/js/html5shiv.min.js')}}"></script>
