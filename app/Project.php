@@ -249,7 +249,7 @@ class Project extends ModelBase
      * @param $project_id
      * @param int|null $member_id
      * @param string|null $passwd
-     * @return bool
+     * @return int
      */
     public static function hasProjectShow($project_id,$member_id = null,$passwd = null)
     {
@@ -266,10 +266,6 @@ class Project extends ModelBase
             if(Member::isSuperMember($member_id)){
                 return 1;
             }
-            $rel = Relationship::where('project_id','=',$project_id)
-                ->where('member_id','=',$member_id)
-                ->first();
-            return intval(empty($rel) === false);
         }
 
         if ($project->project_open_state == 2) {
@@ -279,6 +275,12 @@ class Project extends ModelBase
             }elseif (strcasecmp($passwd,$project->project_password) === 0){
                 return 1;
             }
+        }
+        if(empty($member_id) === false) {
+            $rel = Relationship::where('project_id','=',$project_id)
+                ->where('member_id','=',$member_id)
+                ->first();
+            return intval(empty($rel) === false);
         }
         return 0;
     }
