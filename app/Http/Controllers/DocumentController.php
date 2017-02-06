@@ -346,6 +346,20 @@ class DocumentController extends Controller
             $file = $this->request->file('editormd-file-file');
             $allowExt = explode('|',env('UPLOAD_FILE_EXT','txt|doc|docx|xls|xlsx|ppt|pptx|pdf|7z|rar'));
         }
+        $dirPath = public_path('uploads/' . date('Ym'));
+        //如果目标目录不能创建
+        if (!is_dir($dirPath) && !mkdir($dirPath)) {
+            $data['success'] = 0;
+            $data['message'] = '上传目录没有创建文件夹权限';
+            return $this->response->json($data);
+        }
+        //如果目标目录没有写入权限
+        if(is_dir($dirPath) && !is_writable($dirPath)) {
+            $data['success'] = 0;
+            $data['message'] = '上传目录没有写入权限';
+            return $this->response->json($data);
+        }
+
         //校验文件
         if(isset($file) && $file->isValid()){
             $ext = $file -> getClientOriginalExtension(); //上传文件的后缀

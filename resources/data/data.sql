@@ -129,11 +129,12 @@ CREATE TABLE IF NOT EXISTS `wk_config`(
   UNIQUE `key_uindex` (`key`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配置表';
 
-INSERT wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('启用文档历史','ENABLED_HISTORY','0','system','是否启用文档历史记录：0 否/1 是',now());
-INSERT wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('站点名称','SITE_NAME','SmartWiki','system','站点名称',now());
-INSERT wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('邮件有效期','MAIL_TOKEN_TIME','3600','system','找回密码邮件有效期,单位为秒',now());
-INSERT wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('启用匿名访问','ENABLE_ANONYMOUS','0','system','是否启用匿名访问：0 否/1 是',now());
-INSERT wk_config(name, `key`, value, config_type, remark, create_time) VALUES ('启用登录验证码','ENABLED_CAPTCHA','0','system','是否启用登录验证码：0 否/1 是',now());
+INSERT INTO wk_config (name, `key`, value, config_type, remark, create_time) SELECT '启用文档历史','ENABLED_HISTORY','0','system','是否启用文档历史记录：0 否/1 是',now() FROM dual WHERE NOT exists(SELECT * FROM wk_config WHERE `key` = 'ENABLED_HISTORY');
+INSERT INTO wk_config (name, `key`, value, config_type, remark, create_time) SELECT '站点名称','SITE_NAME','SmartWiki','system','站点名称',now() FROM dual WHERE NOT exists(SELECT * FROM wk_config WHERE `key` = 'SITE_NAME');
+INSERT INTO wk_config (name, `key`, value, config_type, remark, create_time) SELECT '邮件有效期','MAIL_TOKEN_TIME','3600','system','找回密码邮件有效期,单位为秒',now() FROM dual WHERE NOT exists(SELECT * FROM wk_config WHERE `key` = 'MAIL_TOKEN_TIME');
+INSERT INTO wk_config (name, `key`, value, config_type, remark, create_time) SELECT '启用匿名访问','ENABLE_ANONYMOUS','0','system','是否启用匿名访问：0 否/1 是',now() FROM dual WHERE NOT exists(SELECT * FROM wk_config WHERE `key` = 'ENABLE_ANONYMOUS');
+INSERT INTO wk_config (name, `key`, value, config_type, remark, create_time) SELECT '启用登录验证码','ENABLED_CAPTCHA','0','system','是否启用登录验证码：0 否/1 是',now() FROM dual WHERE NOT exists(SELECT * FROM wk_config WHERE `key` = 'ENABLED_CAPTCHA');
+
 
 
 /*****************************************
@@ -151,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `wk_logs`(
 /*****************************************
 * 找回密码表
 ******************************************/
-CREATE TABLE `wk_passwords` (
+CREATE TABLE IF NOT EXISTS `wk_passwords` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `token` varchar(200) NOT NULL COMMENT '唯一认证码',
   `email` varchar(200) NOT NULL COMMENT '收件的邮箱',
@@ -168,7 +169,7 @@ CREATE TABLE `wk_passwords` (
 /**********************************************
  * 项目分类表
  *********************************************/
-CREATE TABLE `wk_project_types` (
+CREATE TABLE IF NOT EXISTS `wk_project_types` (
   `type_id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '父ID',
   `type_name` varchar(200) NOT NULL COMMENT '文档名称',
