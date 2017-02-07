@@ -65,7 +65,7 @@
                             <li>
                                 <a href="{{route('account.register')}}" title="用户登录">注册</a>
                             </li>
-                            @endif
+                        @endif
                     @endif
                 </ul>
             </nav>

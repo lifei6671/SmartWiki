@@ -53,6 +53,11 @@
                         <li>
                             <a href="{{route('account.login')}}" title="用户登录">登录</a>
                         </li>
+                        @if(wiki_config("ENABLED_REGISTER"))
+                            <li>
+                                <a href="{{route('account.register')}}" title="用户登录">注册</a>
+                            </li>
+                        @endif
                     @endif
                 </ul>
             </nav>
@@ -64,7 +69,7 @@
         </div>
         <div class="row">
 
-            @if(count($lists) > 0)
+            @if(count($lists) > 0 && empty($lists) === false)
                 <ul class="project-box">
                     @foreach($lists as $item)
                         @include('widget.project',(array)$item)
