@@ -2,8 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="author" content="SmartWiki" />
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <title>{{wiki_config('SITE_NAME','SmartWiki')}}</title>
+    <title>找回密码 - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
     <style type="text/css">
         .ua-macos::-webkit-scrollbar{ display: none; }
         html,body{background-color: transparent;margin:0;padding: 0;}

@@ -96,9 +96,9 @@
                 }
             });
 
-
             return false;
         });
     });
+
 </script>
 @endsection

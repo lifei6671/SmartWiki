@@ -249,7 +249,7 @@ class Project extends ModelBase
      * @param $project_id
      * @param int|null $member_id
      * @param string|null $passwd
-     * @return int
+     * @return int 0 项目不存在；1 有权限； 2 需要密码； 3 没有权限
      */
     public static function hasProjectShow($project_id,$member_id = null,$passwd = null)
     {
@@ -277,12 +277,12 @@ class Project extends ModelBase
             }
         }
         if(empty($member_id) === false) {
-            $rel = Relationship::where('project_id','=',$project_id)
-                ->where('member_id','=',$member_id)
+            $rel = Relationship::where('project_id', '=', $project_id)
+                ->where('member_id', '=', $member_id)
                 ->first();
-            return intval(empty($rel) === false);
+            return empty($rel) ? 3 : 1;
         }
-        return 0;
+        return 3;
     }
 
     /**

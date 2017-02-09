@@ -76,6 +76,101 @@ class AccountController extends Controller
     }
 
     /**
+     * 用户注册
+     * @return \Illuminate\Contracts\View\Factory|JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function register()
+    {
+        //如果启用了注册
+        if(!wiki_config("ENABLED_REGISTER")){
+            abort(404);
+        }
+        $cookie = $this->request->cookie('login_token');
+        if(empty($cookie) === false or empty(session('member')) === false){
+            $member = Member::find($cookie['member_id']);
+
+            session_member($member);
+
+            if($this->isGet()) {
+                return redirect('/');
+            }else{
+                return $this->jsonResult(20001);
+            }
+        }
+
+        if($this->isPost()){
+            $account = $this->request->input('account');
+            $password = $this->request->input('password');
+            $confirm_password = $this->request->input("confirm_password");
+            $email = $this->request->input("email");
+
+            $captcha = $this->request->input('code');
+
+            if (wiki_config('ENABLED_CAPTCHA') && (empty($captcha) or strcasecmp(session('milkcaptcha'),$captcha) !== 0) ){
+                return $this->jsonResult(40101);
+            }
+
+            if(empty($account) or strlen($account) > 19 or strlen($account) < 4){
+                return $this->jsonResult(40102);
+            }
+
+            if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]{4,19}$/', $account)){
+                return $this->jsonResult(40102);
+            }
+            if (empty($password) || strlen($password) < 5 || strlen($password) > 18) {
+
+                return $this->jsonResult(40106,["a"=>strlen($password)]);
+            }
+            if(empty($confirm_password)){
+                return $this->jsonResult(40105);
+            }
+            if(strcmp($password,$confirm_password) !== 0){
+                return $this->jsonResult(40104);
+            }
+
+            if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return $this->jsonResult(40503);
+            }
+
+            $member = new Member();
+
+            $member->account = $account;
+            $member->member_passwd = password_hash($password,PASSWORD_DEFAULT);
+            $member->nickname = $account;
+            $member->email = $email;
+            $member->headimgurl = asset('/static/images/middle.gif');
+
+            $group_level = intval(wiki_config("DEFAULT_GROUP_LEVEL",2));
+
+            if(in_array($group_level,[0,1,2]) === false){
+                $group_level = 2;
+            }
+
+            $member->group_level = $group_level;
+            $member->create_at = 0;
+
+            try{
+                $result = Member::addOrUpdateMember($member);
+                if($result == false){
+                    return $this->jsonResult(500);
+                }
+                $member = Member::login($account,$password);
+                session_member($member);
+                return $this->jsonResult(0);
+
+            }catch (\Exception $ex){
+                $message = $ex->getMessage();
+                if(empty($message)){
+                    $message = '系统错误';
+                }
+                return $this->jsonResult($ex->getCode(),null,$message);
+            }
+        }
+
+        return view("account.register");
+    }
+
+    /**
      * 退出登录
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

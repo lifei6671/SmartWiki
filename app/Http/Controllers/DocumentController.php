@@ -436,6 +436,10 @@ class DocumentController extends Controller
                 $this->data = $project;
                 return view('home.password',$this->data);
             }
+        }else if($permissions === 3 && empty($member_id)){
+            return redirect(route("account.login"));
+        }elseif($permissions === 3) {
+            abort(403);
         }
 
         $this->data['project'] = Project::getProjectFromCache($doc->project_id);

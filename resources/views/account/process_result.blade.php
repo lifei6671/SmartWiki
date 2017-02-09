@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <meta charset="utf-8"><link rel="shortcut icon" href="{{asset('favicon.ico')}}">
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> {{wiki_config('SITE_NAME','SmartWiki')}}</title>
+    <meta name="author" content="SmartWiki" />
+    <title>提示信息 - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
 
     <!-- Bootstrap -->
     <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">

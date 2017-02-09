@@ -2,6 +2,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8">
+    <meta name="author" content="SmartWiki" />
     <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
@@ -60,6 +61,11 @@
                         <li>
                             <a href="{{route('account.login')}}" title="用户登录">登录</a>
                         </li>
+                        @if(wiki_config("ENABLED_REGISTER"))
+                            <li>
+                                <a href="{{route('account.register')}}" title="用户登录">注册</a>
+                            </li>
+                        @endif
                     @endif
                 </ul>
             </nav>

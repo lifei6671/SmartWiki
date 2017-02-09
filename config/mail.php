@@ -59,7 +59,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'admin@iminho.me', 'name' => 'SmartWiki'],
+    'from' => ['address' => env('MAIL_USERNAME'), 'name' => 'SmartWiki'],
 
     /*
     |--------------------------------------------------------------------------

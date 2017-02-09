@@ -65,8 +65,8 @@ body {
     display: block;
     position: relative;
     z-index: 1;
-    margin-top: 15px;
-    margin-right: 15px;
+    /*margin-top: 15px;*/
+    /*margin-right: 15px;*/
     background-color: #f9f9f9;
     padding: 15px;
     font-size: 12px;
@@ -114,7 +114,7 @@ body {
     display: none\9;
     background-repeat: no-repeat;
     display: block;
-    margin-top: 15px;
+    /*margin-top: 15px;*/
     margin-right: 15px;
     width: 235px;
     height: 96px;
@@ -128,8 +128,8 @@ body {
     line-height: 1.5em;
     overflow: hidden;
     display: block;
-    width: 215px;
-    height: 71px;
+    width: 225px;
+    height: 94px;
     visibility: hidden;
     opacity: 0;
     -webkit-transform: translateY(66px);
@@ -152,10 +152,9 @@ body {
     float: left;
     overflow: hidden;
     min-width: 200px;
+    margin-top: 15px;
 }
-.smart-container li:hover {
-    cursor: pointer;
-}
+
 .smart-container li:hover .summary {
     opacity: 1;
     display: block\9;

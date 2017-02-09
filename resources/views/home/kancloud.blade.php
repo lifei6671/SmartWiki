@@ -6,6 +6,7 @@
     <meta name="renderer" content="webkit" />
     <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="SmartWiki" />
     <title>{{$title}} - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
     <!-- Bootstrap -->
     <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -74,7 +75,7 @@
             <div class="m-copyright">
                 <p>
                     本文档使用
-                    <a href="https://www.iminho.me" target="_blank" onclick="window.open('https://www.iminho.me')">SmartWiki</a> 发布
+                    <a href="https://www.iminho.me" target="_blank">SmartWiki</a> 发布
                 </p>
             </div>
         </div>

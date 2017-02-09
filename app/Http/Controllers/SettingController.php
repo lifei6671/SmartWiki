@@ -16,7 +16,6 @@ class SettingController extends Controller
 {
     public function site()
     {
-
         if($this->isPost()){
             $form = Request::all();
             if(empty($form) === false){
@@ -32,7 +31,6 @@ class SettingController extends Controller
         if(empty($result) === false && count($result) > 0){
             $this->data = array_merge($this->data,array_column($result,'value','key'));
         }
-//        var_dump(array_column($result,'value','key'));exit;
 
         $this->data['setting_site'] = true;
         return view('setting.site',$this->data);

@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="SmartWiki" />
     <title>编辑文档 - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
     <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('static/editormd/css/editormd.min.css')}}" rel="stylesheet">

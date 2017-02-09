@@ -302,7 +302,7 @@ class MemberController extends Controller
             $member->description = $des;
 
             if(empty($member->headimgurl) ){
-                $member->headimgurl = '/static/images/middle.gif';
+                $member->headimgurl = asset('/static/images/middle.gif');
             }
 
             $member->group_level = $group_level;
