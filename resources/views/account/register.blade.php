@@ -52,7 +52,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-lock"></i>
                         </div>
-                        <input type="password" class="form-control" placeholder="密码" name="password" id="password">
+                        <input type="password" class="form-control" placeholder="密码" name="password" id="password"  autocomplete="off">
                     </div>
                 </div>
                 <div class="form-group">
@@ -62,7 +62,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-lock"></i>
                         </div>
-                        <input type="password" class="form-control" placeholder="确认密码" name="confirm_password" id="confirm_password">
+                        <input type="password" class="form-control" placeholder="确认密码" name="confirm_password" id="confirm_password"  autocomplete="off">
                     </div>
                 </div>
                 <div class="form-group">
@@ -72,7 +72,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-envelope-open"></i>
                         </div>
-                        <input type="email" class="form-control" placeholder="邮箱" name="email" id="email">
+                        <input type="email" class="form-control" placeholder="邮箱" name="email" id="email"  autocomplete="off">
                     </div>
                 </div>
                 @if(wiki_config('ENABLED_CAPTCHA'))

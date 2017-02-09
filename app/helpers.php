@@ -280,3 +280,53 @@ if(!function_exists('resolve_attachicons')) {
     }
 
 }
+
+if(!function_exists('output_word')){
+    /**
+     * 导出 word
+     * @param string $content
+     * @return string
+     */
+    function output_word($content){
+
+        $path = public_path('static/styles/kancloud.css');
+        $data = '';
+
+        if(file_exists($path)){
+            $data .= file_get_contents($path);
+        }
+
+        $content = str_replace("<thead>\n<tr>","<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>",$content);
+        $content = str_replace("<pre><code>","<table width='100%' class='codestyle'><pre><code>",$content);
+        $content = str_replace("</code></pre>","</code></pre></table>",$content);
+
+
+        $html = '<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"  xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+        <meta http-equiv=Content-Type content="text/html;  charset=utf-8">
+		<style type="text/css">
+			table  
+			{  
+				border-collapse: collapse;
+				border: none;  
+				width: 100%;  
+			}  
+			td  
+			{  
+				border: solid #CCC 1px;  
+			}  
+			.codestyle{
+				word-break: break-all;
+				background:silver;mso-highlight:silver;
+			}
+			'.$data.'
+		</style>
+        <meta name=ProgId content=Word.Document>
+        <meta name=Generator content="Microsoft Word 11">
+        <meta name=Originator content="Microsoft Word 11">
+        <xml><w:WordDocument><w:View>Print</w:View></xml></head>
+        <body>'  .$content.'</body></html>';
+
+        return $html;
+    }
+}

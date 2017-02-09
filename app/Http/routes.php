@@ -58,6 +58,10 @@ Route::get('/search',[
 Route::get('/show/{id}',[
     'as' => 'home.show', 'uses' => 'HomeController@show'
 ]);
+//项目导出
+Route::get('/export/{id}',[
+    'as' => 'document.export', 'uses' => 'DocumentController@export'
+]);
 //检查项目权限
 Route::post('/check_document_auth',[
     'as' => 'home.check_document_auth' , 'uses' => 'HomeController@checkDocumentAuth'

@@ -49,11 +49,11 @@
 
                 <div class="form-group">
                     <label for="newPasswd">新密码</label>
-                    <input type="password" class="form-control" name="passowrd" id="newPassword" maxlength="20" placeholder="新密码">
+                    <input type="password" class="form-control" name="passowrd" id="newPassword" maxlength="20" placeholder="新密码"  autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="configPasswd">确认密码</label>
-                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" maxlength="20" placeholder="确认密码">
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" maxlength="20" placeholder="确认密码"  autocomplete="off">
                 </div>
 
                 <div class="form-group">

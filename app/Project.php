@@ -306,7 +306,7 @@ class Project extends ModelBase
      * @param int $project_id
      * @return array
      */
-    public static function getProjectTree($project_id)
+    public static function getProjectArrayTree($project_id)
     {
         if(empty($project_id)){
             return [];
@@ -321,7 +321,7 @@ class Project extends ModelBase
             foreach ($tree as &$item){
                 $tmp['id'] = $item ->doc_id.'';
                 $tmp['text'] = $item->doc_name;
-                $tmp['parent' ] = ($item->parent_id == 0 ? '#' : $item->parent_id).'';
+                $tmp['parent'] = ($item->parent_id == 0 ? '#' : $item->parent_id).'';
 
                 $jsonArray[] = $tmp;
             }
@@ -366,7 +366,8 @@ class Project extends ModelBase
         return 0;
     }
 
-    protected static function createTree($parent_id,array $array,$selected_id = 0,$selected_parent_id = 0){
+    protected static function createTree($parent_id,array $array,$selected_id = 0,$selected_parent_id = 0)
+    {
         global $menu;
 
         $menu .= '<ul>';

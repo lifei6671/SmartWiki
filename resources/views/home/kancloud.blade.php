@@ -46,6 +46,7 @@
                     <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dLabel">
                         @if($project->project_open_state ==1 || $project->project_open_state ==2)
                             <li><a href="javascript:" data-toggle="modal" data-target="#shareProject">项目分享</a> </li>
+                            <li><a href="{{route('document.export',['id' => $project->project_id])}}" target="_blank">项目导出</a> </li>
                             <li role="presentation" class="divider"></li>
                         @endif
 
