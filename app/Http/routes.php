@@ -11,91 +11,13 @@
 |
 */
 
-//用户登录
-Route::match(['get','post'],'/login',[
-    'uses' => 'AccountController@login'
-])->name('account.login');
-//退出登录
-Route::get('/logout',[
-    'as' => 'account.logout', 'uses' => 'AccountController@logout'
-]);
-//用户注册
-Route::match(['get','post'],'/register',[
-    'uses' => 'AccountController@register'
-])->name('account.register');
 
-//找回密码
-Route::match(['get','post'],'/find_password',[
-    'uses' => 'AccountController@findPassword'
-])->name('account.find_password');
-
-//找回密码后的修改
-Route::match(['get','post'],'/modify_password/{key}',[
-    'uses' => 'AccountController@modifyPassword'
-])->name('account.modify_password')->where('key','^([a-fA-F0-9]{32})$');
-
-//处理结果跳转页
-Route::get('/process_result')->name('account.process_result')->uses('AccountController@processResult');
-
-//验证码
-Route::get('/verify',[
-    'as' => 'captcha.verify', 'uses' => 'CaptchaController@verify'
-]);
-Route::get('/qrcode',[
-    'as' => 'qrcode.index', 'uses' => 'QrCodeController@index'
-]);
-//发送邮件
-Route::post('/send_mail',['uses' => 'MailController@sendMail'])->name('mail.send_mail');
-//首页
-Route::get('/',[
-     'as' => 'home.index', 'uses' => 'HomeController@index'
-]);
-//搜索
-Route::get('/search',[
-    'uses' => 'SearchController@search'
-])->name('search.search');
-//查看文档
-Route::get('/show/{id}',[
-    'as' => 'home.show', 'uses' => 'HomeController@show'
-]);
 //项目导出
 Route::get('/export/{id}',[
     'as' => 'document.export', 'uses' => 'DocumentController@export'
 ]);
-//检查项目权限
-Route::post('/check_document_auth',[
-    'as' => 'home.check_document_auth' , 'uses' => 'HomeController@checkDocumentAuth'
-]);
-/**
- * 超级管理员
- */
-Route::group(['middleware' => 'super.member','prefix' => 'member'],function (){
-    //站点配置
-    Route::get('setting',[
-        'as' => 'member.setting', 'uses' => 'MemberController@setting'
-    ]);
-    //编辑站点配置
-    Route::match(['get','post'],'setting/edit/{id?}',[
-        'uses' => 'MemberController@editSetting'
-    ])->name('member.setting.edit');
-    //删除配置
-    Route::match(['get','post'],'setting/delete/{id?}',[
-        'uses' => 'MemberController@deleteSetting'
-    ])->name('member.setting.delete');
-    //用户管理
-    Route::get('users',[
-        'as' => 'member.users', 'uses' => 'MemberController@users'
-    ]);
-    //编辑用户
-    Route::match(['get','post'],'edit/{id?}',[
-        'uses' => 'MemberController@editUser'
-    ])->name('member.users.edit');
-    //禁用或启用用户
-    Route::post('users/delete/{id?}',[
-        'uses' => 'MemberController@deleteUser'
-    ])->name('member.users.delete');
 
-});
+
 /**
  * 网站设置
  */
@@ -105,6 +27,7 @@ Route::group(['middleware' => 'super.member','prefix' => 'setting'],function (){
         'uses' => 'SettingController@site'
     ])->name('setting.site');
 });
+
 
 Route::group(['middleware' => 'authorize','prefix' => 'project'],function (){
     //创建项目

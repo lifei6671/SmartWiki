@@ -38,8 +38,13 @@ class RouteServiceProvider extends ServiceProvider
     public function map(Router $router)
     {
         $this->mapWebRoutes($router);
+        $router->group(['namespace' => $this->namespace, 'middleware' => 'web',], function ($router) {
+            //require app_path('Http/routes.php');
+            foreach (glob(app_path('Http//Routes') . '/*.php') as $file) {
+                $this->app->make('SmartWiki\\Http\\Routes\\' . basename($file, '.php'))->map($router);
+            }
+        });
 
-        //
     }
 
     /**
