@@ -146,7 +146,7 @@
                         .tooltip('show')
                         .parents('.form-group').addClass('has-error');
                     return false;
-                }else if(code !== undefined && code === ""){
+                }else if($("#code").length > 0 && code !== undefined && code === ""){
                     $("#code").focus().tooltip({title : '验证码不能为空',trigger : 'manual'})
                         .tooltip('show')
                         .parents('.form-group').addClass('has-error');

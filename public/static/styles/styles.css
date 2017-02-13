@@ -187,7 +187,7 @@ body {
     font-size: 12px;
     background-color: #ffffff;
 }
-.footer .container{
+.footer .container,.footer .container-fluid{
     margin-top: 70px;
     border-top: 2px solid #e5e5e5;
     padding-top: 30px;
@@ -561,9 +561,9 @@ body {
 
 /***API测试工具样式***/
 .tool-container{
-    margin: 20px auto;
     margin-top: 80px;
     min-height: 300px;
+    padding: 0;
 }
 
 .tool-container .tool-api-parameter{

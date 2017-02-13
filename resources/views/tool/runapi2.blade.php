@@ -1,21 +1,8 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-<head>
-    <meta charset="utf-8">
-    <meta name="author" content="SmartWiki" />
-    <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="renderer" content="webkit" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>接口测试工具 - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
-
-    <!-- Bootstrap -->
-    <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('static/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
-
-    <link href="{{asset('static/styles/styles.css')}}" rel="stylesheet">
+@extends('home')
+@section('title')接口测试工具@endsection
+@section('styles')
     <link href="{{asset('static/bootstrap/icheck/skins/square/square.css')}}" rel="stylesheet">
-    <link href="{{asset('static/codemirror/lib/codemirror.css')}}" rel="stylesheet">
+    <link href="/static/codemirror/lib/codemirror.css" rel="stylesheet">
     <style type="text/css">
 
         .CodeMirror { height: 250px; border: 1px solid #ddd; font-family: "Courier New", 'Source Sans Pro', Helvetica, Arial, sans-serif;font-size: 12px;}
@@ -47,227 +34,14 @@
             background: inherit;
             border-bottom: 2px solid #F47023;
         }
-        .page-left{
-            position: fixed;
-            overflow: auto;
-            top: 50px;
-            bottom: 0;
-            z-index: 100;
-            width: 300px;
-            background-color: #f5f5f5;
-            border-right: 1px solid #eaeaea
-        }
-        .page-right{
-            padding: 15px 0 15px 24px;
-            margin-left: 315px;
-            margin-right: 20px;
-            min-width: 660px;
-        }
-        .page-right>.row{
-            margin: 0;
-        }
-        .tool-api-menu-top{
-            text-align: center;
-            border-bottom: 1px solid #DBDBDB;
-            background: #F3F3F3;
-        }
-        .tool-api-menu-top a{
-            text-decoration: none;
-            color: #9A3D7C;
-        }
-        .tool-api-menu-top a:hover{
-            background: #DDDDBB;
-        }
-        .tool-api-action{
-            display: inline-block;
-            padding: 10px 0px;
-            width: 50%;
-        }
-        .tool-api-menu,.tool-api-menu-submenu{
-            margin: 0px auto;
-            color: #505050;
-            list-style: none;
-            padding: 0;
-            line-height: 20px;
-        }
-        .tool-api-menu a{
-            color: #505050;
-            display: block;
-            padding: 10px 0;
-            text-decoration: none;
-            border-bottom: 1px solid #DBDBDB;
+        .description{
 
-        }
-        .tool-api-menu a:hover{
-            text-decoration: none;
-            background: #F0F0F0;
-        }
-        .tool-api-menu .tool-api-menu-title{
-            display: inline-block;
-        }
-        .tool-api-menu .tool-api-menu-title .text{
-            font-size: 10px;
-            color: #919191;
-        }
-        .tool-api-menu>li{
-            display: block;
-            position: relative;
-        }
-        .tool-api-menu>li .fa{
-            display: inline-block;
-            width: 40px;
-            text-align: center;
-            font-size: 24px;
-            vertical-align: super;
-        }
-        .tool-api-menu .btn>.fa{
-            vertical-align: baseline;
-            vertical-align: -webkit-baseline-middle;
-        }
-        .tool-api-menu .btn-more{
-            position: absolute;top:0;right: 0;
-            border-radius:0;
-            height: 63px;
-            background:transparent;
-            padding-left: 1px;
-            padding-right: 1px;
-        }
-        .tool-api-menu .tool-api-menu-submenu{
-            position: relative;
-        }
-        .tool-api-menu .tool-api-menu-submenu .fa{
-            vertical-align: bottom;
-        }
-        .tool-api-menu .tool-api-menu-submenu .btn-more{
-           height: 44px;
-        }
-        .tool-api-menu .menu-title{
-            display: inline-block;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            width: 140px;
-        }
-        .tool-api-menu .api-items{
-            margin: 0;
-            padding: 0;
-            position: relative;
-            font-size: 12px;
-        }
-        .tool-api-menu .get{
-            color: #7ED321;
-            display: inline-block;
-            width: 50px;
-            font-weight: bold;
-            text-align: right;
         }
     </style>
-<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="{{asset('static/bootstrap/js/html5shiv.min.js')}}"></script>
-    <script src="{{asset('static/bootstrap/js/respond.min.js')}}"></script>
-    <![endif]-->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="{{asset('static/scripts/jquery.min.js')}}"></script>
-</head>
-<body>
-<div class="manual-reader">
-    <header class="navbar navbar-static-top smart-nav navbar-fixed-top" role="banner">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a href="{{route('home.index')}}" class="navbar-brand"> {{wiki_config('SITE_NAME','SmartWiki')}}</a>
-                <div class="searchbar pull-left visible-lg-inline-block visible-md-inline-block">
-                    <form class="form-inline" action="{{route('search.search')}}" method="get">
-                        <input class="form-control" name="keyword" type="search" placeholder="请输入关键词...">
-                        <button class="search-btn">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
-                </div>
-                @include('widget.usermenu')
-            </div>
-
-            <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-                <ul class="nav navbar-nav navbar-right">
-                    @if(isset($member) && ($member->group_level == 0 || $member->group_level == 1))
-                        <li>
-                            <a href="{{route('project.edit')}}" title="创建项目"><i class="fa fa-plus"></i></a>
-                        </li>
-                    @endif
-                    @if(isset($member))
-                        <li>
-                            <a href="{{route('account.logout')}}" title="退出登录">
-                                <i class="fa fa-sign-out"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('member.projects')}}" class="img" title="个人中心">
-                                <img src="{{$member['headimgurl']}}" class="img-circle" style="width: 43px;">
-                            </a>
-                        </li>
-                    @else
-                        <li>
-                            <a href="{{route('account.login')}}" title="用户登录">登录</a>
-                        </li>
-                        @if(wiki_config("ENABLED_REGISTER"))
-                            <li>
-                                <a href="{{route('account.register')}}" title="用户登录">注册</a>
-                            </li>
-                        @endif
-                    @endif
-                </ul>
-            </nav>
-        </div>
-    </header>
-    <div class="container-fluid tool-container">
-        <div class="page-left">
-            <div class="tool-api-menu-top">
-                <a href="javascript:;" class="pull-left tool-api-action">
-                    <i class="fa fa-folder"></i> 添加分类
-                </a>
-                <a href="javascript:;" class="pull-right tool-api-action" style="border-left: 1px solid #DBDBDB;">
-                    <i class="fa fa-plus"></i> 添加接口
-                </a>
-                <div class="clearfix"></div>
-            </div>
-            <ul class="tool-api-menu">
-                <li>
-                    <a href="javascript:;">
-                        <i class="fa fa-folder"></i>
-                        <div class="tool-api-menu-title">默认分类<br/><span class="text">0 个接口</span></div>
-                    </a>
-                    <button class="btn btn-more">
-                        <i class="fa fa-ellipsis-h"></i>
-                    </button>
-                    <ul class="tool-api-menu-submenu">
-                        <li>
-                            <a href="javascript:;">
-                                <i class="fa fa-folder-o"></i>
-                                微信
-                            </a>
-                            <button class="btn btn-more">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </button>
-                            <ul class="api-items">
-                                <li>
-                                    <a href="javascript:;">
-                                        <i class="fa"></i>
-                                        <span class="get">GET</span>
-                                        <span class="menu-title">搜索订单搜索订单搜索订单搜索订单搜索订单搜索订单</span>
-                                    </a>
-                                    <button class="btn btn-more">
-                                        <i class="fa fa-ellipsis-h"></i>
-                                    </button>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="page-right">
-            <div class="row">
+@endsection
+@section('content')
+    <div class="container tool-container">
+        <div class="row">
                 <div class="description">
                     <strong>使用说明：</strong>
                     <ul>
@@ -403,9 +177,7 @@
                     </div>
                 </div>
             </div>
-            <div class="clearfix"></div>
-        </div>
-
+        <div class="clearfix"></div>
     </div>
     <script type="text/plain" id="parameter-template">
         <tr>
@@ -419,10 +191,10 @@
             </td>
         </tr>
     </script>
-</div>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="{{asset('static/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
-<script src="{{asset('static/scripts/scripts.js')}}" type="text/javascript"></script>
+@endsection
+
+
+@section('scripts')
 <script type="text/javascript" src="{{asset('static/bootstrap/icheck/icheck.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('static/layer/layer.js')}}"></script>
 <script type="text/javascript" src="/static/codemirror/lib/codemirror.js"></script>
@@ -450,9 +222,7 @@
             });
             renderParameter();
         });
-        $(".parameter-close").on("click",function () {
-            $(this).closest("tr").empty().remove();
-        });
+
     }
     $(function () {
         renderParameter();
@@ -483,19 +253,18 @@
         });
 
         $("#sendRequest").on("click",function () {
-            var url = $("#requestUrl").val();
-            if(!url){
-                layer.msg("请输入一个URL");
-            }
-            var method = $("#httpMethod").text();
-            var runApi = new RunApi();
+           var url = $("#requestUrl").val();
+           if(!url){
+               layer.msg("请输入一个URL");
+           }
+           var method = $("#httpMethod").text();
+           var runApi = new RunApi();
 
             var header = runApi.resolveRequestHeader();
             var body = runApi.resolveRequestBody();
 
-            runApi.send(url,method,header,body);
+           runApi.send(url,method,header,body);
         });
-
 
 
         window.ResponseEditor = CodeMirror.fromTextArea(document.getElementById('responseBodyContainer'),{
@@ -507,5 +276,4 @@
 
     });
 </script>
-</body>
-</html>
+@endsection

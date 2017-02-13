@@ -135,10 +135,11 @@ $(function () {
                        $("#captcha-img").click();
                        $("#code").val('');
                        layer.msg(res.message);
+                       $btn.button('reset');
                    }else{
                        window.location = "/";
                    }
-                   $btn.button('reset');
+
                },
                error :function () {
                    $("#captcha-img").click();

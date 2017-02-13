@@ -43,7 +43,7 @@ class AccountController extends Controller
             $captcha = $this->request->input('code');
 
             if (wiki_config('ENABLED_CAPTCHA') && (empty($captcha) or strcasecmp(session('milkcaptcha'),$captcha) !== 0) ){
-                return $this->jsonResult(401010);
+                return $this->jsonResult(40101);
             }
             if(empty($account) or strlen($account) > 20 or strlen($account) < 3){
                 return $this->jsonResult(40102);
