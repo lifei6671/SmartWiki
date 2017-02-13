@@ -147,6 +147,7 @@
             white-space: nowrap;
             overflow: hidden;
             width: 140px;
+            line-height: 20px;
         }
         .tool-api-menu .api-items{
             margin: 0;
@@ -154,12 +155,17 @@
             position: relative;
             font-size: 12px;
         }
+        .tool-api-menu .api-items a{
+            padding: 12px 0 6px 0;
+        }
         .tool-api-menu .get{
             color: #7ED321;
             display: inline-block;
             width: 50px;
             font-weight: bold;
             text-align: right;
+            line-height: 20px;
+            overflow: hidden;
         }
     </style>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -268,12 +274,7 @@
         </div>
         <div class="page-right">
             <div class="row">
-                <div class="description">
-                    <strong>使用说明：</strong>
-                    <ul>
-                        <li>跨域请求请在服务器端添加响应头 Access-Control-Allow-Origin:{{$_SERVER['HTTP_HOST']}}</li>
-                    </ul>
-                </div>
+                
 
                 <div class="tool-api-method">
                     <div class="row">
