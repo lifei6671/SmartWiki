@@ -3,8 +3,8 @@
 use SmartWiki\Extentions\Markdown\Parser\AutoLinkParser;
 use SmartWiki\Extentions\Markdown\Parser\HttpMethodParser;
 use SmartWiki\Extentions\Markdown\Renderer\HttpMethodRenderer;
-use SmartWiki\Member;
-use SmartWiki\WikiConfig;
+use SmartWiki\Models\Member;
+use SmartWiki\Models\WikiConfig;
 
 
 if (! function_exists('session_member')) {
@@ -126,7 +126,7 @@ if(!function_exists('is_can_create_project')) {
      * @return bool
      */
     function is_can_create_project($member_id){
-        return \SmartWiki\Project::isCanCreateProject($member_id);
+        return \SmartWiki\Models\Project::isCanCreateProject($member_id);
     }
 }
 

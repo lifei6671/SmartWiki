@@ -47,7 +47,7 @@
         </div>
 
     </div>
-    <form method="post" action="{{route('document.save')}}" id="editormd-form">
+    <form method="post" action="{{route('document.save')}}" id="form-editormd">
         <div class="editormd-body">
             <div id="editormd">
                 <input type="hidden" name="doc_id" id="document-id">
@@ -60,12 +60,12 @@
 <div class="modal fade" id="create-wiki" tabindex="-1" role="dialog" aria-labelledby="添加文件" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" role="form" method="post" action="{{route('document.save')}}">
+            <form class="form-horizontal" role="form" method="post" action="{{route('document.save')}}" id="form-document">
                 <input type="hidden" name="project_id" value="{{$project_id or ''}}">
                 <input type="hidden" name="id" value="{{$doc_id or ''}}">
                 <input type="hidden" name="parentId" value="{{$parent_id or 0}}">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="modal-title">添加文件</h4>
+                    <h4 class="modal-title" id="modal-title">添加文档</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">

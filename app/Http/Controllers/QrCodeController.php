@@ -9,7 +9,7 @@
 namespace SmartWiki\Http\Controllers;
 
 use Illuminate\Http\Response;
-use SmartWiki\Project;
+use SmartWiki\Models\Project;
 use QrCode;
 
 class QrCodeController extends Controller

@@ -1,6 +1,6 @@
 <?php
 
-namespace SmartWiki;
+namespace SmartWiki\Models;
 
 use DB;
 use Cache;
@@ -10,7 +10,7 @@ use SmartWiki\Exceptions\FormatException;
 use SmartWiki\Exceptions\ResultException;
 
 /**
- * SmartWiki\Project
+ * SmartWiki\Models\Project
  *
  * @property integer $project_id
  * @property string $project_name 项目名称
@@ -22,21 +22,21 @@ use SmartWiki\Exceptions\ResultException;
  * @property string $modify_time
  * @property integer $modify_at
  * @property string $version 当前时间戳
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereProjectId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereProjectName($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereProjectOpenState($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereProjectPassword($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereCreateTime($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereCreateAt($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereModifyTime($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereModifyAt($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereVersion($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereProjectId($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereProjectName($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereProjectOpenState($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereProjectPassword($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereCreateTime($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereCreateAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereModifyTime($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereModifyAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereVersion($value)
  * @mixin \Eloquent
  * @property integer $doc_count 文档数据量
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereDocCount($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereDocCount($value)
  * @property string $doc_tree 当前项目的文档树
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Project whereDocTree($value)
+ * @method static \Illuminate\Database\Query\Builder|Project whereDocTree($value)
  */
 class Project extends ModelBase
 {

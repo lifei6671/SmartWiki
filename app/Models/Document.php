@@ -1,12 +1,12 @@
 <?php
 
-namespace SmartWiki;
+namespace SmartWiki\Models;
 
 use Cache;
 use Carbon\Carbon;
 
 /**
- * SmartWiki\Document
+ * SmartWiki\Models\Document
  *
  * @mixin \Eloquent
  * @property integer $doc_id
@@ -20,17 +20,17 @@ use Carbon\Carbon;
  * @property string $modify_time
  * @property integer $modify_at
  * @property string $version 当前时间戳
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Document whereDocId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Document whereDocName($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Document whereParentId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Document whereProjectId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Document whereDocSort($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Document whereDocContent($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Document whereCreateTime($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Document whereCreateAt($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Document whereModifyTime($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Document whereModifyAt($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Document whereVersion($value)
+ * @method static \Illuminate\Database\Query\Builder|Document whereDocId($value)
+ * @method static \Illuminate\Database\Query\Builder|Document whereDocName($value)
+ * @method static \Illuminate\Database\Query\Builder|Document whereParentId($value)
+ * @method static \Illuminate\Database\Query\Builder|Document whereProjectId($value)
+ * @method static \Illuminate\Database\Query\Builder|Document whereDocSort($value)
+ * @method static \Illuminate\Database\Query\Builder|Document whereDocContent($value)
+ * @method static \Illuminate\Database\Query\Builder|Document whereCreateTime($value)
+ * @method static \Illuminate\Database\Query\Builder|Document whereCreateAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Document whereModifyTime($value)
+ * @method static \Illuminate\Database\Query\Builder|Document whereModifyAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Document whereVersion($value)
  */
 class Document extends ModelBase
 {

@@ -6,15 +6,15 @@
  * Time: 13:24
  */
 
-namespace SmartWiki;
+namespace SmartWiki\Models;
 
 use Illuminate\Database\Eloquent\Model;
 /**
  * Class ModelBase
  *
  * @package SmartWiki
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\ModelBase multiWhere($conditions)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\ModelBase s()
+ * @method static \Illuminate\Database\Query\Builder|ModelBase multiWhere($conditions)
+ * @method static \Illuminate\Database\Query\Builder|ModelBase s()
  * @mixin \Eloquent
  */
 class ModelBase extends Model

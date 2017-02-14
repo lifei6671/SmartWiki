@@ -4,14 +4,14 @@ namespace SmartWiki\Providers;
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use SmartWiki\Document;
-use SmartWiki\Member;
+use SmartWiki\Models\Document;
+use SmartWiki\Models\Member;
 use SmartWiki\Observers\DocumentObservers;
 use SmartWiki\Observers\MemberObservers;
 use SmartWiki\Observers\ProjectObservers;
 use SmartWiki\Observers\WikiConfigObservers;
-use SmartWiki\Project;
-use SmartWiki\WikiConfig;
+use SmartWiki\Models\Project;
+use SmartWiki\Models\WikiConfig;
 
 
 class EventServiceProvider extends ServiceProvider

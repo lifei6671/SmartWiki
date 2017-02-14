@@ -10,12 +10,9 @@ namespace SmartWiki\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-use SmartWiki\Document;
-use SmartWiki\Member;
-use DB;
-use SmartWiki\Project;
-use SmartWiki\Relationship;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use SmartWiki\Models\Document;
+use SmartWiki\Models\Member;
+use SmartWiki\Models\Project;
 
 class HomeController extends Controller
 {

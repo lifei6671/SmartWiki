@@ -1,12 +1,12 @@
 <?php
 
-namespace SmartWiki;
+namespace SmartWiki\Models;
 
 use Cache;
 
 
 /**
- * SmartWiki\WikiConfig
+ * SmartWiki\Models\WikiConfig
  *
  * @property integer $id
  * @property string $name 名称
@@ -16,15 +16,15 @@ use Cache;
  * @property string $remark 备注
  * @property string $create_time 创建时间
  * @property string $modify_time 修改时间
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\WikiConfig whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\WikiConfig whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\WikiConfig whereKey($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\WikiConfig whereValue($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\WikiConfig whereRemark($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\WikiConfig whereCreateTime($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\WikiConfig whereModifyTime($value)
+ * @method static \Illuminate\Database\Query\Builder|WikiConfig whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|WikiConfig whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|WikiConfig whereKey($value)
+ * @method static \Illuminate\Database\Query\Builder|WikiConfig whereValue($value)
+ * @method static \Illuminate\Database\Query\Builder|WikiConfig whereRemark($value)
+ * @method static \Illuminate\Database\Query\Builder|WikiConfig whereCreateTime($value)
+ * @method static \Illuminate\Database\Query\Builder|WikiConfig whereModifyTime($value)
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\WikiConfig whereConfigType($value)
+ * @method static \Illuminate\Database\Query\Builder|WikiConfig whereConfigType($value)
  */
 class WikiConfig extends ModelBase
 {

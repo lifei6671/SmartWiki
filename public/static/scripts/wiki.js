@@ -234,7 +234,7 @@ $(document).ready(function () {
     /**
      * 实现添加文档
      */
-    $then.find("form").ajaxForm({
+    $then.find("#form-document").ajaxForm({
         type : "post",
         dataType : "json",
         beforeSubmit : function (formData, jqForm, options) {
@@ -276,7 +276,7 @@ $(document).ready(function () {
     /**
      * 实现保存文档编辑
      */
-    $("#editormd-form").ajaxForm({
+    $("#form-editormd").ajaxForm({
         dataType:"json",
         beforeSubmit:function (formData, jqForm, options) {
             $("#markdown-save").removeClass('change').addClass('disabled');

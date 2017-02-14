@@ -1,11 +1,11 @@
 <?php
 
-namespace SmartWiki;
+namespace SmartWiki\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * SmartWiki\Logs
+ * SmartWiki\Models\Logs
  *
  * @mixin \Eloquent
  * @property integer $id
@@ -14,12 +14,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $content 日志内容
  * @property string $create_time 创建时间
  * @property integer $create_at 创建人
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Logs whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Logs whereOriginalData($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Logs wherePresentData($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Logs whereContent($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Logs whereCreateTime($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Logs whereCreateAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Logs whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|Logs whereOriginalData($value)
+ * @method static \Illuminate\Database\Query\Builder|Logs wherePresentData($value)
+ * @method static \Illuminate\Database\Query\Builder|Logs whereContent($value)
+ * @method static \Illuminate\Database\Query\Builder|Logs whereCreateTime($value)
+ * @method static \Illuminate\Database\Query\Builder|Logs whereCreateAt($value)
  */
 class Logs extends ModelBase
 {

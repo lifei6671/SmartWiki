@@ -1,21 +1,21 @@
 <?php
 
-namespace SmartWiki;
+namespace SmartWiki\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * SmartWiki\Relationship
+ * SmartWiki\Models\Relationship
  *
  * @mixin \Eloquent
  * @property integer $rel_id
  * @property integer $member_id
  * @property integer $project_id
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Relationship whereRelId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Relationship whereMemberId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Relationship whereProjectId($value)
+ * @method static \Illuminate\Database\Query\Builder|Relationship whereRelId($value)
+ * @method static \Illuminate\Database\Query\Builder|Relationship whereMemberId($value)
+ * @method static \Illuminate\Database\Query\Builder|Relationship whereProjectId($value)
  * @property boolean $role_type 项目角色：0 参与者，1 所有者
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Relationship whereRoleType($value)
+ * @method static \Illuminate\Database\Query\Builder|Relationship whereRoleType($value)
  */
 class Relationship extends ModelBase
 {

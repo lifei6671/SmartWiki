@@ -9,7 +9,7 @@
 namespace SmartWiki\Http\Controllers;
 
 
-use SmartWiki\Project;
+use SmartWiki\Models\Project;
 
 class SearchController extends Controller
 {

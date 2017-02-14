@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 
 use Response;
 use Illuminate\Http\Request;
-use SmartWiki\Member;
+use SmartWiki\Models\Member;
 
 /**
  * Class Controller

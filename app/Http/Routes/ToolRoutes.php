@@ -17,7 +17,7 @@ class ToolRoutes
         //工具路由
         $router->group(['middleware' => 'authorize','prefix' => 'tool'],function ()use(&$router){
             $router->match(['GET','POST'],'{runapi}',[
-                'uses' => 'ToolController@runApi'
+                'uses' => 'RunApiController@index'
             ])->where('runapi','runapi')->name('tool.runApi');
         });
     }

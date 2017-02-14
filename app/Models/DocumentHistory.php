@@ -1,11 +1,11 @@
 <?php
 
-namespace SmartWiki;
+namespace SmartWiki\Models;
 
 use DB;
 
 /**
- * SmartWiki\DocumentHistory
+ * SmartWiki\Models\DocumentHistory
  *
  * @mixin \Eloquent
  * @property integer $history_id
@@ -16,18 +16,18 @@ use DB;
  * @property string $modify_time
  * @property integer $modify_at
  * @property string $version 当前时间戳
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereHistoryId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereDocId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereDocName($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereParentId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereDocContent($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereModifyTime($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereModifyAt($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereVersion($value)
+ * @method static \Illuminate\Database\Query\Builder|DocumentHistory whereHistoryId($value)
+ * @method static \Illuminate\Database\Query\Builder|DocumentHistory whereDocId($value)
+ * @method static \Illuminate\Database\Query\Builder|DocumentHistory whereDocName($value)
+ * @method static \Illuminate\Database\Query\Builder|DocumentHistory whereParentId($value)
+ * @method static \Illuminate\Database\Query\Builder|DocumentHistory whereDocContent($value)
+ * @method static \Illuminate\Database\Query\Builder|DocumentHistory whereModifyTime($value)
+ * @method static \Illuminate\Database\Query\Builder|DocumentHistory whereModifyAt($value)
+ * @method static \Illuminate\Database\Query\Builder|DocumentHistory whereVersion($value)
  * @property string $create_time 历史记录创建时间
  * @property integer $create_at 历史记录创建人
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereCreateTime($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\DocumentHistory whereCreateAt($value)
+ * @method static \Illuminate\Database\Query\Builder|DocumentHistory whereCreateTime($value)
+ * @method static \Illuminate\Database\Query\Builder|DocumentHistory whereCreateAt($value)
  */
 class DocumentHistory extends ModelBase
 {

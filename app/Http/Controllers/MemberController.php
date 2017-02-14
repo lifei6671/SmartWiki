@@ -8,15 +8,15 @@
 
 namespace SmartWiki\Http\Controllers;
 
-use SmartWiki\WikiConfig;
+use SmartWiki\Models\WikiConfig;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use SmartWiki\Member;
+use SmartWiki\Models\Member;
 use Image;
 use Config;
-use SmartWiki\Project;
+use SmartWiki\Models\Project;
 use DB;
 
 class MemberController extends Controller

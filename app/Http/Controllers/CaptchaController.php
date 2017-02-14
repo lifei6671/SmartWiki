@@ -8,7 +8,6 @@
 
 namespace SmartWiki\Http\Controllers;
 
-//use Gregwar\Captcha\CaptchaBuilder;
 use Minho\Captcha\CaptchaBuilder;
 use Cookie;
 use Session;

@@ -9,9 +9,9 @@
 namespace SmartWiki\Http\Controllers;
 
 use League\Flysystem\Exception;
-use SmartWiki\Document;
-use SmartWiki\DocumentHistory;
-use SmartWiki\Project;
+use SmartWiki\Models\Document;
+use SmartWiki\Models\DocumentHistory;
+use SmartWiki\Models\Project;
 use Illuminate\Auth\Access\AuthorizationException;
 
 

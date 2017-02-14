@@ -1,6 +1,6 @@
 <?php
 
-namespace SmartWiki;
+namespace SmartWiki\Models;
 
 use SmartWiki\Exceptions\ArgumentNullException;
 use SmartWiki\Exceptions\ArgumentOutOfRangeException;
@@ -11,7 +11,7 @@ use SmartWiki\Exceptions\ResultNullException;
 
 
 /**
- * SmartWiki\Member
+ * SmartWiki\Models\Member
  *
  * @property integer $member_id
  * @property string $account 账号
@@ -31,26 +31,26 @@ use SmartWiki\Exceptions\ResultNullException;
  * @property string $user_agent 最后登录浏览器信息
  * @property string $version 当前时间戳
  * @property boolean $state
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereMemberId($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereAccount($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereMemberPasswd($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereNickname($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereGorupLevel($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereEmail($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member wherePhone($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereHeadimgurl($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereRememberToken($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereCreateTime($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereCreateAt($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereModifyTime($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereLastLoginTime($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereLastLoginIp($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereUserAgent($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereVersion($value)
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereState($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereMemberId($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereAccount($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereMemberPasswd($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereNickname($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereGorupLevel($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|Member wherePhone($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereHeadimgurl($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereRememberToken($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereCreateTime($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereCreateAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereModifyTime($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereLastLoginTime($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereLastLoginIp($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereUserAgent($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereVersion($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereState($value)
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Query\Builder|\SmartWiki\Member whereGroupLevel($value)
+ * @method static \Illuminate\Database\Query\Builder|Member whereGroupLevel($value)
  */
 class Member extends ModelBase
 {

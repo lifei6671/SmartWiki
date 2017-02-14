@@ -10,9 +10,9 @@ namespace SmartWiki\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Log;
-use SmartWiki\Member;
-use SmartWiki\Project;
-use SmartWiki\Relationship;
+use SmartWiki\Models\Member;
+use SmartWiki\Models\Project;
+use SmartWiki\Models\Relationship;
 use Illuminate\Auth\Access\AuthorizationException;
 
 class ProjectController extends Controller

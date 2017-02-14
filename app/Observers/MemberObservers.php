@@ -9,7 +9,7 @@
 namespace SmartWiki\Observers;
 
 
-use SmartWiki\Member;
+use SmartWiki\Models\Member;
 
 /**
  * 用户模型观察者

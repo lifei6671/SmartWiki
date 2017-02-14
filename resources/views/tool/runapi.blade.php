@@ -124,23 +124,30 @@
             vertical-align: baseline;
             vertical-align: -webkit-baseline-middle;
         }
+        .tool-api-menu .btn-group-more{
+            position: absolute;top:0;right: 0;
+        }
+
         .tool-api-menu .btn-more{
             position: absolute;top:0;right: 0;
             border-radius:0;
-            height: 63px;
             background:transparent;
             padding-left: 1px;
             padding-right: 1px;
+            box-shadow: none !important;
         }
-        .tool-api-menu .tool-api-menu-submenu{
+
+        .tool-api-menu>li>.tool-api-menu-submenu{
             position: relative;
+            display: none;
         }
         .tool-api-menu .tool-api-menu-submenu .fa{
             vertical-align: bottom;
         }
         .tool-api-menu .tool-api-menu-submenu .btn-more{
-           height: 44px;
+            height: 44px;
         }
+
         .tool-api-menu .menu-title{
             display: inline-block;
             text-overflow: ellipsis;
@@ -154,18 +161,63 @@
             padding: 0;
             position: relative;
             font-size: 12px;
+            display: none;
         }
-        .tool-api-menu .api-items a{
+        .tool-api-menu>li>.tool-api-menu-submenu,
+        .tool-api-menu>li>.tool-api-menu-submenu>li>.api-items{
+            display: none;
+        }
+        .tool-api-menu>.open-menu>.tool-api-menu-submenu,
+        .tool-api-menu>.open-menu>.tool-api-menu-submenu>.open-menu>.btn-more,
+        .tool-api-menu>.open-menu>.tool-api-menu-submenu>.open-menu>.api-items,
+        .tool-api-menu>.open-menu>.api-items{
+            display: block;
+        }
+        .tool-api-menu .api-items>li>a{
             padding: 12px 0 6px 0;
         }
-        .tool-api-menu .get{
-            color: #7ED321;
+        .tool-api-menu>li>.api-items>li .btn-more,
+        .tool-api-menu .tool-api-menu-submenu .btn-group>.btn-more{
+            display: none;
+            box-shadow: none;
+        }
+        .tool-api-menu .api-items>li:hover>.btn-group>.btn-more,
+        .tool-api-menu .tool-api-menu-submenu>li:hover>.btn-group-more>.btn-more,
+        .tool-api-menu .tool-api-menu-submenu>.open-menu>.btn-group-more>.btn-more,
+        .tool-api-menu .api-items>li>.open>.btn-more,
+        .tool-api-menu .tool-api-menu-submenu>li>.open>.btn-more{
+            display: block;
+            box-shadow: none;
+        }
+
+        .dropdown-menu-more{
+            right: 2px;
+            top: 44px;
+            left:inherit;
+            padding: 0;
+        }
+        .dropdown-menu-more>li>a{
+            padding: 10px 0 10px 15px;
+            border: 0;
+            line-height: 15px;
+            font-size: 13px;
+        }
+        .dropdown-menu-more>li>a>.fa{
+            display: inline-block;
+            width: auto;
+            font-size: 13px;
+            vertical-align: baseline;
+        }
+        .tool-api-menu .method-default{
             display: inline-block;
             width: 50px;
             font-weight: bold;
             text-align: right;
             line-height: 20px;
             overflow: hidden;
+        }
+        .tool-api-menu .method-get{
+            color: #7ED321;
         }
     </style>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -243,30 +295,66 @@
                         <i class="fa fa-folder"></i>
                         <div class="tool-api-menu-title">默认分类<br/><span class="text">0 个接口</span></div>
                     </a>
-                    <button class="btn btn-more">
-                        <i class="fa fa-ellipsis-h"></i>
-                    </button>
+                    <div class="btn-group btn-group-more">
+                        <button class="btn btn-more dropdown-toggle" style="height: 63px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-more">
+                            <li><a href="javascript:;"><i class="fa fa-pencil"></i> 编辑</a></li>
+                            <li><a href="javascript:;"><i class="fa fa-folder"></i> 添加分类</a> </li>
+                            <li><a href="javascript:;"><i class="fa fa-trash"></i> 删除</a></li>
+                        </ul>
+                    </div>
                     <ul class="tool-api-menu-submenu">
                         <li>
                             <a href="javascript:;">
                                 <i class="fa fa-folder-o"></i>
                                 微信
                             </a>
-                            <button class="btn btn-more">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </button>
+                            <div class="btn-group btn-group-more">
+                                <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-h"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-more">
+                                    <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
+                                    <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
+                                </ul>
+                            </div>
                             <ul class="api-items">
                                 <li>
                                     <a href="javascript:;">
                                         <i class="fa"></i>
-                                        <span class="get">GET</span>
+                                        <span class="method-default method-get">GET</span>
                                         <span class="menu-title">搜索订单搜索订单搜索订单搜索订单搜索订单搜索订单</span>
                                     </a>
-                                    <button class="btn btn-more">
-                                        <i class="fa fa-ellipsis-h"></i>
-                                    </button>
+                                    <div class="btn-group btn-group-more">
+                                        <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-more">
+                                            <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
+                                            <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
+                                        </ul>
+                                    </div>
                                 </li>
                             </ul>
+                        </li>
+                    </ul>
+                    <ul class="api-items">
+                        <li>
+                            <a href="javascript:;">
+                                <span class="method-default method-get">GET</span>
+                                <span class="menu-title">搜索订单搜索订单搜索订单搜索订单搜索订单搜索订单</span>
+                            </a>
+                            <div class="btn-group btn-group-more">
+                                <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-h"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-more">
+                                    <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
+                                    <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
+                                </ul>
+                            </div>
                         </li>
                     </ul>
                 </li>
@@ -274,7 +362,7 @@
         </div>
         <div class="page-right">
             <div class="row">
-                
+
 
                 <div class="tool-api-method">
                     <div class="row">
@@ -506,6 +594,9 @@
             lineWrapping : true
         })
 
+        $(".tool-api-menu-submenu>li>a,.tool-api-menu>li>a").on("click",function (e) {
+            $(this).closest("li").toggleClass("open-menu");
+        });
     });
 </script>
 </body>
