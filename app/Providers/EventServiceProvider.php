@@ -4,8 +4,11 @@ namespace SmartWiki\Providers;
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use SmartWiki\Models\ApiClassify;
+use SmartWiki\Models\ApiModel;
 use SmartWiki\Models\Document;
 use SmartWiki\Models\Member;
+use SmartWiki\Observers\ApiClassifyObservers;
 use SmartWiki\Observers\DocumentObservers;
 use SmartWiki\Observers\MemberObservers;
 use SmartWiki\Observers\ProjectObservers;
@@ -52,5 +55,7 @@ class EventServiceProvider extends ServiceProvider
 
         //注册配置观察者
         WikiConfig::observe(new WikiConfigObservers());
+
+        ApiClassify::observe(new ApiClassifyObservers());
     }
 }

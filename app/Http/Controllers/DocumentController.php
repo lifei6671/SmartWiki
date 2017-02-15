@@ -28,7 +28,7 @@ class DocumentController extends Controller
             abort(404);
         }
         $project = Project::find($id);
-        if(empty($id)){
+        if(empty($project)){
             abort(404);
         }
         //判断是否有编辑权限

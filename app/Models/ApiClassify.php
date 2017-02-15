@@ -17,6 +17,7 @@ use DB;
  * @property string $description
  * @property int $classify_sort
  * @property int $parent_id
+ * @property int $api_count
  * Class ApiClassify
  * @package SmartWiki\Models
  */

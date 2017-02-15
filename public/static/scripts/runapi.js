@@ -131,5 +131,62 @@
     }
 
 
+    window.Classify = function () {
+      return{
+          resetClassifyForm : function () {
+              var classifyForm = $("#editClassifyForm");
+              classifyForm.find("input[name='parentId']").val('0');
+              classifyForm.find("input[name='classifyId']").val('0');
+              classifyForm.find("input[name='classifyName']").val('');
+              classifyForm.find("[name='description']").val("");
+          },
+          saveClassify : function () {
+                $("#editClassifyForm").ajaxForm({
+                    dataType : "json",
+                    beforeSubmit : function () {
+                        var classifyName = $("#editClassifyForm").find("input[name='classifyName']").val();
+                        if(classifyName === undefined || $.trim(classifyName) === ""){
+                            alert("分类名称不能为空");
+                            return false;
+                        }
+                    },
+                    success : function (res) {
+                        if(res.errcode === 0){
+                            $("#editClassifyModal").modal('hide');
+                            $("#tool-api-classify-items>.tool-api-menu").append(res.data);
+                        }else{
+                            alert(res.message);
+                        }
+                    },
+                    error : function () {
+                      alert("系统异常");
+                    }
+                });
+          },
+          delClassify : function (id) {
+            $.post(window.config.ClassifyDeleteUrl,{"classifyId":id},function (res) {
+                if(res.errcode === 0){
+                    $("[data-id='"+id+"']").closest("li").remove().empty();
+                }else{
+                    layer.msg(res.message);
+                }
+            },"json");
+          },
+          editClassify : function (id) {
+
+              $.get(window.config.ClassifyEditUrl + "/" + id,function (res) {
+                  if(res.errcode === 0){
+                      var $then = $("#editClassifyForm");
+                      $then.find("input[name='classifyName']").val(res.data.classify_name);
+                      $then.find("[name='classifyName']").val(res.data.classify_name);
+                      $then.find("input[name='classifyId']").val(res.data.classify_id)
+                      $("#editClassifyModal").modal("show");
+                  }else{
+                      layer.msg(res.errmsg);
+                  }
+              },"json");
+          }
+      }
+    };
 
 })(jQuery);

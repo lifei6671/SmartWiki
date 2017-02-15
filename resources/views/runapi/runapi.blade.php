@@ -10,7 +10,7 @@
     <title>接口测试工具 - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
 
     <!-- Bootstrap -->
-    <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{asset('static/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
 
     <link href="{{asset('static/styles/styles.css')}}" rel="stylesheet">
@@ -228,6 +228,12 @@
     <![endif]-->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="{{asset('static/scripts/jquery.min.js')}}"></script>
+    <script type="text/javascript">
+        window.config = {
+          "ClassifyDeleteUrl" : "{{route('runapi.delete.classify')}}",
+            "ClassifyEditUrl" : "{{route('runapi.edit.classify')}}"
+        };
+    </script>
 </head>
 <body>
 <div class="manual-reader">
@@ -235,14 +241,6 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <a href="{{route('home.index')}}" class="navbar-brand"> {{wiki_config('SITE_NAME','SmartWiki')}}</a>
-                <div class="searchbar pull-left visible-lg-inline-block visible-md-inline-block">
-                    <form class="form-inline" action="{{route('search.search')}}" method="get">
-                        <input class="form-control" name="keyword" type="search" placeholder="请输入关键词...">
-                        <button class="search-btn">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
-                </div>
                 @include('widget.usermenu')
             </div>
 
@@ -281,7 +279,7 @@
     <div class="container-fluid tool-container">
         <div class="page-left">
             <div class="tool-api-menu-top">
-                <a href="javascript:;" class="pull-left tool-api-action">
+                <a href="###" class="pull-left tool-api-action"  data-toggle="modal" data-target="#editClassifyModal">
                     <i class="fa fa-folder"></i> 添加分类
                 </a>
                 <a href="javascript:;" class="pull-right tool-api-action" style="border-left: 1px solid #DBDBDB;">
@@ -289,76 +287,84 @@
                 </a>
                 <div class="clearfix"></div>
             </div>
-            <ul class="tool-api-menu">
-                <li>
-                    <a href="javascript:;">
-                        <i class="fa fa-folder"></i>
-                        <div class="tool-api-menu-title">默认分类<br/><span class="text">0 个接口</span></div>
-                    </a>
-                    <div class="btn-group btn-group-more">
-                        <button class="btn btn-more dropdown-toggle" style="height: 63px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-ellipsis-h"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-more">
-                            <li><a href="javascript:;"><i class="fa fa-pencil"></i> 编辑</a></li>
-                            <li><a href="javascript:;"><i class="fa fa-folder"></i> 添加分类</a> </li>
-                            <li><a href="javascript:;"><i class="fa fa-trash"></i> 删除</a></li>
-                        </ul>
-                    </div>
-                    <ul class="tool-api-menu-submenu">
-                        <li>
-                            <a href="javascript:;">
-                                <i class="fa fa-folder-o"></i>
-                                微信
-                            </a>
-                            <div class="btn-group btn-group-more">
-                                <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-ellipsis-h"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-more">
-                                    <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
-                                    <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
-                                </ul>
-                            </div>
-                            <ul class="api-items">
-                                <li>
-                                    <a href="javascript:;">
-                                        <i class="fa"></i>
-                                        <span class="method-default method-get">GET</span>
-                                        <span class="menu-title">搜索订单搜索订单搜索订单搜索订单搜索订单搜索订单</span>
-                                    </a>
-                                    <div class="btn-group btn-group-more">
-                                        <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fa fa-ellipsis-h"></i>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-more">
-                                            <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
-                                            <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
+            <div id="tool-api-classify-items">
+                <ul class="tool-api-menu">
+                    @if(empty($classify) === false && count($classify) > 0)
+                        @foreach($classify as $item)
+                            @include("runapi.classify_top", (array)$item)
+                        @endforeach
+                    @endif
+
+                    <li>
+                        <a href="###">
+                            <i class="fa fa-folder"></i>
+                            <div class="tool-api-menu-title">默认分类<br/><span class="text">0 个接口</span></div>
+                        </a>
+                        <div class="btn-group btn-group-more">
+                            <button class="btn btn-more dropdown-toggle" style="height: 63px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-more">
+                                <li><a href="###"><i class="fa fa-pencil"></i> 编辑</a></li>
+                                <li><a href="###"><i class="fa fa-folder"></i> 添加分类</a> </li>
+                                <li><a href="###"><i class="fa fa-trash"></i> 删除</a></li>
                             </ul>
-                        </li>
-                    </ul>
-                    <ul class="api-items">
-                        <li>
-                            <a href="javascript:;">
-                                <span class="method-default method-get">GET</span>
-                                <span class="menu-title">搜索订单搜索订单搜索订单搜索订单搜索订单搜索订单</span>
-                            </a>
-                            <div class="btn-group btn-group-more">
-                                <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-ellipsis-h"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-more">
-                                    <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
-                                    <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
+                        </div>
+                        <ul class="tool-api-menu-submenu">
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-folder-o"></i>
+                                    微信
+                                </a>
+                                <div class="btn-group btn-group-more">
+                                    <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-h"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-more">
+                                        <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
+                                        <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
+                                    </ul>
+                                </div>
+                                <ul class="api-items">
+                                    <li>
+                                        <a href="javascript:;">
+                                            <i class="fa"></i>
+                                            <span class="method-default method-get">GET</span>
+                                            <span class="menu-title">搜索订单搜索订单搜索订单搜索订单搜索订单搜索订单</span>
+                                        </a>
+                                        <div class="btn-group btn-group-more">
+                                            <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-ellipsis-h"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-more">
+                                                <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
+                                                <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
                                 </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+                            </li>
+                        </ul>
+                        <ul class="api-items">
+                            <li>
+                                <a href="javascript:;">
+                                    <span class="method-default method-get">GET</span>
+                                    <span class="menu-title">搜索订单搜索订单搜索订单搜索订单搜索订单搜索订单</span>
+                                </a>
+                                <div class="btn-group btn-group-more">
+                                    <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-h"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-more">
+                                        <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
+                                        <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="page-right">
             <div class="row">
@@ -494,8 +500,38 @@
             </div>
             <div class="clearfix"></div>
         </div>
-
     </div>
+
+    <!-- Add Api Classify Modal -->
+    <div class="modal fade" id="editClassifyModal" tabindex="-1" role="dialog" aria-labelledby="editClassifyTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" id="editClassifyForm" action="{{route("runapi.edit.classify")}}">
+                    <input type="hidden" name="parentId" value="0">
+                    <input type="hidden" name="classifyId" value="0">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="editClassifyTitle">编辑分类</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="classifyName">名称</label>
+                            <input type="text" name="classifyName" class="form-control" value="" placeholder="分类名称" id="classifyName" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">描述</label>
+                            <textarea name="description" class="form-control" style="resize: none;height: 150px;" placeholder="分类描述" id="description" autocomplete="off"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script type="text/plain" id="parameter-template">
         <tr>
             <td style="width: 100px;padding-right: 20px;"><label class="hide"><input type="checkbox" checked></label></td>
@@ -510,10 +546,10 @@
     </script>
 </div>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="{{asset('static/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
-<script src="{{asset('static/scripts/scripts.js')}}" type="text/javascript"></script>
+<script type="text/javascript" src="{{asset('static/bootstrap/js/bootstrap.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('static/bootstrap/icheck/icheck.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('static/layer/layer.js')}}"></script>
+<script type="text/javascript" src="/static/scripts/jquery.form.js"></script>
 <script type="text/javascript" src="/static/codemirror/lib/codemirror.js"></script>
 <script src="/static/codemirror/mode/xml/xml.js"></script>
 <script src="/static/codemirror/mode/javascript/javascript.js"></script>
@@ -523,6 +559,7 @@
 <script type="text/javascript" src="{{asset('static/scripts/runapi.js')}}"></script>
 <script type="text/javascript">
     window.RawEditor = null;
+
 
     function renderParameter() {
         $(".parameter-active>tbody>tr .input-text").off("focus");
@@ -592,10 +629,42 @@
             mode: "text/html",
             readOnly : true,
             lineWrapping : true
-        })
+        });
 
         $(".tool-api-menu-submenu>li>a,.tool-api-menu>li>a").on("click",function (e) {
             $(this).closest("li").toggleClass("open-menu");
+        });
+        /**
+         * 添加分类模态窗
+         */
+        $("#editClassifyModal").on("hidden.bs.modal",function () {
+           var classify = new Classify();
+           classify.resetClassifyForm();
+        }).on("shown.bs.modal",function () {
+            var classify = new Classify();
+            classify.saveClassify();
+        });
+        /**
+         * 删除分类
+         */
+        $(".btn_classify_del").on("click",function () {
+            var classify = new Classify();
+            var id = $(this).closest("ul").attr("data-id");
+            if(id) {
+                classify.delClassify(id);
+            }else{
+                layer.msg("分类信息获取失败");
+            }
+        });
+        /**
+         * 编辑分类
+         */
+        $(".btn_classify_edit").on("click",function () {
+            var id = $(this).closest("ul").attr("data-id");
+            if(id){
+                var classify = new Classify();
+                classify.editClassify(id);
+            }
         });
     });
 </script>
