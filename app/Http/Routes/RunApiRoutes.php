@@ -17,15 +17,23 @@ class RunApiRoutes
         //工具路由
         $router->group(['middleware' => 'authorize','prefix' => 'tool'],function ()use(&$router){
             $router->match(['GET','POST'],'runapi',[
-                'uses' => 'RunApiController@index'
-            ])->name('runapi.index');
+                'uses' => 'RunApiController@index', 'as' => 'runapi.index'
+            ]);
 
             $router->match(['GET','POST'],'edit_classify/{classifyId?}',[
-                'uses' => 'RunApiController@editClassify'
-            ])->name('runapi.edit.classify');
+                'uses' => 'RunApiController@editClassify', 'as' => 'runapi.edit.classify'
+            ]);
 
             $router->post('runapi/delete',[
                 'uses' => 'RunApiController@deleteClassify', 'as' => 'runapi.delete.classify'
+            ]);
+
+            $router->get('runapi/getapi/{parentId?}',[
+               'uses' => 'RunApiController@getClassifyList', 'as' => 'runapi.classify.list'
+            ]);
+
+            $router->match(['GET','POST'],'runapi/save',[
+               'uses' => 'RunApiController@editApi', 'as' => 'runapi.edit.api'
             ]);
         });
     }

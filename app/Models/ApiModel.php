@@ -36,4 +36,6 @@ class ApiModel extends ModelBase
     protected $guarded = ['api_id'];
 
     public $timestamps = false;
+
+
 }

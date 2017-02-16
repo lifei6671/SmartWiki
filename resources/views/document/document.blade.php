@@ -50,7 +50,7 @@
     <form method="post" action="{{route('document.save')}}" id="form-editormd">
         <div class="editormd-body">
             <div id="editormd">
-                <input type="hidden" name="doc_id" id="document-id">
+                <input type="hidden" name="doc_id" id="documentId">
                 <textarea style="display:none;">### Hello Editor.md !</textarea>
             </div>
         </div>
@@ -340,7 +340,6 @@ TRACE:/api/login
 
                     window.loadDocument($select_node);
                 }
-                console.log($select_node);
             }
 
         }).on('select_node.jstree', function (node, selected, event) {
@@ -354,7 +353,6 @@ TRACE:/api/login
 
             if (parent.parent != parent.old_parent) {
                 parentNode = window.treeCatalog.get_node(parent.old_parent);
-                //console.log(parentNode);
                 var newNodeData = window.getSiblingSort(parentNode);
                 if (newNodeData.length > 0) {
                     nodeData = nodeData.concat(newNodeData);

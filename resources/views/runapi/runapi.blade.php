@@ -16,6 +16,7 @@
     <link href="{{asset('static/styles/styles.css')}}" rel="stylesheet">
     <link href="{{asset('static/bootstrap/icheck/skins/square/square.css')}}" rel="stylesheet">
     <link href="{{asset('static/codemirror/lib/codemirror.css')}}" rel="stylesheet">
+    <link href="{{asset('static/styles/tool.css')}}" rel="stylesheet">
     <style type="text/css">
 
         .CodeMirror { height: 250px; border: 1px solid #ddd; font-family: "Courier New", 'Source Sans Pro', Helvetica, Arial, sans-serif;font-size: 12px;}
@@ -90,6 +91,9 @@
             padding: 0;
             line-height: 20px;
         }
+        .tool-api-menu-submenu>li>a{
+            padding-left: 10px;
+        }
         .tool-api-menu a{
             color: #505050;
             display: block;
@@ -97,6 +101,11 @@
             text-decoration: none;
             border-bottom: 1px solid #DBDBDB;
 
+        }
+        .tool-api-menu>.open-menu>a{
+            -webkit-box-shadow: 0 1px 5px #DBDBDB;
+            -moz-box-shadow:0 1px 5px #DBDBDB;
+            box-shadow: 0 1px 5px #DBDBDB;
         }
         .tool-api-menu a:hover{
             text-decoration: none;
@@ -109,7 +118,7 @@
             font-size: 10px;
             color: #919191;
         }
-        .tool-api-menu>li{
+        .tool-api-menu>li,.tool-api-menu-submenu>li{
             display: block;
             position: relative;
         }
@@ -144,6 +153,9 @@
         .tool-api-menu .tool-api-menu-submenu .fa{
             vertical-align: bottom;
         }
+        .tool-api-menu .tool-api-menu-submenu a>.fa{
+            color: #B4B4B4;
+        }
         .tool-api-menu .tool-api-menu-submenu .btn-more{
             height: 44px;
         }
@@ -173,6 +185,13 @@
         .tool-api-menu>.open-menu>.api-items{
             display: block;
         }
+        .tool-api-menu>.open-menu>a>i:before{
+            content: "\f07c";
+        }
+        .tool-api-menu>.open-menu>.tool-api-menu-submenu>.open-menu>a>i:before{
+                content: "\f115";
+        }
+
         .tool-api-menu .api-items>li>a{
             padding: 12px 0 6px 0;
         }
@@ -183,7 +202,7 @@
         }
         .tool-api-menu .api-items>li:hover>.btn-group>.btn-more,
         .tool-api-menu .tool-api-menu-submenu>li:hover>.btn-group-more>.btn-more,
-        .tool-api-menu .tool-api-menu-submenu>.open-menu>.btn-group-more>.btn-more,
+        .tool-api-menu .tool-api-menu-submenu>.open>.btn-group-more>.btn-more,
         .tool-api-menu .api-items>li>.open>.btn-more,
         .tool-api-menu .tool-api-menu-submenu>li>.open>.btn-more{
             display: block;
@@ -230,8 +249,10 @@
     <script src="{{asset('static/scripts/jquery.min.js')}}"></script>
     <script type="text/javascript">
         window.config = {
-          "ClassifyDeleteUrl" : "{{route('runapi.delete.classify')}}",
-            "ClassifyEditUrl" : "{{route('runapi.edit.classify')}}"
+            "ClassifyDeleteUrl" : "{{route('runapi.delete.classify')}}",
+            "ClassifyEditUrl" : "{{route('runapi.edit.classify')}}",
+            'ClassifyListUrl' : "{{route('runapi.classify.list')}}",
+            'ApiSaveUrl' : "{{route('runapi.edit.api')}}"
         };
     </script>
 </head>
@@ -282,7 +303,7 @@
                 <a href="###" class="pull-left tool-api-action"  data-toggle="modal" data-target="#editClassifyModal">
                     <i class="fa fa-folder"></i> 添加分类
                 </a>
-                <a href="javascript:;" class="pull-right tool-api-action" style="border-left: 1px solid #DBDBDB;">
+                <a href="javascript:;" class="pull-right tool-api-action" id="btnAddApi" style="border-left: 1px solid #DBDBDB;">
                     <i class="fa fa-plus"></i> 添加接口
                 </a>
                 <div class="clearfix"></div>
@@ -291,7 +312,7 @@
                 <ul class="tool-api-menu">
                     @if(empty($classify) === false && count($classify) > 0)
                         @foreach($classify as $item)
-                            @include("runapi.classify_top", (array)$item)
+                            @include("runapi.classify", (array)$item)
                         @endforeach
                     @endif
 
@@ -368,135 +389,9 @@
         </div>
         <div class="page-right">
             <div class="row">
-
-
-                <div class="tool-api-method">
-                    <div class="row">
-                        <div class="col-lg-9 col-sm-8 col-xs-7">
-                            <div class="input-group">
-                                <div class="input-group-btn" id="btn-http-group">
-                                    <button type="button" id="httpMethod" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 100px;">GET <span class="caret"></span></button>
-                                    <ul class="dropdown-menu" style="width: 100px;min-width: 100px;">
-                                        <li><a href="#">GET</a></li>
-                                        <li><a href="#">POST</a></li>
-                                        <li><a href="#">PUT</a></li>
-                                        <li><a href="#">PATCH</a></li>
-                                        <li><a href="#">DELETE</a></li>
-                                        <li><a href="#">COPY</a></li>
-                                        <li><a href="#">HEAD</a></li>
-                                        <li><a href="#">OPTIONS</a></li>
-                                        <li><a href="#">LINK</a></li>
-                                        <li><a href="#">UNLINK</a></li>
-                                        <li><a href="#">PURGE</a></li>
-                                        <li><a href="#">LOCK</a></li>
-                                        <li><a href="#">UNLOCK</a></li>
-                                        <li><a href="#">PROPFND</a></li>
-                                        <li><a href="#">VIEW</a></li>
-                                    </ul>
-                                </div><!-- /btn-group -->
-                                <input type="text" class="form-control" id="requestUrl" aria-label="..." placeholder="请输入一个的URL" value="http://wiki.minho.com/tool/runapi">
-                            </div><!-- /input-group -->
-                        </div>
-                        <div class="col-lg-3 col-sm-4 col-xs-5">
-                            <button type="button" id="sendRequest" class="btn btn-primary" style="width: 70px"> 发 送</button>
-
-                            <div class="btn-group">
-                                <button class="btn btn-default" style="width: 70px">
-                                    保 存
-                                </button>
-                                <button class="btn btn-default dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">保存到文档</a></li>
-                                    <li><a href="#">生成 Markdown</a> </li>
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="row tool-api-parameter">
-                    <ul class="nav nav-tabs" id="parameter-tab">
-                        <li role="presentation" class="active"  href="#headers"><a href="#headers">Headers</a></li>
-                        <li role="presentation"  href="#body"><a href="#body">Body</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="headers">
-                            <table style="margin-top: 10px;width: 100%" class="parameter-active">
-                                <tbody>
-                                <tr>
-                                    <td style="width: 100px;padding-right: 20px;"><label class="hide"><input type="checkbox" checked></label></td>
-                                    <td style="width: 50%;"><input type="text" class="input-text" name="key" placeholder="key"></td>
-                                    <td style="width: 50%;padding-left: 15px;"><input type="text" class="input-text" name="value" placeholder="value"></td>
-                                    <td style="width: 100px;padding-left: 20px;">
-                                        <a href="javascript:;" class="parameter-close hide">
-                                            <i class="fa fa-close"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="body">
-                            <ul class="nav nav-tabs parameter-post-list">
-                                <li href="#x-www-form-urlencodeed"><label><input type="radio" name="parameterType" checked value="x-www-form-urlencodeed">x-www-form-urlencodeed</label></li>
-                                <li href="#raw"><label><input type="radio" name="parameterType" value="raw">raw</label></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane active" id="x-www-form-urlencodeed">
-                                    <table style="margin-top: 10px;width: 100%" class="parameter-active">
-                                        <tbody>
-                                        <tr>
-                                            <td style="width: 100px;padding-right: 20px;"><label class="hide"><input type="checkbox" checked></label></td>
-                                            <td style="width: 50%;"><input type="text" class="input-text" name="key" placeholder="key"></td>
-                                            <td style="width: 50%;padding-left: 15px;"><input type="text" class="input-text" name="value" placeholder="value"></td>
-                                            <td style="width: 100px;padding-left: 20px;">
-                                                <a href="javascript:;" class="parameter-close hide">
-                                                    <i class="fa fa-close"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div role="tabpanel" class="tab-pane" id="raw">
-                                    <textarea id="demotext"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row tool-api-response">
-                    <ul class="nav nav-tabs">
-                        <li href="#responseBody" class="active"><a href="javascript:;">Body</a> </li>
-                        <li href="#responseCookie"><a href="javascript:;">Cookies</a> </li>
-                        <li href="#responseHeader"><a href="javascript:;">Header</a> </li>
-                        <div class="pull-right response-info">
-                            <span>Status: <span class="result" id="httpCode">0</span></span>&nbsp;&nbsp;
-                            <span>Time: <span class="result" id="httpTime">0 ms</span></span>
-                        </div>
-                    </ul>
-                    <div class="tab-content" style="padding-top: 10px;">
-                        <div role="tabpanel" class="tab-pane active" id="responseBody">
-                            <textarea id="responseBodyContainer" style="display: none;"></textarea>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="responseCookie">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr><th>Name</th><th>Value</th><th>Domian</th><th>Path</th><th>Expires</th><th>HTTP</th><th>Secure</th></tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="responseHeader">
-
-                        </div>
-                    </div>
-                </div>
+                <form method="post" id="toolApiContainer" action="{{route("runapi.edit.api")}}">
+                    @include("runapi.body")
+                </form>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -525,14 +420,14 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button type="submit" class="btn btn-primary" data-loading-text="保存中">保存</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <script type="text/plain" id="parameter-template">
+    <script type="text/plain" id="parameterTemplate">
         <tr>
             <td style="width: 100px;padding-right: 20px;"><label class="hide"><input type="checkbox" checked></label></td>
             <td style="width: 50%;"><input type="text" class="input-text" placeholder="key" name="key"></td>
@@ -543,6 +438,9 @@
                 </a>
             </td>
         </tr>
+    </script>
+    <script type="text/html" id="apiViewTemplate">
+       @include("runapi.body")
     </script>
 </div>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -561,79 +459,14 @@
     window.RawEditor = null;
 
 
-    function renderParameter() {
-        $(".parameter-active>tbody>tr .input-text").off("focus");
-
-        $(".parameter-active>tbody>tr:last-child .input-text").on("focus",function(){
-            var html = $("#parameter-template").html();
-            var $then = $(this).closest('tbody');
-
-            $then.find("tr .hide").removeClass("hide");
-            $then.append(html);
-            $('input:checkbox').iCheck({
-                checkboxClass: 'icheckbox_square',
-                increaseArea: '10%'
-            });
-            renderParameter();
-        });
-        $(".parameter-close").on("click",function () {
-            $(this).closest("tr").empty().remove();
-        });
-    }
     $(function () {
-        renderParameter();
-        $("#btn-http-group .dropdown-menu>li").on("click",function () {
-            var text = $(this).text();
-            $("#httpMethod").html(text + ' <span class="caret"></span>');
-        });
+        window.renderParameter();
 
-        $('#parameter-tab a').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show');
-        });
-
-        $(".parameter-post-list li,.tool-api-response .nav-tabs>li").on("click",function (e) {
-            $(this).tab('show');
-        });
-
-        $(".parameter-post-list>li[href='#raw']").on("shown.bs.tab",function (e) {
-            if(!window.RawEditor) {
-                window.RawEditor = CodeMirror.fromTextArea(document.getElementById("demotext"), {
-                    lineNumbers: true,
-                    mode: "text/javascript",
-                    matchBrackets: true,
-                    indentUnit: 2,
-                    autofocus: true,
-                });
-            }
-        });
-
-        $("#sendRequest").on("click",function () {
-            var url = $("#requestUrl").val();
-            if(!url){
-                layer.msg("请输入一个URL");
-            }
-            var method = $("#httpMethod").text();
-            var runApi = new RunApi();
-
-            var header = runApi.resolveRequestHeader();
-            var body = runApi.resolveRequestBody();
-
-            runApi.send(url,method,header,body);
-        });
+        $("#btnAddApi").on("click",window.newApiView);
 
 
+       window.bindApiViewEvent();
 
-        window.ResponseEditor = CodeMirror.fromTextArea(document.getElementById('responseBodyContainer'),{
-            lineNumbers: true,
-            mode: "text/html",
-            readOnly : true,
-            lineWrapping : true
-        });
-
-        $(".tool-api-menu-submenu>li>a,.tool-api-menu>li>a").on("click",function (e) {
-            $(this).closest("li").toggleClass("open-menu");
-        });
         /**
          * 添加分类模态窗
          */
@@ -645,27 +478,38 @@
             classify.saveClassify();
         });
         /**
-         * 删除分类
+         * 编辑、删除、添加分类
          */
-        $(".btn_classify_del").on("click",function () {
-            var classify = new Classify();
-            var id = $(this).closest("ul").attr("data-id");
-            if(id) {
-                classify.delClassify(id);
-            }else{
-                layer.msg("分类信息获取失败");
-            }
-        });
-        /**
-         * 编辑分类
-         */
-        $(".btn_classify_edit").on("click",function () {
-            var id = $(this).closest("ul").attr("data-id");
+        $("#tool-api-classify-items").on("click",".btn_classify_edit",function () {
+
+            var id = $(this).closest("li[data-id]").attr("data-id");
             if(id){
                 var classify = new Classify();
                 classify.editClassify(id);
             }
-        });
+        }).on("click",".btn_classify_del",function () {
+            var $then = $(this);
+            layer.confirm("删除分类会将该分类下所有子分类和接口都删除，你确定删除吗？",{
+               btn : ['确定','取消']
+            },function (index) {
+                layer.close(index);
+                var classify = new Classify();
+                var id = $then.closest("li[data-id]").attr("data-id");
+                if (id) {
+                    window.loading = layer.load();
+                    classify.delClassify(id);
+                } else {
+                    layer.msg("分类信息获取失败");
+                }
+            });
+        }).on("click",".btn_classify_add",function (e) {
+            e.preventDefault();
+            var id = $(this).closest("li[data-id]").attr("data-id");
+            if(id){
+                $("#editClassifyModal").modal("show").find("input[name='parentId']").val(id);;
+            }
+        }).on("click",".tool-api-menu-submenu>li>a",renderApiItem)
+            .on("click",".tool-api-menu>li>a",renderApiItem);
     });
 </script>
 </body>

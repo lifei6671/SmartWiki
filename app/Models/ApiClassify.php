@@ -45,8 +45,11 @@ class ApiClassify extends ModelBase
             ->where('classify.parent_id','=',$parentId)
             ->orderBy('classify.classify_sort','DESC')
             ->get();
+
         return $result;
     }
+
+
 
     /**
      * 判断是否存在编辑权限

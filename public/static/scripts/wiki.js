@@ -91,11 +91,11 @@ $(document).ready(function () {
             },
             save : function (cm, icon, cursor, selection) {
                 if($("#markdown-save").hasClass('change')) {
-                    $("#editormd-form").submit();
+                    $("#form-editormd").submit();
                 }
             },
             history :function (cm, icon, cursor, selection) {
-                var doc_id = $("#document-id").val();
+                var doc_id = $("#documentId").val();
                 if(!doc_id){
                     layer.msg('当前文档暂无历史版本');
                 }else{
@@ -219,7 +219,7 @@ $(document).ready(function () {
 
         $.get("/docs/content/" + selected.node.id + '?dataType=json').done(function (data) {
             layer.close(index);
-            $("#editormd-form").find("input[name='doc_id']").val(selected.node.id);
+            $("#documentId").val(selected.node.id);
             window.editor.setValue("");
             if(data.errcode == 0 && data.data.doc.content){
                 window.editor.insertValue(data.data.doc.content);
@@ -282,11 +282,12 @@ $(document).ready(function () {
             $("#markdown-save").removeClass('change').addClass('disabled');
             var content = $.trim(win.editor.getMarkdown());
             var id = $(jqForm).find("input[name='doc_id']").val();
-            console.log(id);
-            if(content == ""){
+
+            if(content === ""){
                 layer.msg("保存成功");
                 return false;
             }
+
             if(!id){
                 layer.msg("没有需要保存的文档");
                 return false;
@@ -296,7 +297,7 @@ $(document).ready(function () {
             });
         },
         success :function (res) {
-            if(res.errcode == 0){
+            if(res.errcode === 0){
                 $("#markdown-save").removeClass('change').addClass('disabled');
                 layer.close(layerIndex);
                 layer.msg("文档已保存");

@@ -42,7 +42,7 @@ class HeadingRenderer implements BlockRendererInterface
             if (preg_match('/([\x80-\xff]*)/i', $idText)) {
                 $id = preg_replace('/([\x80-\xff]*)/i', '', $idText);
                 if (empty($id)) {
-                    $id = $this->unicode_encode($idText, 'u');
+                    $id = $this->utf8_str_to_unicode($idText, 'u');
                 } elseif ($id !== $idText) {
                     $id = '-' . trim($id);
                 }
@@ -57,6 +57,20 @@ class HeadingRenderer implements BlockRendererInterface
         $text = "<a name=\"{$sourceText}\" class=\"reference-link\"></a><span class=\"header-link octicon octicon-link\"></span>" . $text;
 
         return new HtmlElement($tag, $attrs, $text);
+    }
+
+    private function utf8_str_to_unicode($utf8_str,$prefix = '\u')
+    {
+        $buffer = '';
+
+        for ( $i= 0,$len = mb_strlen($utf8_str);$i<$len;$i++) {
+            $str = mb_substr($utf8_str,$i,1);
+            $unicode = (ord($str[0]) & 0x1F) << 12;
+            $unicode |= (ord($str[1]) & 0x3F) << 6;
+            $unicode |= (ord($str[2]) & 0x3F);
+            $buffer .= $prefix . dechex($unicode);
+        }
+        return $buffer;
     }
 
     protected function unicode_encode($value, $prefix = '\u')

@@ -26,6 +26,37 @@ class RunApiController extends Controller
         return view('runapi.runapi',$this->data);
     }
 
+    public function getClassifyList($parentId = 0)
+    {
+        $parentId = intval($parentId);
+        $view = '';
+
+        //查询子分类
+        $classifyList = ApiClassify::getApiClassifyList($this->member_id,$parentId);
+        if(empty($classifyList) === false && count($classifyList) > 0){
+            foreach ($classifyList as $classify){
+                $view .= view('runapi.classify',(array)$classify)->render();
+            }
+        }
+
+        $apiView = '';
+        if($parentId > 0){
+            $apiList = ApiModel::where('classify_id','=',$parentId)->orderBy('sort','DESC')->get(['api_id','api_name','method']);
+
+            if(empty($apiList) === false && count($apiList) > 0){
+                foreach ($apiList as $item){
+                    $apiView .= view('runapi.api',(array)$item)->render();
+                }
+            }
+        }
+
+        $data['view'] = $view;
+        $data['api_view'] = $apiView;
+
+        return $this->jsonResult(0,$data);
+
+    }
+
     public function editApi($apiId = 0)
     {
         $apiId = intval($apiId);
@@ -66,22 +97,27 @@ class RunApiController extends Controller
             if(mb_strlen($classifyName) > 50){
                 return $this->jsonResult(60003);
             }
+
             //如果是创建
             if(empty($classify)){
                 $classify = new ApiClassify();
-                $classify->parent_id = $this->request->get('parentId',0);
+                $classify->parent_id = intval($this->request->get('parentId',0));
                 $classify->member_id = $this->member_id;
             }
             $classify->classify_name = $classifyName;
             $classify->description = $description;
-            $classify->classify_sort = $classifySort?:$classifyId;
+            $classify->classify_sort = intval($classifySort?:$classifyId);
 
             $result = $classify->save();
 
             if($result){
 
-                $this->data = view('runapi.classify_top',$classify)->render();
-                return $this->jsonResult(0,$this->data);
+                $data['view'] = view('runapi.classify',$classify)->render();
+                $data['classify_id'] = $classify->classify_id;
+                $data['parent_id'] = $classify->parent_id;
+                $data['is_edit'] = boolval($classifyId);
+
+                return $this->jsonResult(0,$data);
             }
             return $this->jsonResult(500);
         }
