@@ -1,6 +1,11 @@
 <input type="hidden" id="isChangeForApi" value="0">
+<input type="hidden" id="apiId" name="api_id" value="0">
+<input type="hidden" name="api_name">
+<input type="hidden" name="classify_id">
+<input type="hidden" name="description">
+<input type="hidden" name="http_method" value="GET">
 <div class="tool-api-title">
-    <h4 class="title"><i class="fa fa-circle saved"></i> 无标题</h4>
+    <h4 class="title"><i class="fa fa-circle saved"></i> <span>无标题</span></h4>
     <div class="text">暂无描述</div>
 </div>
 <div class="tool-api-method">
@@ -27,23 +32,24 @@
                         <li><a href="#">VIEW</a></li>
                     </ul>
                 </div><!-- /btn-group -->
-                <input type="text" class="form-control" id="requestUrl" aria-label="..." placeholder="请输入一个的URL" value="">
+                <input type="text" class="form-control" name="request_url" id="requestUrl" aria-label="..." placeholder="请输入一个的URL" value="">
             </div><!-- /input-group -->
         </div>
         <div class="col-lg-3 col-sm-4 col-xs-5">
-            <button type="button" id="sendRequest" disabled class="btn btn-primary" style="width: 70px" data-loading-text="发送中"> 发 送</button>
+            <button type="button" id="sendRequest" class="btn btn-primary" style="width: 70px" data-loading-text="发送中"> 发 送</button>
 
             <div class="btn-group">
-                <button class="btn btn-default" style="width: 70px" id="btnSaveApi" type="submit" disabled>
+                <button class="btn btn-default" style="width: 70px" id="btnSaveApi" type="submit">
                     保 存
                 </button>
-                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="#">保存到文档</a></li>
-                    <li><a href="#">生成 Markdown</a> </li>
+                    <li><a href="###" id="editAndSave">编辑并保存</a> </li>
+                    <li><a href="###" id="saveToDocument">保存到文档</a></li>
+                    <li><a href="###" id="makeMarkdown">生成 Markdown</a> </li>
                 </ul>
             </div>
 

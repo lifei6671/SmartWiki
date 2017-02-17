@@ -12,6 +12,7 @@
     <!-- Bootstrap -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{asset('static/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="/static/seltree/seltree.css" rel="stylesheet">
 
     <link href="{{asset('static/styles/styles.css')}}" rel="stylesheet">
     <link href="{{asset('static/bootstrap/icheck/skins/square/square.css')}}" rel="stylesheet">
@@ -118,7 +119,7 @@
             font-size: 10px;
             color: #919191;
         }
-        .tool-api-menu>li,.tool-api-menu-submenu>li{
+        .tool-api-menu>li,.tool-api-menu-submenu>li,.api-items>li{
             display: block;
             position: relative;
         }
@@ -252,7 +253,8 @@
             "ClassifyDeleteUrl" : "{{route('runapi.delete.classify')}}",
             "ClassifyEditUrl" : "{{route('runapi.edit.classify')}}",
             'ClassifyListUrl' : "{{route('runapi.classify.list')}}",
-            'ApiSaveUrl' : "{{route('runapi.edit.api')}}"
+            'ApiSaveUrl' : "{{route('runapi.edit.api')}}",
+            "ClassifyTreeUrl" : "{{route('runapi.classify.tree')}}"
         };
     </script>
 </head>
@@ -427,6 +429,8 @@
         </div>
     </div>
 
+    @include('runapi.metadata',['isForm'=>true])
+
     <script type="text/plain" id="parameterTemplate">
         <tr>
             <td style="width: 100px;padding-right: 20px;"><label class="hide"><input type="checkbox" checked></label></td>
@@ -447,6 +451,7 @@
 <script type="text/javascript" src="{{asset('static/bootstrap/js/bootstrap.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('static/bootstrap/icheck/icheck.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('static/layer/layer.js')}}"></script>
+<script type="text/javascript" src="/static/seltree/seltree.js"></script>
 <script type="text/javascript" src="/static/scripts/jquery.form.js"></script>
 <script type="text/javascript" src="/static/codemirror/lib/codemirror.js"></script>
 <script src="/static/codemirror/mode/xml/xml.js"></script>
@@ -464,9 +469,21 @@
 
         $("#btnAddApi").on("click",window.newApiView);
 
-
        window.bindApiViewEvent();
 
+       /**
+        * 接口详情模态窗
+        **/
+       $("#editApiModal").on("shown.bs.modal",function () {
+          $(".dropdown-select").selTree({});
+       }).on("hide.bs.modal",function () {
+           $("#apiClassifyId").val('');
+           $("#editApiForm")[0].reset();
+           $("#toolApiContainer").find("input[name='classify_id']").val('');
+           $("#toolApiContainer").find("input[name='api_name']").val('');
+           $("#toolApiContainer").find("input[name='description']").val('');
+       });
+        
         /**
          * 添加分类模态窗
          */
@@ -476,6 +493,30 @@
         }).on("shown.bs.modal",function () {
             var classify = new Classify();
             classify.saveClassify();
+        });
+
+        $("#btnSaveApiDetailed").on("click",function () {
+
+            var then = $("#editApiForm");
+
+            var apiName = $.trim(then.find("input[name='apiName']").val());
+            if(apiName === ""){
+                layer.msg("接口名称不能为空");
+                return false;
+            }
+            var apiClassifyId = Number(then.find("#apiClassifyId").val());
+
+            if(apiClassifyId <= 0){
+                layer.msg("接口分类不能为空");
+                return false;
+            }
+            var description = then.find("#apiDescription").val();
+            then = $("#toolApiContainer");
+
+            then.find("input[name='api_name']").val(apiName);
+            then.find("input[name='classify_id']").val(apiClassifyId);
+            then.find("input[name='description']").val(description);
+            then.find("#btnSaveApi").trigger("click");
         });
         /**
          * 编辑、删除、添加分类
@@ -508,8 +549,10 @@
             if(id){
                 $("#editClassifyModal").modal("show").find("input[name='parentId']").val(id);;
             }
-        }).on("click",".tool-api-menu-submenu>li>a",renderApiItem)
-            .on("click",".tool-api-menu>li>a",renderApiItem);
+        }).on("click",".tool-api-menu-submenu>li>a,.tool-api-menu>li>a",renderApiItem)
+            .on("click",".tool-api-item",function () {
+                
+            });
     });
 </script>
 </body>

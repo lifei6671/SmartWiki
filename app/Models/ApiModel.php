@@ -15,6 +15,7 @@ namespace SmartWiki\Models;
  * @property integer $classify_id 接口分类
  * @property string $api_name 接口名称
  * @property string $description
+ * @property string $method
  * @property string $member_id
  * @property string $request_url
  * @property string $authorization_classify

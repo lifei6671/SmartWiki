@@ -20,21 +20,27 @@ class RunApiRoutes
                 'uses' => 'RunApiController@index', 'as' => 'runapi.index'
             ]);
 
-            $router->match(['GET','POST'],'edit_classify/{classifyId?}',[
+            $router->match(['GET','POST'],'runapi/classify/edit/{classifyId?}',[
                 'uses' => 'RunApiController@editClassify', 'as' => 'runapi.edit.classify'
             ]);
 
-            $router->post('runapi/delete',[
+            $router->post('runapi/classify/delete',[
                 'uses' => 'RunApiController@deleteClassify', 'as' => 'runapi.delete.classify'
             ]);
 
-            $router->get('runapi/getapi/{parentId?}',[
+            $router->get('runapi/classify/list/{parentId?}',[
                'uses' => 'RunApiController@getClassifyList', 'as' => 'runapi.classify.list'
             ]);
 
-            $router->match(['GET','POST'],'runapi/save',[
+            $router->get('runapi/classify/tree',[
+                'uses' => 'RunApiController@getClassifyTreeList', 'as' => 'runapi.classify.tree'
+            ]);
+
+            $router->match(['GET','POST'],'runapi/api/save/{apiId?}',[
                'uses' => 'RunApiController@editApi', 'as' => 'runapi.edit.api'
             ]);
+
+
         });
     }
 }

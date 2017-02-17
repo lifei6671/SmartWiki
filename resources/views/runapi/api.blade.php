@@ -1,5 +1,5 @@
 <li data-id="{{$api_id}}">
-    <a href="javascript:;" title="{{$api_name}}">
+    <a href="javascript:;" title="{{$api_name}}" class="tool-api-item">
         <i class="fa"></i>
         <span class="method-default method-get">{{$method}}</span>
         <span class="menu-title">{{$api_name}}</span>

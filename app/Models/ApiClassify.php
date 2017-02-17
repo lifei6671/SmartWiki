@@ -49,6 +49,23 @@ class ApiClassify extends ModelBase
         return $result;
     }
 
+    /**
+     * 获取指定用户所有的分类
+     * @param $memberId
+     * @return array|static[]
+     */
+
+    public static function getApiClassifyAllList($memberId)
+    {
+        $result = DB::table('api_classify as classify')
+            ->select(['classify.*','share.member_id as uid','share.role'])
+            ->leftJoin('api_share as share','share.classify_id','=','classify.classify_id')
+            ->where('share.member_id','=',$memberId)
+            ->orderBy('classify.classify_sort','DESC')
+            ->get();
+
+        return $result;
+    }
 
 
     /**

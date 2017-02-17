@@ -33,6 +33,7 @@
                     crossDomain: true,
                     xhrFields : { withCredentials : true },
                     data : body,
+                    dataType : "text",
                     beforeSend : function () {
                         $this.sendBefore();
                     },
@@ -56,6 +57,16 @@
                             $("#responseHeader").html(html);
                         }
 
+                        try{
+                            var json = (new Function("return " + data))();
+
+                            data = $this.formatJson(data);
+                            window.ResponseEditor.setOption("mode","application/json");
+
+                        }catch(e){
+                            console.log(e);
+                        }
+                        console.log(data);
                         window.ResponseEditor.setValue(data);
                     },
                     statusCode : {
@@ -76,14 +87,14 @@
             resolveResponseHeader : function(header) {
 
             },
-            resolveRequestBody : function () {
+            resolveRequestBody : function (isAll) {
                 var body = {};
                 var type = $(".parameter-post-list input:checked").val();
 
-                if(type === "x-www-form-urlencodeed"){
+                if(type === "x-www-form-urlencodeed" || isAll){
                     $("#x-www-form-urlencodeed>table>tbody>tr").each(function (index, domEle) {
                         var checkbox = $(domEle).find('input[type="checkbox"]').is(":checked");
-                        if(checkbox){
+                        if(checkbox || isAll){
                             var key = $(domEle).find("input[name='key']").val();
                             if(key && key !== ""){
                                 body[key] = $(domEle).find("input[name='value']").val();
@@ -97,11 +108,11 @@
                 return body;
             }
             ,
-            resolveRequestHeader : function () {
+            resolveRequestHeader : function (isAll) {
                 var header = {};
                 $("#headers>table>tbody>tr").each(function (index, domEle) {
                     var checkbox = $(domEle).find('input[type="checkbox"]').is(":checked");
-                    if(checkbox){
+                    if(checkbox || isAll){
                         var key = $(domEle).find("input[name='key']").val();
                         if(key && key !== ""){
                             header[key] = $(domEle).find("input[name='value']").val();
@@ -110,7 +121,88 @@
                 });
 
                 return header;
+            },
+            formatJson : function(json, options) {
+                var reg = null,
+                    formatted = '',
+                    pad = 0,
+                    PADDING = '    '; // one can also use '\t' or a different number of spaces
+
+                // optional settings
+                options = options || {};
+                // remove newline where '{' or '[' follows ':'
+                options.newlineAfterColonIfBeforeBraceOrBracket = (options.newlineAfterColonIfBeforeBraceOrBracket === true) ? true : false;
+                // use a space after a colon
+                options.spaceAfterColon = (options.spaceAfterColon === false) ? false : true;
+
+                // begin formatting...
+                if (typeof json !== 'string') {
+                    // make sure we start with the JSON as a string
+                    json = JSON.stringify(json);
+                } else {
+                    // is already a string, so parse and re-stringify in order to remove extra whitespace
+                    json = JSON.parse(json);
+                    json = JSON.stringify(json);
+                }
+
+                // add newline before and after curly braces
+                reg = /([\{\}])/g;
+                json = json.replace(reg, '\r\n$1\r\n');
+
+                // add newline before and after square brackets
+                reg = /([\[\]])/g;
+                json = json.replace(reg, '\r\n$1\r\n');
+
+                // add newline after comma
+                reg = /(\,)/g;
+                json = json.replace(reg, '$1\r\n');
+
+                // remove multiple newlines
+                reg = /(\r\n\r\n)/g;
+                json = json.replace(reg, '\r\n');
+
+                // remove newlines before commas
+                reg = /\r\n\,/g;
+                json = json.replace(reg, ',');
+
+                // optional formatting...
+                if (!options.newlineAfterColonIfBeforeBraceOrBracket) {
+                    reg = /\:\r\n\{/g;
+                    json = json.replace(reg, ':{');
+                    reg = /\:\r\n\[/g;
+                    json = json.replace(reg, ':[');
+                }
+                if (options.spaceAfterColon) {
+                    reg = /\:/g;
+                    json = json.replace(reg, ': ');
+                }
+
+                $.each(json.split('\r\n'), function(index, node) {
+                    var i = 0,
+                        indent = 0,
+                        padding = '';
+
+                    if (node.match(/\{$/) || node.match(/\[$/)) {
+                        indent = 1;
+                    } else if (node.match(/\}/) || node.match(/\]/)) {
+                        if (pad !== 0) {
+                            pad -= 1;
+                        }
+                    } else {
+                        indent = 0;
+                    }
+
+                    for (i = 0; i < pad; i++) {
+                        padding += PADDING;
+                    }
+
+                    formatted += padding + node + '\r\n';
+                    pad += indent;
+                });
+
+                return formatted;
             }
+
         };
     };
 
@@ -316,11 +408,14 @@
      */
     window.bindApiViewEvent = function () {
         var runApi = new window.RunApi();
+        window.loadResponseEditor();
 
         $("#toolApiContainer").on("click","#btn-http-group .dropdown-menu>li",function (e) {
             e.preventDefault();
             var text = $(this).text();
             $("#httpMethod").html(text + ' <span class="caret"></span>');
+            $("#toolApiContainer").find("input[name='http_method']").val(text);
+
             $("#isChangeForApi").trigger("change.api");
         }).on("click",".parameter-post-list li,.tool-api-response .nav-tabs>li,#parameter-tab a",function () {
             $(this).tab('show');
@@ -334,7 +429,7 @@
                     autofocus: true,
                 });
                 window.RawEditor.on("change",function () {
-                    alert("a")
+                    $("#isChangeForApi").trigger("change.api");
                 });
             }
         }).on("click","#sendRequest",function () {
@@ -355,22 +450,111 @@
             $(this).val('0');
             $(".tool-api-title").find(".title>.fa").addClass("saved");
         }).on("click","#btnSaveApi",function () {
-            $("#toolApiContainer").ajaxForm({
-               beforeSubmit : function () {
-                   return false;
-               }
-            });
-            $("#isChangeForApi").trigger("saved.api");
+            var then = $("#toolApiContainer");
+
+            var apiId = Number(then.find("input[name='api_id']").val());
+            var apiName = $.trim(then.find("input[name='api_name']").val());
+            var classifyId = Number(then.find("input[name='classify_id']").val());
+
+            if(apiId || (apiName && classifyId)){
+
+                var runApi = new window.RunApi();
+                var header = runApi.resolveRequestHeader(true);
+                var body = runApi.resolveRequestBody(true);
+
+                $("#toolApiContainer").ajaxForm({
+                    data :{
+                        "http_header" : header,
+                        "http_body" : body,
+                        "raw_data" : window.RawEditor !== null ? window.RawEditor.getValue() : ""
+                    },
+                    beforeSubmit: function () {
+                        var $then = $("#editApiForm");
+
+                        if(apiId <= 0 && apiName === ""){
+                            layer.msg("接口名称不能为空");
+                            $then.find("input[name='apiName']").focus();
+                            return false;
+                        }
+                        if(apiId <=0 && classifyId <= 0){
+                            layer.msg("接口分类不能为空");
+                            return false;
+                        }
+                        return true;
+                    },
+                    success : function (res) {
+                        if(res.errcode === 0){
+                            $("#editApiModal").modal("hide");
+                            $("#isChangeForApi").trigger("saved.api");
+                            $("#toolApiContainer input[name='api_id']").val(res.data.api_id);
+                            $("#toolApiContainer .tool-api-title>h4>span").text(apiName);
+                            $("#toolApiContainer .tool-api-title>.text").text(res.data.description);
+
+                            var current = $("#tool-api-classify-items li[data-id='"+ res.data.api_id+"']");
+                            console.log(current);
+                            if(current.length > 0){
+                                current.replaceWith(res.data.view);
+                            }else{
+                                $("#tool-api-classify-items li[data-id='"+ res.data.classify_id+"']").find(".api-items").append(res.data.view);
+                            }
+
+                        }
+                    }
+                });
+            }else {
+                var index = layer.load();
+                $.ajax({
+                    url : window.config.ClassifyTreeUrl,
+                    success : function (res) {
+                        if(res.errcode === 0){
+                            var $then = $("#editApiModal").modal("show").find(".dropdown-select-menu").html(res.data.view);
+                        }else{
+                            layer.msg(res.message);
+                        }
+                    },
+                    complete : function () {
+                        layer.close(index);
+                    }
+                });
+
+                return false;
+            }
         }).on("keydown","#requestUrl",function (e) {
-            e.preventDefault();
             $("#isChangeForApi").trigger("change.api");
 
         }).on("keydown",".input-text",function () {
-            e.preventDefault();
             $("#isChangeForApi").trigger("change.api");
         });
     };
 
+    window.loadApiDetailView = function ($id) {
+        var index = layer.load();
+        $.ajax({
+           url : window.config.ApiSaveUrl + "/" + $id,
+            type : "GET",
+            success : function (res) {
+                if(res.errcode === 0){
+                    $("#editApiForm input[name='apiName']").val(res.data.api_name);
 
+                    $.ajax({
+                        url : window.config.ClassifyTreeUrl,
+                        success : function (res) {
+                            if(res.errcode === 0){
+                                var $then = $("#editApiModal").modal("show").find(".dropdown-select-menu").html(res.data.view);
+                            }else{
+                                layer.msg(res.message);
+                            }
+                        },
+                        complete : function () {
+                            layer.close(index);
+                        }
+                    });
+                }else{
+                    layer.msg(res.message);
+                }
+            }
+        });
+
+    };
 })(jQuery);
 
