@@ -40,7 +40,13 @@ class RunApiRoutes
                'uses' => 'RunApiController@editApi', 'as' => 'runapi.edit.api'
             ]);
 
+            $router->get('runapi/api/metadata/get/{apiId?}',[
+               'uses' =>  'RunApiController@getApiMetaData', 'as' => 'runapi.metadata.api'
+            ]);
 
+            $router->post('runapi/api/metadata/save',[
+                'uses' => 'RunApiController@saveApiMetaData', 'as' => 'runapi.metadata.save.api'
+            ]);
         });
     }
 }

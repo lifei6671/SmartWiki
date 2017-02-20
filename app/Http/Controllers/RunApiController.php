@@ -8,9 +8,11 @@
 
 namespace SmartWiki\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use SmartWiki\Models\ApiClassify;
 use SmartWiki\Models\ApiModel;
 use SmartWiki\Models\ApiShare;
+use SmartWiki\Models\ModelBase;
 
 class RunApiController extends Controller
 {
@@ -118,11 +120,13 @@ class RunApiController extends Controller
         }
         if($this->isPost()){
 
-            $apiId = intval($this->request->get('api_id',0));
+            $apiId = intval($this->request->get('apiId',0));
+            $api_name = $this->request->get('apiName',null);
+            $description = $this->request->get('apiDescription',null);
+            $classify_id = intval($this->request->get('classifyId',0));
+
             $request_url = $this->request->get('request_url');
-            $api_name = $this->request->get('api_name',null);
-            $classify_id = intval($this->request->get('classify_id',0));
-            $description = $this->request->get('description',null);
+
             $http_method = strtoupper($this->request->get('http_method','GET'));
             $parameterType = strtolower($this->request->get('parameterType','x-www-form-urlencodeed'));
             $http_header = $this->request->get('http_header');
@@ -202,11 +206,69 @@ class RunApiController extends Controller
 
         $data = $apiModel->toArray();
 
+        $body = $data['body'];
+        $header = $data['headers'];
+
         unset($data['create_at']);
         unset($data['create_time']);
+        unset($data['body']);
 
+        $data['headers'] = json_decode($header,true);
+        $data['body'] = json_decode($body,true);
+
+        $isView = $this->request->get('dataType');
+
+        if(strcasecmp($isView,'html') === 0){
+            $data['view'] = view('runapi.body',$data)->render();
+        }
 
         return $this->jsonResult(0,$data);
+    }
+
+    /**
+     * 获取接口的简单信息
+     * @param $apiId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    public function getApiMetaData($apiId)
+    {
+        $apiId = intval($apiId);
+
+        $apiModel = $this->isAbleEditApi($apiId);
+
+        if($apiModel instanceof ApiModel){
+            $data = $apiModel->toArray();
+            $data['isForm'] = true;
+
+            return view('runapi.metadata',$data);
+        }
+        return $apiModel;
+    }
+
+    /**
+     * 保存接口的元数据
+     * @return JsonResponse
+     */
+    public function saveApiMetaData()
+    {
+        $apiId = intval($this->request->get('apiId'));
+        $apiName = $this->request->get('apiName');
+        $apiDescription = $this->request->get('apiDescription');
+
+
+        $apiModel = $this->isAbleEditApi($apiId);
+
+        if($apiModel instanceof ModelBase && ApiClassify::isHasEditRole($this->member_id,$apiModel->classify_id)){
+            $apiModel->api_name = $apiName;
+            $apiModel->description = $apiDescription;
+            if($apiModel->save()){
+                $data = $apiModel->toArray();
+                $data['view'] = view('runapi.api',$data)->render();
+                return $this->jsonResult(0,$data);
+            }
+            return $this->jsonResult(500);
+        }
+        return $this->jsonResult(403);
     }
 
     /**
@@ -293,5 +355,23 @@ class RunApiController extends Controller
         }else{
             return $this->jsonResult(500);
         }
+    }
+
+    /**
+     * @param $apiId
+     * @return ApiModel| JsonResponse
+     */
+    protected function isAbleEditApi($apiId)
+    {
+        if($apiId <= 0){
+            return $this->jsonResult(404);
+        }
+
+        $apiModel= ApiModel::find($apiId);
+
+        if(!ApiClassify::isHasEditRole($this->member_id,$apiModel->classify_id)){
+            return $this->jsonResult(403);
+        }
+        return $apiModel;
     }
 }

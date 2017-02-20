@@ -14,8 +14,6 @@
             stack.find(".dropdown-select-menu").show();
         });
         $(document).on("click",function () {
-            console.log(this);
-
             stack.find(".dropdown-select-menu").hide();
         });
         stack.find(".dropdown-select-menu a").on("click",function (e) {
@@ -25,8 +23,6 @@
 
            $(this).closest(".dropdown-select-menu").find("a").removeClass("selected");
             $(this).addClass("selected");
-
-           console.log($(this).closest(".dropdown-select-menu a").html())
 
             //如果有子节点
             if(next.length >0 && !parent.hasClass('selected')){

@@ -254,7 +254,9 @@
             "ClassifyEditUrl" : "{{route('runapi.edit.classify')}}",
             'ClassifyListUrl' : "{{route('runapi.classify.list')}}",
             'ApiSaveUrl' : "{{route('runapi.edit.api')}}",
-            "ClassifyTreeUrl" : "{{route('runapi.classify.tree')}}"
+            "ClassifyTreeUrl" : "{{route('runapi.classify.tree')}}",
+            "ApiMetadataGetUrl" : "{{route('runapi.metadata.api')}}",
+            "ApiMetadataSaveUrl" : "{{route('runapi.metadata.save.api')}}"
         };
     </script>
 </head>
@@ -432,16 +434,7 @@
     @include('runapi.metadata',['isForm'=>true])
 
     <script type="text/plain" id="parameterTemplate">
-        <tr>
-            <td style="width: 100px;padding-right: 20px;"><label class="hide"><input type="checkbox" checked></label></td>
-            <td style="width: 50%;"><input type="text" class="input-text" placeholder="key" name="key"></td>
-            <td style="width: 50%;padding-left: 15px;"><input type="text" class="input-text" name="value" placeholder="value"></td>
-            <td style="width: 100px;padding-left: 20px;">
-                <a href="javascript:;" class="parameter-close hide">
-                    <i class="fa fa-close"></i>
-                </a>
-            </td>
-        </tr>
+        @include("runapi.params")
     </script>
     <script type="text/html" id="apiViewTemplate">
        @include("runapi.body")
@@ -459,6 +452,7 @@
 <script src="/static/codemirror/mode/css/css.js"></script>
 <script src="/static/codemirror/mode/htmlmixed/htmlmixed.js"></script>
 <script src="/static/codemirror/addon/edit/matchbrackets.js"></script>
+<script src="/static/scripts/json2.js"></script>
 <script type="text/javascript" src="{{asset('static/scripts/runapi.js')}}"></script>
 <script type="text/javascript">
     window.RawEditor = null;
@@ -467,72 +461,76 @@
     $(function () {
         window.renderParameter();
 
-        $("#btnAddApi").on("click",window.newApiView);
+        $("#btnAddApi").on("click", window.newApiView);
 
-       window.bindApiViewEvent();
+        window.bindApiViewEvent();
 
-       /**
-        * 接口详情模态窗
-        **/
-       $("#editApiModal").on("shown.bs.modal",function () {
-          $(".dropdown-select").selTree({});
-       }).on("hide.bs.modal",function () {
-           $("#apiClassifyId").val('');
-           $("#editApiForm")[0].reset();
-           $("#toolApiContainer").find("input[name='classify_id']").val('');
-           $("#toolApiContainer").find("input[name='api_name']").val('');
-           $("#toolApiContainer").find("input[name='description']").val('');
-       });
-        
+        /**
+         * 接口详情模态窗
+         **/
+        $("#toolApiContainer").on("shown.bs.modal","#saveApiModal", function () {
+            $(this).find(".dropdown-select").selTree({});
+        });
+
+        /**
+         * 编辑接口元数据
+         **/
+        $("#editApiForm").on("submit",function () {
+
+            var $then = $(this);
+
+            $(this).ajaxSubmit({
+                beforeSubmit : function () {
+                    var apiName = $then.find("input[name='apiName']").val();
+                    if(apiName == undefined || apiName == ""){
+                        layer.msg("接口名称不能为空");
+                        $then.find("input[name='apiName']").focus();
+                        return false;
+                    }
+                    $then.find("button[type='submit']").button("loading");
+                },
+                success : function (res) {
+                    if(res.errcode === 0){
+                        $("#api-item-" + res.data.api_id).replaceWith(res.data.view);
+
+                    }else{
+                        layer.msg(res.message);
+                    }
+                },
+                complete : function () {
+                    $then.find("button[type='submit']").button("reset");
+                    $("#editApiModal").modal("hide");
+                }
+            });
+            return false;
+        });
+
         /**
          * 添加分类模态窗
          */
-        $("#editClassifyModal").on("hidden.bs.modal",function () {
-           var classify = new Classify();
-           classify.resetClassifyForm();
-        }).on("shown.bs.modal",function () {
+        $("#editClassifyModal").on("hidden.bs.modal", function () {
+            var classify = new Classify();
+            classify.resetClassifyForm();
+        }).on("shown.bs.modal", function () {
             var classify = new Classify();
             classify.saveClassify();
         });
 
-        $("#btnSaveApiDetailed").on("click",function () {
-
-            var then = $("#editApiForm");
-
-            var apiName = $.trim(then.find("input[name='apiName']").val());
-            if(apiName === ""){
-                layer.msg("接口名称不能为空");
-                return false;
-            }
-            var apiClassifyId = Number(then.find("#apiClassifyId").val());
-
-            if(apiClassifyId <= 0){
-                layer.msg("接口分类不能为空");
-                return false;
-            }
-            var description = then.find("#apiDescription").val();
-            then = $("#toolApiContainer");
-
-            then.find("input[name='api_name']").val(apiName);
-            then.find("input[name='classify_id']").val(apiClassifyId);
-            then.find("input[name='description']").val(description);
-            then.find("#btnSaveApi").trigger("click");
-        });
         /**
          * 编辑、删除、添加分类
          */
-        $("#tool-api-classify-items").on("click",".btn_classify_edit",function () {
+        $("#tool-api-classify-items").on("click", ".btn_classify_edit", function () {
 
             var id = $(this).closest("li[data-id]").attr("data-id");
-            if(id){
+            if (id) {
                 var classify = new Classify();
                 classify.editClassify(id);
             }
-        }).on("click",".btn_classify_del",function () {
+        }).on("click", ".btn_classify_del", function () {
             var $then = $(this);
-            layer.confirm("删除分类会将该分类下所有子分类和接口都删除，你确定删除吗？",{
-               btn : ['确定','取消']
-            },function (index) {
+            layer.confirm("删除分类会将该分类下所有子分类和接口都删除，你确定删除吗？", {
+                btn: ['确定', '取消']
+            }, function (index) {
                 layer.close(index);
                 var classify = new Classify();
                 var id = $then.closest("li[data-id]").attr("data-id");
@@ -543,16 +541,34 @@
                     layer.msg("分类信息获取失败");
                 }
             });
-        }).on("click",".btn_classify_add",function (e) {
+        }).on("click", ".btn_classify_add", function (e) {
             e.preventDefault();
             var id = $(this).closest("li[data-id]").attr("data-id");
-            if(id){
-                $("#editClassifyModal").modal("show").find("input[name='parentId']").val(id);;
+            if (id) {
+                $("#editClassifyModal").modal("show").find("input[name='parentId']").val(id);
             }
-        }).on("click",".tool-api-menu-submenu>li>a,.tool-api-menu>li>a",renderApiItem)
-            .on("click",".tool-api-item",function () {
-                
+        }).on("click", ".tool-api-menu-submenu>li>a,.tool-api-menu>li>a", function (e) {
+            //加载接口分类的子分类
+            window.renderApiItem(this);
+        }).on("click", ".tool-api-item", function () {
+            //加载接口详情
+            var id = $(this).closest("li[data-id]").attr("data-id");
+            if (id) {
+                window.loadApiView(id);
+            }
+        }).on("click",".btn_api_edit",function () {
+            //当点击接口编辑按钮时
+
+            var id = $(this).closest("li[data-id]").attr("data-id");
+            var index = layer.load();
+            var url = window.config.ApiMetadataGetUrl + '/' + id + ' .modal-body';
+
+            $("#editApiModal .modal-body").load(url,function () {
+                layer.close(index);
             });
+
+            $("#editApiModal").modal('show');
+        });
     });
 </script>
 </body>

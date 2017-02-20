@@ -41,8 +41,11 @@
                         console.log(errorThrown);
 
                     },
-                    success : function (data, textStatus, jqXHR) {
-                        var headers = jqXHR.getAllResponseHeaders();
+                    complete : function (xhr, textStatus) {
+                        console.log(xhr);
+                        $("#sendRequest").button("reset")
+
+                        var headers = xhr.getAllResponseHeaders();
 
                         if(headers) {
                             headers = headers.split('\r');
@@ -57,29 +60,16 @@
                             $("#responseHeader").html(html);
                         }
 
-                        try{
-                            var json = (new Function("return " + data))();
-
-                            data = $this.formatJson(data);
-                            window.ResponseEditor.setOption("mode","application/json");
-
-                        }catch(e){
-                            console.log(e);
-                        }
-                        console.log(data);
-                        window.ResponseEditor.setValue(data);
-                    },
-                    statusCode : {
-                        404 : function () {
-
-                        }
-                    },
-                    complete : function (xhr, textStatus) {
-                        $("#sendRequest").button("reset")
                         var time = (new Date()) - startTime;
 
                         $("#httpTime").text(time + 'ms');
                         $("#httpCode").text(xhr.status + ' ' + xhr.statusText);
+                        try{
+                            xhr.responseText = JSON.stringify(JSON.parse(xhr.responseText), null, 4);
+                            window.ResponseEditor.setOption("mode","application/ld+json");
+                        }catch(e){
+                            console.log(e);
+                        }
                         window.ResponseEditor.setValue(xhr.responseText);
                     }
                 });
@@ -121,88 +111,7 @@
                 });
 
                 return header;
-            },
-            formatJson : function(json, options) {
-                var reg = null,
-                    formatted = '',
-                    pad = 0,
-                    PADDING = '    '; // one can also use '\t' or a different number of spaces
-
-                // optional settings
-                options = options || {};
-                // remove newline where '{' or '[' follows ':'
-                options.newlineAfterColonIfBeforeBraceOrBracket = (options.newlineAfterColonIfBeforeBraceOrBracket === true) ? true : false;
-                // use a space after a colon
-                options.spaceAfterColon = (options.spaceAfterColon === false) ? false : true;
-
-                // begin formatting...
-                if (typeof json !== 'string') {
-                    // make sure we start with the JSON as a string
-                    json = JSON.stringify(json);
-                } else {
-                    // is already a string, so parse and re-stringify in order to remove extra whitespace
-                    json = JSON.parse(json);
-                    json = JSON.stringify(json);
-                }
-
-                // add newline before and after curly braces
-                reg = /([\{\}])/g;
-                json = json.replace(reg, '\r\n$1\r\n');
-
-                // add newline before and after square brackets
-                reg = /([\[\]])/g;
-                json = json.replace(reg, '\r\n$1\r\n');
-
-                // add newline after comma
-                reg = /(\,)/g;
-                json = json.replace(reg, '$1\r\n');
-
-                // remove multiple newlines
-                reg = /(\r\n\r\n)/g;
-                json = json.replace(reg, '\r\n');
-
-                // remove newlines before commas
-                reg = /\r\n\,/g;
-                json = json.replace(reg, ',');
-
-                // optional formatting...
-                if (!options.newlineAfterColonIfBeforeBraceOrBracket) {
-                    reg = /\:\r\n\{/g;
-                    json = json.replace(reg, ':{');
-                    reg = /\:\r\n\[/g;
-                    json = json.replace(reg, ':[');
-                }
-                if (options.spaceAfterColon) {
-                    reg = /\:/g;
-                    json = json.replace(reg, ': ');
-                }
-
-                $.each(json.split('\r\n'), function(index, node) {
-                    var i = 0,
-                        indent = 0,
-                        padding = '';
-
-                    if (node.match(/\{$/) || node.match(/\[$/)) {
-                        indent = 1;
-                    } else if (node.match(/\}/) || node.match(/\]/)) {
-                        if (pad !== 0) {
-                            pad -= 1;
-                        }
-                    } else {
-                        indent = 0;
-                    }
-
-                    for (i = 0; i < pad; i++) {
-                        padding += PADDING;
-                    }
-
-                    formatted += padding + node + '\r\n';
-                    pad += indent;
-                });
-
-                return formatted;
             }
-
         };
     };
 
@@ -303,8 +212,8 @@
       }
     };
 
-    window.renderApiItem = function(e) {
-        var liEle = $(this).closest("li[data-id]");
+    window.renderApiItem = function($this) {
+        var liEle = $($this).closest("li[data-id]");
         if(liEle.hasClass("open-menu")){
             liEle.removeClass("open-menu");
         }else {
@@ -337,14 +246,12 @@
                 layer.msg("获取分类ID时出错");
             }
         }
-    }
+    };
 
     /**
      * 接口参数面板的事件处理和绑定
      */
     window.renderParameter = function() {
-        //$(".parameter-active>tbody>tr .input-text").off("focus");
-
         $("#toolApiContainer").on("focus",".parameter-active>tbody>tr:last-child .input-text",function(e){
             e.preventDefault();
 
@@ -366,15 +273,16 @@
     };
 
     window.newApiView = function (e) {
+
         var fun = function () {
             var html = $("#apiViewTemplate").html();
+            window.RawEditor = null;
             $("#toolApiContainer").html(html);
             window.loadResponseEditor();
         };
 
         var changed = Number($("#isChangeForApi").val());
 
-        console.log(Number(changed));
         if(!!changed){
             layer.confirm("当前接口还未保存，如果新添加接口会丢失未保存的数据，确定新添加吗？",{
                 btn : ['确定',"保存并添加",'取消']
@@ -391,17 +299,90 @@
         fun();
         return true;
     };
+    
+    window.loadApiView = function (id) {
 
+        id = Number(id);
+
+        if(!id){
+            layer.msg("获取接口ID失败");
+            return false;
+        }
+        var loadViewFun = function () {
+            var index = layer.load();
+            $.ajax({
+                url : window.config.ApiSaveUrl + '/' + id,
+                data :{"dataType":"html"},
+                type : "GET",
+                dataType :"json",
+                success :function (res) {
+                    if(res.errcode === 0){
+                        window.RawEditor = null;
+                        $("#toolApiContainer").html(res.data.view);
+                        window.loadResponseEditor();
+                        $('input:checkbox').iCheck({
+                            checkboxClass: 'icheckbox_square',
+                            increaseArea: '10%'
+                        });
+                    }else{
+                        layer.msg(res.message);
+                    }
+                },error : function () {
+                    layer.msg("请求失败");
+                },
+                complete : function () {
+                    layer.close(index);
+                }
+            });
+        };
+
+        var changed = Number($("#isChangeForApi").val());
+        if(!!changed){
+            layer.confirm("当前接口还未保存，如果新添加接口会丢失未保存的数据，确定新添加吗？",{
+                btn : ['确定',"保存并添加",'取消']
+            },function (index) {
+                loadViewFun();
+                layer.close(index);
+            },function (index) {
+                $("#btnSaveApi").trigger("click");
+                layer.close(index);
+                loadViewFun();
+            });
+            return false;
+        }
+        loadViewFun();
+        return true;
+    };
+
+    /**
+     * 初始化响应值的显示区域
+     */
     window.loadResponseEditor = function () {
-        /**
-         * 初始化响应值的显示区域
-         **/
         window.ResponseEditor = CodeMirror.fromTextArea(document.getElementById('responseBodyContainer'),{
             lineNumbers: true,
             mode: "text/html",
             readOnly : true,
-            lineWrapping : true
+            lineWrapping : true,
+            matchBrackets: true,
+            autoCloseBrackets: true,
         });
+    };
+    /**
+     * 加载 Raw 区域编辑器
+     */
+    window.loadRawEditor = function () {
+        if(!window.RawEditor) {
+            window.RawEditor = CodeMirror.fromTextArea(document.getElementById("demotext"), {
+                lineNumbers: true,
+                mode: "text/javascript",
+                matchBrackets: true,
+                indentUnit: 2,
+                autofocus: true
+            });
+            window.RawEditor.on("change",function () {
+                $("#isChangeForApi").trigger("change.api");
+            });
+        }
     };
     /***
      * API区域事件绑定和初始化
@@ -417,20 +398,14 @@
             $("#toolApiContainer").find("input[name='http_method']").val(text);
 
             $("#isChangeForApi").trigger("change.api");
-        }).on("click",".parameter-post-list li,.tool-api-response .nav-tabs>li,#parameter-tab a",function () {
+        }).on("click",".parameter-post-list li,.tool-api-response .nav-tabs>li,#parameter-tab>li",function () {
             $(this).tab('show');
         }).on("shown.bs.tab",".parameter-post-list>li[href='#raw']",function () {
-            if(!window.RawEditor) {
-                window.RawEditor = CodeMirror.fromTextArea(document.getElementById("demotext"), {
-                    lineNumbers: true,
-                    mode: "text/javascript",
-                    matchBrackets: true,
-                    indentUnit: 2,
-                    autofocus: true,
-                });
-                window.RawEditor.on("change",function () {
-                    $("#isChangeForApi").trigger("change.api");
-                });
+            window.loadRawEditor();
+        }).on("shown.bs.tab","#parameter-tab>li[href='#body']",function () {
+            var value = $(".parameter-post-list>li[href='#raw'] input:checked").val();
+            if(value == "raw"){
+                window.loadRawEditor();
             }
         }).on("click","#sendRequest",function () {
             var url = $("#requestUrl").val();
@@ -445,24 +420,40 @@
             runApi.send(url,method,header,body);
         }).on("change.api","#isChangeForApi",function () {
             $(this).val('1');
+            $("#btnSaveApi").removeAttr("disabled")
             $(".tool-api-title").find(".title>.fa").removeClass("saved");
         }).on("saved.api","#isChangeForApi",function () {
             $(this).val('0');
             $(".tool-api-title").find(".title>.fa").addClass("saved");
-        }).on("click","#btnSaveApi",function () {
-            var then = $("#toolApiContainer");
+            $("#btnSaveApi").attr("disabled","disabled")
+        }).on("keydown","#requestUrl",function (e) {
+            $("#isChangeForApi").trigger("change.api");
 
-            var apiId = Number(then.find("input[name='api_id']").val());
-            var apiName = $.trim(then.find("input[name='api_name']").val());
-            var classifyId = Number(then.find("input[name='classify_id']").val());
+        }).on("keydown",".input-text",function () {
+            $("#isChangeForApi").trigger("change.api");
+        }).on("submit",function () {
 
-            if(apiId || (apiName && classifyId)){
+            var then = $(this);
+
+            var apiId = Number(then.find("input[name='apiId']").val());
+            var apiName = $.trim(then.find("input[name='apiName']").val());
+            var classifyId = Number(then.find("input[name='classifyId']").val());
+            var request_url = $.trim(then.find("input[name='request_url']").val())
+
+            if(request_url === ""){
+                layer.msg("接口链接不能为空");
+                then.find("input[name='request_url']").focus();
+                return false;
+            }
+
+            //如果是已保存过的则直接保存否则弹出接口元数据窗口
+            if(apiId> 0 || (apiName !== "" && classifyId > 0)){
 
                 var runApi = new window.RunApi();
                 var header = runApi.resolveRequestHeader(true);
                 var body = runApi.resolveRequestBody(true);
 
-                $("#toolApiContainer").ajaxForm({
+                $("#toolApiContainer").ajaxSubmit({
                     data :{
                         "http_header" : header,
                         "http_body" : body,
@@ -480,18 +471,18 @@
                             layer.msg("接口分类不能为空");
                             return false;
                         }
+                        $("#btnSaveApi").button("loading");
                         return true;
                     },
                     success : function (res) {
                         if(res.errcode === 0){
-                            $("#editApiModal").modal("hide");
+                            $("#saveApiModal").modal("hide");
                             $("#isChangeForApi").trigger("saved.api");
                             $("#toolApiContainer input[name='api_id']").val(res.data.api_id);
                             $("#toolApiContainer .tool-api-title>h4>span").text(apiName);
                             $("#toolApiContainer .tool-api-title>.text").text(res.data.description);
 
                             var current = $("#tool-api-classify-items li[data-id='"+ res.data.api_id+"']");
-                            console.log(current);
                             if(current.length > 0){
                                 current.replaceWith(res.data.view);
                             }else{
@@ -499,6 +490,9 @@
                             }
 
                         }
+                    },
+                    complete:function () {
+                        $("#btnSaveApi").button("reset");
                     }
                 });
             }else {
@@ -507,7 +501,8 @@
                     url : window.config.ClassifyTreeUrl,
                     success : function (res) {
                         if(res.errcode === 0){
-                            var $then = $("#editApiModal").modal("show").find(".dropdown-select-menu").html(res.data.view);
+                            var $then = $("#saveApiModal").find(".dropdown-select-menu").html(res.data.view);
+                            $("#saveApiModal").modal("show");
                         }else{
                             layer.msg(res.message);
                         }
@@ -519,42 +514,23 @@
 
                 return false;
             }
-        }).on("keydown","#requestUrl",function (e) {
-            $("#isChangeForApi").trigger("change.api");
+            return false;
+        }).on("click","#saveApiModal button[type='submit']",function () {
 
-        }).on("keydown",".input-text",function () {
-            $("#isChangeForApi").trigger("change.api");
-        });
-    };
-
-    window.loadApiDetailView = function ($id) {
-        var index = layer.load();
-        $.ajax({
-           url : window.config.ApiSaveUrl + "/" + $id,
-            type : "GET",
-            success : function (res) {
-                if(res.errcode === 0){
-                    $("#editApiForm input[name='apiName']").val(res.data.api_name);
-
-                    $.ajax({
-                        url : window.config.ClassifyTreeUrl,
-                        success : function (res) {
-                            if(res.errcode === 0){
-                                var $then = $("#editApiModal").modal("show").find(".dropdown-select-menu").html(res.data.view);
-                            }else{
-                                layer.msg(res.message);
-                            }
-                        },
-                        complete : function () {
-                            layer.close(index);
-                        }
-                    });
-                }else{
-                    layer.msg(res.message);
-                }
+            var then = $("#toolApiContainer");
+            var apiName = $.trim(then.find("input[name='apiName']").val());
+            var classifyId = Number(then.find("input[name='classifyId']").val());
+            if(apiName === ""){
+                layer.msg("接口名称不能为空");
+                return false;
             }
+            if(classifyId <= 0){
+                layer.msg("请选择接口分类");
+                return false;
+            }
+            return true;
         });
-
     };
+
 })(jQuery);
 
