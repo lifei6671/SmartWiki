@@ -21,9 +21,9 @@ use DB;
  * Class ApiClassify
  * @package SmartWiki\Models
  */
-class ApiClassify extends ModelBase
+class RequestFolder extends ModelBase
 {
-    protected $table = 'api_classify';
+    protected $table = 'request_folder';
     protected $primaryKey = 'classify_id';
     protected $dateFormat = 'Y-m-d H:i:s';
     protected $guarded = ['classify_id'];
@@ -38,9 +38,9 @@ class ApiClassify extends ModelBase
      */
     public static function getApiClassifyList($memberId, $parentId = 0)
     {
-        $result = DB::table('api_classify as classify')
+        $result = DB::table('request_folder as classify')
             ->select(['classify.*','share.member_id as uid','share.role'])
-            ->leftJoin('api_share as share','share.classify_id','=','classify.classify_id')
+            ->leftJoin('request_share as share','share.classify_id','=','classify.classify_id')
             ->where('share.member_id','=',$memberId)
             ->where('classify.parent_id','=',$parentId)
             ->orderBy('classify.classify_sort','DESC')
@@ -57,9 +57,9 @@ class ApiClassify extends ModelBase
 
     public static function getApiClassifyAllList($memberId)
     {
-        $result = DB::table('api_classify as classify')
+        $result = DB::table('request_folder as classify')
             ->select(['classify.*','share.member_id as uid','share.role'])
-            ->leftJoin('api_share as share','share.classify_id','=','classify.classify_id')
+            ->leftJoin('request_share as share','share.classify_id','=','classify.classify_id')
             ->where('share.member_id','=',$memberId)
             ->orderBy('classify.classify_sort','DESC')
             ->get();
@@ -76,7 +76,7 @@ class ApiClassify extends ModelBase
      */
     public static function isHasEditRole($member_id,$classify_id)
     {
-        return ApiShare::where('member_id','=',$member_id)
+        return RequestShare::where('member_id','=',$member_id)
             ->where('classify_id','=',$classify_id)
             ->exists();
     }

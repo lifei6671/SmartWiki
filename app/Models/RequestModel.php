@@ -22,6 +22,7 @@ namespace SmartWiki\Models;
  * @property string $authorization
  * @property string $headers
  * @property string $body
+ * @property string $raw_data
  * @property string $enctype
  * @property string $create_time
  * @property int $create_at
@@ -29,9 +30,9 @@ namespace SmartWiki\Models;
  * Class ApiModel
  * @package SmartWiki
  */
-class ApiModel extends ModelBase
+class RequestModel extends ModelBase
 {
-    protected $table = 'api';
+    protected $table = 'requests';
     protected $primaryKey = 'api_id';
     protected $dateFormat = 'Y-m-d H:i:s';
     protected $guarded = ['api_id'];

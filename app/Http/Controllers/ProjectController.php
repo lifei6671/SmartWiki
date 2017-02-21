@@ -171,7 +171,10 @@ class ProjectController extends Controller
 
             try{
                 if($project->addOrUpdate()) {
-                    return $this->jsonResult(0);
+                    $data['project_id'] = $project->project_id;
+                    $data['url'] = route('project.edit',['id'=>$project->project_id]);
+
+                    return $this->jsonResult(0,$data);
                 }else{
                     return $this->jsonResult(500);
                 }

@@ -1,24 +1,18 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lifeilin
- * Date: 2017/2/14 0014
- * Time: 17:01
- */
 
 namespace SmartWiki\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use SmartWiki\Models\ApiClassify;
-use SmartWiki\Models\ApiModel;
-use SmartWiki\Models\ApiShare;
+use SmartWiki\Models\RequestShare;
+use SmartWiki\Models\RequestFolder;
+use SmartWiki\Models\RequestModel;
 use SmartWiki\Models\ModelBase;
 
 class RunApiController extends Controller
 {
     public function index()
     {
-        $classifyList = ApiClassify::getApiClassifyList($this->member_id,0);
+        $classifyList = RequestFolder::getApiClassifyList($this->member_id,0);
 
         $this->data['classify'] = [];
 
@@ -43,7 +37,7 @@ class RunApiController extends Controller
         $view = '';
 
         //查询子分类
-        $classifyList = ApiClassify::getApiClassifyList($this->member_id,$parentId);
+        $classifyList = RequestFolder::getApiClassifyList($this->member_id,$parentId);
         if(empty($classifyList) === false && count($classifyList) > 0 && strcasecmp($dataType,'html') === 0){
             foreach ($classifyList as $classify){
                 $view .= view('runapi.classify',(array)$classify)->render();
@@ -54,7 +48,7 @@ class RunApiController extends Controller
         $apiView = '';
         if($containApis) {
             if ($parentId > 0) {
-                $apiList = ApiModel::where('classify_id', '=', $parentId)->orderBy('sort', 'DESC')->get(['api_id', 'api_name', 'method']);
+                $apiList = RequestModel::where('classify_id', '=', $parentId)->orderBy('sort', 'DESC')->get(['api_id', 'api_name', 'method']);
 
                 if (empty($apiList) === false && count($apiList) > 0 && strcasecmp($dataType,'html') === 0) {
                     foreach ($apiList as $item) {
@@ -83,7 +77,7 @@ class RunApiController extends Controller
      */
     public function getClassifyTreeList()
     {
-        $classifyList = ApiClassify::getApiClassifyAllList($this->member_id);
+        $classifyList = RequestFolder::getApiClassifyAllList($this->member_id);
 
         $view = '<ul>';
         foreach ($classifyList as $classify) {
@@ -108,13 +102,18 @@ class RunApiController extends Controller
         return $this->jsonResult(0,$data);
     }
 
+    /**
+     * 编辑和添加接口
+     * @param int $apiId
+     * @return JsonResponse
+     */
     public function editApi($apiId = 0)
     {
         $apiId = intval($apiId);
 
         if($apiId > 0){
-            $apiModel = ApiModel::find($apiId);
-            if(empty($apiModel) || !ApiClassify::isHasEditRole($this->member_id,$apiModel->classify_id)){
+            $apiModel = RequestModel::find($apiId);
+            if(empty($apiModel) || !RequestFolder::isHasEditRole($this->member_id,$apiModel->classify_id)){
                 return $this->jsonResult(403);
             }
         }
@@ -154,23 +153,23 @@ class RunApiController extends Controller
             }
 
             if($apiId <=0){
-                $apiModel = new ApiModel();
+                $apiModel = new RequestModel();
 
             }else {
-                $apiModel = ApiModel::find($apiId);
-                if(!ApiClassify::isHasEditRole($this->member_id,$apiModel->classify_id)){
+                $apiModel = RequestModel::find($apiId);
+                if(!RequestFolder::isHasEditRole($this->member_id,$apiModel->classify_id)){
                     return $this->jsonResult(403);
                 }
             }
 
             //检查分类操作的权限
             if($classify_id > 0) {
-                $classify = ApiClassify::find($classify_id);
+                $classify = RequestFolder::find($classify_id);
 
                 if(empty($classify)){
                     return $this->jsonResult(60006);
                 }
-                $classifyRole = ApiShare::where('member_id','=',$this->member_id)->where("classify_id",'=',$classify_id)->first();
+                $classifyRole = RequestShare::where('member_id','=',$this->member_id)->where("classify_id",'=',$classify_id)->first();
                 if(empty($classifyRole)){
                     return $this->jsonResult(60001);
                 }
@@ -184,8 +183,10 @@ class RunApiController extends Controller
             $apiModel->description = $description;
             $apiModel->method = $http_method;
             $apiModel->enctype = $parameterType;
-            $apiModel->body = json_encode(['raw' => $raw_data,'x-www-form-urlencodeed' => $http_body]);
-            $apiModel->headers = json_encode($http_header);
+
+            $apiModel->body = empty($http_body) ? null : json_encode($http_body);
+            $apiModel->raw_data = empty($raw_data) ? null : trim($raw_data);
+            $apiModel->headers = empty($http_header)?  null :json_encode($http_header);
             $apiModel->create_at = $this->member_id;
 
             if($apiModel->save()){
@@ -216,6 +217,7 @@ class RunApiController extends Controller
         $data['headers'] = json_decode($header,true);
         $data['body'] = json_decode($body,true);
 
+
         $isView = $this->request->get('dataType');
 
         if(strcasecmp($isView,'html') === 0){
@@ -223,6 +225,29 @@ class RunApiController extends Controller
         }
 
         return $this->jsonResult(0,$data);
+    }
+
+    /**
+     * 删除接口
+     * @param int $apiId
+     * @return JsonResponse|RequestModel
+     */
+    public function deleteApi($apiId = 0)
+    {
+        $apiId = intval($apiId);
+        if($apiId <= 0){
+            $apiId = intval($this->request->get('api_id',0));
+        }
+
+        $apiModel = $this->isAbleEditApi($apiId);
+
+        if($apiModel instanceof ModelBase){
+            if($apiModel->delete()){
+                return $this->jsonResult(0);
+            }
+            return $this->jsonResult(500);
+        }
+        return $apiModel;
     }
 
     /**
@@ -236,7 +261,7 @@ class RunApiController extends Controller
 
         $apiModel = $this->isAbleEditApi($apiId);
 
-        if($apiModel instanceof ApiModel){
+        if($apiModel instanceof ModelBase){
             $data = $apiModel->toArray();
             $data['isForm'] = true;
 
@@ -258,7 +283,7 @@ class RunApiController extends Controller
 
         $apiModel = $this->isAbleEditApi($apiId);
 
-        if($apiModel instanceof ModelBase && ApiClassify::isHasEditRole($this->member_id,$apiModel->classify_id)){
+        if($apiModel instanceof ModelBase && RequestFolder::isHasEditRole($this->member_id,$apiModel->classify_id)){
             $apiModel->api_name = $apiName;
             $apiModel->description = $apiDescription;
             if($apiModel->save()){
@@ -285,10 +310,10 @@ class RunApiController extends Controller
         }
         if($classifyId > 0){
             //判断是否有编辑权限
-            if(!ApiClassify::isHasEditRole($this->member_id,$classifyId)){
+            if(!RequestFolder::isHasEditRole($this->member_id,$classifyId)){
                 return $this->jsonResult(60001);
             }
-            $classify = ApiClassify::find($classifyId);
+            $classify = RequestFolder::find($classifyId);
         }
 
         if($this->isPost()){
@@ -305,7 +330,7 @@ class RunApiController extends Controller
 
             //如果是创建
             if(empty($classify)){
-                $classify = new ApiClassify();
+                $classify = new RequestFolder();
                 $classify->parent_id = intval($this->request->get('parentId',0));
                 $classify->member_id = $this->member_id;
             }
@@ -345,10 +370,10 @@ class RunApiController extends Controller
         if($classifyId <= 0){
             return $this->jsonResult(50502);
         }
-        if(!ApiClassify::isHasEditRole($this->member_id,$classifyId)){
+        if(!RequestFolder::isHasEditRole($this->member_id,$classifyId)){
             return $this->jsonResult(60001);
         }
-        $classify = ApiClassify::find($classifyId);
+        $classify = RequestFolder::find($classifyId);
 
         if($classify->delete()){
             return $this->jsonResult(0);
@@ -359,7 +384,7 @@ class RunApiController extends Controller
 
     /**
      * @param $apiId
-     * @return ApiModel| JsonResponse
+     * @return RequestModel| JsonResponse
      */
     protected function isAbleEditApi($apiId)
     {
@@ -367,9 +392,9 @@ class RunApiController extends Controller
             return $this->jsonResult(404);
         }
 
-        $apiModel= ApiModel::find($apiId);
+        $apiModel= RequestModel::find($apiId);
 
-        if(!ApiClassify::isHasEditRole($this->member_id,$apiModel->classify_id)){
+        if(!RequestFolder::isHasEditRole($this->member_id,$apiModel->classify_id)){
             return $this->jsonResult(403);
         }
         return $apiModel;

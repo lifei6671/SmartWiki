@@ -10,7 +10,8 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-more">
             <li><a href="###" title="编辑" class="btn_classify_edit"><i class="fa fa-pencil"></i> 编辑</a></li>
-            <li><a href="###" title="添加分类" class="btn_classify_add"><i class="fa fa-folder"></i> 添加分类</a> </li>
+            <li><a href="###" title="添加" class="btn_classify_add"><i class="fa fa-folder"></i> 添加</a> </li>
+            <li><a href="###" title="共享" class="btn_classify_share"><i class="fa fa-share-alt-square"></i> 共享</a> </li>
             <li><a href="###" title="删除" class="btn_classify_del"><i class="fa fa-trash"></i> 删除</a></li>
         </ul>
     </div>

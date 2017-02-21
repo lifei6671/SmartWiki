@@ -64,8 +64,8 @@
             <table style="margin-top: 10px;width: 100%" class="parameter-active">
                 <tbody>
                 @if(empty($headers) === false)
-                    @foreach($headers as $key => $value)
-                        @include("runapi.params",['key' => $key,'value' => $value])
+                    @foreach($headers as $item)
+                        @include("runapi.params",$item)
                     @endforeach
                 @endif
                 <tr>
@@ -83,7 +83,7 @@
         </div>
         <div role="tabpanel" class="tab-pane" id="body">
             <ul class="nav nav-tabs parameter-post-list">
-                <li href="#x-www-form-urlencodeed"><label><input type="radio" name="parameterType" value="x-www-form-urlencodeed"{{(isset($enctype) && $enctype == 'x-www-form-urlencodeed') ? ' checked' : ''}}>x-www-form-urlencodeed</label></li>
+                <li href="#x-www-form-urlencodeed"><label><input type="radio" name="parameterType" value="x-www-form-urlencodeed"{{(!isset($enctype) || $enctype == 'x-www-form-urlencodeed') ? ' checked' : ''}}>x-www-form-urlencodeed</label></li>
                 <li href="#raw"><label><input type="radio" name="parameterType" value="raw"{{(isset($enctype) && $enctype == 'raw') ? ' checked' : ''}}>raw</label></li>
             </ul>
             <div class="tab-content">
@@ -91,9 +91,9 @@
                     <table style="margin-top: 10px;width: 100%" class="parameter-active">
                         <tbody>
                         <tr>
-                            @if(empty($body['x-www-form-urlencodeed']) === false)
-                                @foreach($body['x-www-form-urlencodeed'] as $key => $value)
-                                    @include("runapi.params",['key' => $key,'value' => $value])
+                            @if(empty($body) === false)
+                                @foreach($body as $item)
+                                    @include("runapi.params", $item)
                                 @endforeach
                             @endif
                             <td style="width: 100px;padding-right: 20px;"><label class="hide"><input type="checkbox" checked></label></td>
@@ -109,7 +109,7 @@
                     </table>
                 </div>
                 <div role="tabpanel" class="tab-pane{{(isset($enctype) && $enctype == 'raw') ? ' active' : ''}}" id="raw">
-                    <textarea id="demotext">{!! $body['raw'] or '' !!}</textarea>
+                    <textarea id="rawModeData">{!! $raw_data or '' !!}</textarea>
                 </div>
             </div>
         </div>

@@ -1,0 +1,18 @@
+{
+  "name": "SmartWiki Interceptor",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "SmartWiki 接口工具的Cookie访问和跨域请求插件.",
+  "browser_action": {
+    "default_icon": "logo_135.png" ,
+    "default_title": "SmartWiki Interceptor",
+    "default_popup": "popup.html"
+  },
+  "permissions" : [
+    "webRequest", "webRequestBlocking","tabs", "http://*/*", "https://*/*", "cookies","storage"
+  ],
+  "background": {
+    "persistent": true,
+    "scripts": [ "lib/jquery-1.12.4.min.js","script.js", "background.js" ]
+  }
+}

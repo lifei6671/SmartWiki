@@ -47,6 +47,10 @@ class RunApiRoutes
             $router->post('runapi/api/metadata/save',[
                 'uses' => 'RunApiController@saveApiMetaData', 'as' => 'runapi.metadata.save.api'
             ]);
+
+            $router->post('runapi/api/delete',[
+                'uses' => 'RunApiController@deleteApi', 'as' => 'runapi.delete.api'
+            ]);
         });
     }
 }

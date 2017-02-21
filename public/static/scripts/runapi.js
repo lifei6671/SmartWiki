@@ -92,7 +92,11 @@
                         }
                     });
                 }else{
-                    body = window.RawEditor.getValue();
+                    if(window.RawEditor != null){
+                        body = window.RawEditor.getValue();
+                    }else{
+                        body = $("#rawModeData").val();
+                    }
                 }
 
                 return body;
@@ -372,9 +376,9 @@
      */
     window.loadRawEditor = function () {
         if(!window.RawEditor) {
-            window.RawEditor = CodeMirror.fromTextArea(document.getElementById("demotext"), {
+            window.RawEditor = CodeMirror.fromTextArea(document.getElementById("rawModeData"), {
                 lineNumbers: true,
-                mode: "text/javascript",
+                mode: "text/html",
                 matchBrackets: true,
                 indentUnit: 2,
                 autofocus: true
@@ -449,9 +453,8 @@
             //如果是已保存过的则直接保存否则弹出接口元数据窗口
             if(apiId> 0 || (apiName !== "" && classifyId > 0)){
 
-                var runApi = new window.RunApi();
-                var header = runApi.resolveRequestHeader(true);
-                var body = runApi.resolveRequestBody(true);
+                var header = window.resolveRequestHeader();
+                var body = window.resolveRequestBody();
 
                 $("#toolApiContainer").ajaxSubmit({
                     data :{
@@ -492,6 +495,7 @@
                         }
                     },
                     complete:function () {
+                        $("#saveApiModal button[type='submit']").button("rest");
                         $("#btnSaveApi").button("reset");
                     }
                 });
@@ -528,8 +532,58 @@
                 layer.msg("请选择接口分类");
                 return false;
             }
+            $(this).button("loading");
             return true;
         });
+    };
+
+    /**
+     * 解析保存到数据库的请求头信息
+     * @returns {Array}
+     */
+    window.resolveRequestHeader = function () {
+        var header = [];
+        $("#headers>table>tbody>tr").each(function (index, domEle) {
+            if($(domEle).find("label").hasClass("hide")){
+                return;
+            }
+            var checkbox = $(domEle).find('input[type="checkbox"]').is(":checked");
+            var key = $(domEle).find("input[name='key']").val();
+            var value = $(domEle).find("input[name='value']").val();
+
+            var item = {};
+            item['key'] = key;
+            item['value'] = value;
+            item['enabled'] = checkbox;
+
+            header.push(item);
+        });
+
+        return header;
+    };
+    /**
+     * 解析保存到数据库的请求参数内容
+     * @returns {Array}
+     */
+    window.resolveRequestBody = function () {
+        var body = [];
+
+        $("#x-www-form-urlencodeed>table>tbody>tr").each(function (index, domEle) {
+            if($(domEle).find("label").hasClass("hide")){
+                return;
+            }
+            var checkbox = $(domEle).find('input[type="checkbox"]').is(":checked");
+            var key = $(domEle).find("input[name='key']").val();
+            var value =  $(domEle).find("input[name='value']").val();
+            var item = {};
+            item['key'] = key;
+            item['value'] = value;
+            item['enabled'] = checkbox;
+            item['type'] = 'text';
+
+            body.push(item);
+        });
+        return body;
     };
 
 })(jQuery);

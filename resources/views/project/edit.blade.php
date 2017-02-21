@@ -40,6 +40,8 @@
                 },
                 success : function (res) {
                     if(res.errcode == 0){
+                        $("#project_id").val(res.data.project_id);
+                        $("#basicForm").attr("action",res.data.url);
                         showSuccess("保存成功");
                     }else{
                         showError(res.message);
@@ -59,9 +61,9 @@
                     var password = $.trim($("#deletePassword").val());
 
                     if(!password){
-                        return showError("登录密码不能为空");
+                        return layer.msg("登录密码不能为空");
                     }
-                    $("#delete-form").find('button[type="submit"]').button('loading');
+                    $("#deleteForm").find('button[type="submit"]').button('loading');
                 },
                 success : function (res) {
                     if(res.errcode == 0){
@@ -115,7 +117,7 @@
         <div class="box-body">
             <div class="form-left">
                 <form role="form" method="post" action="{{route('project.edit',['id'=>$project->project_id])}}" id="basicForm">
-                    <input type="hidden" name="project_id" value="{{$project_id or ''}}">
+                    <input type="hidden" name="project_id" id="project_id" value="{{$project_id or ''}}">
                     <div class="form-group">
                         <label for="user-account">项目名称</label>
                         <input type="text" class="form-control" name="name" value="{{$project->project_name or ''}}" id="name" placeholder="项目名称" title="项目名称">

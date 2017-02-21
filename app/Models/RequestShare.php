@@ -17,9 +17,9 @@ namespace SmartWiki\Models;
  * Class ApiShoare
  * @package SmartWiki\Models
  */
-class ApiShare extends ModelBase
+class RequestShare extends ModelBase
 {
-    protected $table = 'api_share';
+    protected $table = 'request_share';
     protected $primaryKey = 'share_id';
     protected $dateFormat = 'Y-m-d H:i:s';
     protected $guarded = ['share_id'];

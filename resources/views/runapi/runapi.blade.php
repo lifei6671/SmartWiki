@@ -130,6 +130,9 @@
             font-size: 24px;
             vertical-align: super;
         }
+        .tool-api-item>i.fa{
+            width: 15px;
+        }
         .tool-api-menu .btn>.fa{
             vertical-align: baseline;
             vertical-align: -webkit-baseline-middle;
@@ -230,7 +233,7 @@
         }
         .tool-api-menu .method-default{
             display: inline-block;
-            width: 50px;
+            width: 65px;
             font-weight: bold;
             text-align: right;
             line-height: 20px;
@@ -256,7 +259,8 @@
             'ApiSaveUrl' : "{{route('runapi.edit.api')}}",
             "ClassifyTreeUrl" : "{{route('runapi.classify.tree')}}",
             "ApiMetadataGetUrl" : "{{route('runapi.metadata.api')}}",
-            "ApiMetadataSaveUrl" : "{{route('runapi.metadata.save.api')}}"
+            "ApiMetadataSaveUrl" : "{{route('runapi.metadata.save.api')}}",
+            "ApiDeleteUrl" : "{{route('runapi.delete.api')}}"
         };
     </script>
 </head>
@@ -565,9 +569,27 @@
 
             $("#editApiModal .modal-body").load(url,function () {
                 layer.close(index);
+                $("#editApiModal").modal('show');
             });
+        }).on("click",".btn_api_del",function () {
+            //接口删除
+            var $then = $(this).closest("li[data-id]");
 
-            $("#editApiModal").modal('show');
+            var id = $then.attr("data-id");
+
+            $.ajax({
+                url : window.config.ApiDeleteUrl,
+                data : {"api_id" : id},
+                type : "POST",
+                dataType : "json",
+                success : function (res) {
+                    if(res.errcode === 0){
+                        $then.remove().empty();
+                    }else{
+                        layer.msg(res.message);
+                    }
+                }
+            });
         });
     });
 </script>
