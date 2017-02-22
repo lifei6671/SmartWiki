@@ -397,6 +397,10 @@
         </div>
         <div class="page-right">
             <div class="row">
+                <button style="display: none;" id="chromeExtensionEventTriggerBtn"></button>
+                <button class="hidden" id="chromeExtensionResponseEventTriggerBtn"></button>
+                <textarea class="hidden" id="chromeExtensionResponse"></textarea>
+
                 <form method="post" id="toolApiContainer" action="{{route("runapi.edit.api")}}">
                     @include("runapi.body")
                 </form>
@@ -590,6 +594,15 @@
                     }
                 }
             });
+        });
+
+        //用于接收Chrome插件响应数据处理
+        $("#chromeExtensionResponseEventTriggerBtn").on("click",function () {
+            var responseText = $.trim($("#chromeExtensionResponse").text());
+            if(responseText !== ""){
+                var response =  jQuery.parseJSON(responseText);
+                window.renderResponseView(response)
+            }
         });
     });
 </script>

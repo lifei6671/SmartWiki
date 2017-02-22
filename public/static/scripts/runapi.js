@@ -4,6 +4,60 @@
 
 (function($){
 
+    window.renderResponseView = function (response) {
+        $("#sendRequest").button("reset")
+
+        if(response.hasOwnProperty("headers")) {
+            var html = "";
+            for (var index in response.headers) {
+
+                var item = response.headers[index];
+
+                for(var key in item){
+                    html = html + '<p><strong>' + key + '</strong>:' + item[key] + '</p>';
+                }
+            }
+
+            $("#responseHeader").html(html);
+        }
+
+        if(response.hasOwnProperty("cookies")){
+            var html = "";
+            for (var index in response.cookies){
+                var cookie = response.cookies[index];
+               // alert(cookie)
+
+                html += "<tr><td>" + cookie.name +
+                    "</td><td>" + cookie.value +
+                    "</td><td>" + cookie.domain +
+                    "</td><td>" + cookie.path +
+                    "</td><td>" + cookie.expirationDate +
+                    "</td><td>" + cookie.httpOnly +
+                    "</td><td>" + cookie.secure +
+                    "</td></tr>";
+            }
+            //alert(html)
+            $("#responseCookie>table>tbody").html(html);
+        }
+
+        $("#httpTime").text(response.time + 'ms');
+        $("#httpCode").text(response.status + ' ' + response.statusText);
+
+        try{
+            response.responseText = JSON.stringify(JSON.parse(response.responseText), null, 4);
+            window.ResponseEditor.setOption("mode","application/ld+json");
+        }catch(e){
+            console.log(e);
+        }
+
+        window.ResponseEditor.setValue(response.responseText);
+    };
+
+    /**
+     * 负责发起请求
+     * @returns {{sendBefore: sendBefore, send: send, resolveResponseHeader: resolveResponseHeader, resolveRequestBody: resolveRequestBody, resolveRequestHeader: resolveRequestHeader}}
+     * @constructor
+     */
     window.RunApi = function () {
         var header = {};
         var startTime = null;
@@ -42,35 +96,30 @@
 
                     },
                     complete : function (xhr, textStatus) {
-                        console.log(xhr);
-                        $("#sendRequest").button("reset")
+                        // console.log(xhr)
+                        var rawHeaders = xhr.getAllResponseHeaders();
+                        var headers = rawHeaders.split('\n');
+                        var unpackedHeaders = [];
 
-                        var headers = xhr.getAllResponseHeaders();
-
-                        if(headers) {
-                            headers = headers.split('\r');
-
-                            var html = "";
-                            for (index in headers) {
-                                var item = headers[index].split(':');
-                                if(item.length === 2) {
-                                    html = html + '<p><strong>' + item[0] + '</strong>:' + item[1] + '</p>';
-                                }
+                        for (var index in headers) {
+                            var item = headers[index].split(':');
+                            if(item.length === 2){
+                                var node = {};
+                                node[item[0]] = item[1];
+                                unpackedHeaders.push(node);
                             }
-                            $("#responseHeader").html(html);
                         }
-
-                        var time = (new Date()) - startTime;
-
-                        $("#httpTime").text(time + 'ms');
-                        $("#httpCode").text(xhr.status + ' ' + xhr.statusText);
-                        try{
-                            xhr.responseText = JSON.stringify(JSON.parse(xhr.responseText), null, 4);
-                            window.ResponseEditor.setOption("mode","application/ld+json");
-                        }catch(e){
-                            console.log(e);
-                        }
-                        window.ResponseEditor.setValue(xhr.responseText);
+                        var response = {
+                            time : (new Date()) - startTime,
+                            responseType: xhr.responseType,
+                            readyState : xhr.readyState,
+                            rawHeaders: rawHeaders,
+                            headers: unpackedHeaders,
+                            status: xhr.status,
+                            statusText: xhr.statusText,
+                            responseText : xhr.responseText
+                        };
+                        window.renderResponseView(response);
                     }
                 });
             },
@@ -370,6 +419,7 @@
             matchBrackets: true,
             autoCloseBrackets: true,
         });
+        $("#chromeExtensionEventTriggerBtn").trigger("click")
     };
     /**
      * 加载 Raw 区域编辑器
@@ -387,6 +437,18 @@
                 $("#isChangeForApi").trigger("change.api");
             });
         }
+    };
+    window.sendApiRequest = function (e) {
+        var url = $("#requestUrl").val();
+        if(!url){
+            layer.msg("请输入一个URL");
+        }
+        var method = $("#httpMethod").text();
+        var runApi = new window.RunApi();
+        var header = runApi.resolveRequestHeader();
+        var body = runApi.resolveRequestBody();
+
+        runApi.send(url,method,header,body);
     };
     /***
      * API区域事件绑定和初始化
@@ -411,18 +473,7 @@
             if(value == "raw"){
                 window.loadRawEditor();
             }
-        }).on("click","#sendRequest",function () {
-            var url = $("#requestUrl").val();
-            if(!url){
-                layer.msg("请输入一个URL");
-            }
-            var method = $("#httpMethod").text();
-
-            var header = runApi.resolveRequestHeader();
-            var body = runApi.resolveRequestBody();
-
-            runApi.send(url,method,header,body);
-        }).on("change.api","#isChangeForApi",function () {
+        }).on("click","#sendRequest",window.sendApiRequest).on("change.api","#isChangeForApi",function () {
             $(this).val('1');
             $("#btnSaveApi").removeAttr("disabled")
             $(".tool-api-title").find(".title>.fa").removeClass("saved");

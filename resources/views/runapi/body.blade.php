@@ -132,7 +132,7 @@
         <div role="tabpanel" class="tab-pane" id="responseCookie">
             <table class="table table-condensed">
                 <thead>
-                <tr><th>Name</th><th>Value</th><th>Domian</th><th>Path</th><th>Expires</th><th>HTTP</th><th>Secure</th></tr>
+                <tr><th>Name</th><th style="width: 150px;">Value</th><th>Domian</th><th>Path</th><th>Expires</th><th>HTTP</th><th>Secure</th></tr>
                 </thead>
                 <tbody>
 
