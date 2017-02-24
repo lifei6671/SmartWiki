@@ -129,135 +129,13 @@
     </div>
 </div>
 <script type="text/plain" id="template-normal">
-##SmartWiki是什么?
-一个文档储存系统。
-
-##SmartWiki有哪些功能？
-
--  项目管理
--  文档管理
--  用户管理
--  用户权限管理
--  项目加密
--  站点配置
-
-##有问题反馈
-在使用中有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流
-
-* 邮件(longfei6671#163.com, 把#换成@)
-* QQ: 867311066
-* http://www.iminho.me
-
-##捐助开发者
-在兴趣的驱动下,写一个`免费`的东西，有欣喜，也还有汗水，希望你喜欢我的作品，同时也能支持一下。
-当然，有钱捧个钱场（右上角的爱心标志，支持支付宝捐助），没钱捧个人场，谢谢各位。
-
-##感激
-感谢以下的项目,排名不分先后
-
-- laravel 5.2
-- mysql 5.6
-- editor.md
-- bootstrap 3.2
-- jquery 库
-- layer 弹出层框架
-- webuploader 文件上传框架
-- Nprogress 库
-- jstree
-- font awesome 字体库
-- cropper 图片剪裁库
-
-##关于作者
-
-一个纯粹的PHPer.
-PS：PHP是世界上最好的语言，没有之一(逃
+@include("template.text")
 </script>
 <script type="text/plain" id="template-api">
-### 简要描述：
-
-- 用户登录接口
-
-### 请求域名:
-
-- http://xx.com
-
-### 请求URL:
-
-GET:/api/login
-
-POST:/api/login
-
-PUT:/api/login
-
-DELETE:/api/login
-
-TRACE:/api/login
-
-
-### 参数:
-
-|参数名|是否必须|类型|说明|
-|:----    |:---|:----- |-----   |
-|username |是  |string |用户名   |
-|password |是  |string | 密码    |
-
-### 返回示例:
-
-**正确时返回:**
-
-```
-  {
-    "errcode": 0,
-    "data": {
-      "uid": "1",
-      "account": "admin",
-      "nickname": "Minho",
-      "group_level": 0 ,
-      "create_time": "1436864169",
-      "last_login_time": "0",
-    }
-  }
-```
-
-**错误时返回:**
-
-
-```
-  {
-    "errcode": 500,
-    "errmsg": "invalid appid"
-  }
-```
-
-### 返回参数说明:
-
-|参数名|类型|说明|
-|:-----  |:-----|-----                           |
-|group_level |int   |用户组id，1：超级管理员；2：普通用户  |
-
-### 备注:
-
-- 更多返回错误代码请看首页的错误代码描述
-
-
-
+@include("template.api")
 </script>
 <script type="text/plain" id="template-code">
-### 数据库字典
-#### 用户表，储存用户信息
-
-|字段|类型|空|默认|注释|
-|:----    |:-------    |:--- |-- -|------      |
-|uid	  |int(10)     |否	|	 |	           |
-|username |varchar(20) |否	|    |	 用户名	|
-|password |varchar(50) |否   |    |	 密码		 |
-|name     |varchar(15) |是   |    |    昵称     |
-|reg_time |int(11)     |否   | 0  |   注册时间  |
-
-#### 备注：无
-
-
-
+@include("template.dictionary")
 </script>
 <script src="{{asset('static/bootstrap/js/bootstrap.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('static/jstree/jstree.js')}}"></script>

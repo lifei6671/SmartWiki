@@ -26,12 +26,17 @@
             for (var index in response.cookies){
                 var cookie = response.cookies[index];
                // alert(cookie)
-
+                var time = '';
+                if(cookie.hasOwnProperty("expirationDate")){
+                    var date = new Date();
+                    date.setTime(cookie.expirationDate * 1000);
+                    time = date.toLocaleString();
+                }
                 html += "<tr><td>" + cookie.name +
                     "</td><td>" + cookie.value +
                     "</td><td>" + cookie.domain +
                     "</td><td>" + cookie.path +
-                    "</td><td>" + cookie.expirationDate +
+                    "</td><td>" + time +
                     "</td><td>" + cookie.httpOnly +
                     "</td><td>" + cookie.secure +
                     "</td></tr>";
@@ -493,7 +498,7 @@
             var apiId = Number(then.find("input[name='apiId']").val());
             var apiName = $.trim(then.find("input[name='apiName']").val());
             var classifyId = Number(then.find("input[name='classifyId']").val());
-            var request_url = $.trim(then.find("input[name='request_url']").val())
+            var request_url = $.trim(then.find("input[name='request_url']").val());
 
             if(request_url === ""){
                 layer.msg("接口链接不能为空");
@@ -585,6 +590,68 @@
             }
             $(this).button("loading");
             return true;
+        }).on("click","#makeMarkdown",function () {
+            var then = $("#makeMarkdownModal");
+
+            var $this = $("#toolApiContainer");
+
+            var url = then.find("form").attr("action");
+            var apiId = Number($this.find("input[name='apiId']").val());
+            var apiName = $.trim($this.find("input[name='apiName']").val());
+            var classifyId = Number($this.find("input[name='classifyId']").val());
+            var request_url = $.trim($this.find("input[name='request_url']").val());
+            var header = window.resolveRequestHeader();
+            var body = window.resolveRequestBody();
+            var apiDescription = $this.find("#apiDescription").val();
+
+            var data ={};
+
+            data.http_header = header;
+            data.http_body = body;
+            data.raw_data = window.RawEditor !== null ? window.RawEditor.getValue() : "";
+            data.apiName = apiName;
+            data.apiDescription = apiDescription;
+            data.classifyId = classifyId;
+            data.request_url = request_url;
+            data.parameterType = $this.find("input[name='parameterType']:checked").val();
+            data.response = window.ResponseEditor !== null ? window.ResponseEditor.getValue() : '';
+
+            console.log(data);
+
+            $.post(url,data,function (res) {
+                then.find(".modal-body").html('<div id="editormdContainer"></div>');
+                then.modal("show");
+
+                then.on("shown.bs.modal",function () {
+                    var editormdScript = $("#editormdScript").attr("href");
+
+                    $.getScript(editormdScript,function () {
+                        window.markdowEditor = editormd("editormdContainer", {
+                            path : "/static/editormd/lib/",
+                            markdown : res,
+                            watch : true,
+                            syncScrolling : true,
+                            placeholder: "本编辑器支持Markdown编辑，左边编写，右边预览",
+                            width : "100%",
+                            height : $(document).height() - 250,
+                            toolbarIcons : [ "undo", "redo" , "h1", "h2","h3" ,"h4","bold", "hr", "italic","quote","list-ul","list-ol","link","reference-link","code","html-entities","preformatted-text","code-block","table"]
+                        });
+                    });
+
+
+                });
+
+            });
+
+
+            then.on("hidden.bs.modal",function () {
+               if(window.markdowEditor){
+                   window.markdowEditor.editor.remove();
+               }
+            });
+
+
+
         });
     };
 

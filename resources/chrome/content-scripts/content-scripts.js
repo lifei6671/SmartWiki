@@ -47,7 +47,7 @@
         if(type === "x-www-form-urlencodeed" || isAll){
             $("#x-www-form-urlencodeed>table>tbody>tr").each(function (index, domEle) {
                 var checkbox = $(domEle).find('input[type="checkbox"]').is(":checked");
-                if(checkbox || isAll){
+                if(checkbox){
                     var key = $(domEle).find("input[name='key']").val();
                     if(key && key !== ""){
                         body[key] = $(domEle).find("input[name='value']").val();
@@ -79,11 +79,13 @@
         }
     }
 
-    $("#chromeExtensionEventTriggerBtn").on("click", function () {
-
+    /**
+     * 用来绑定按钮点击后发送请求事件
+     */
+    function bindSendEvent() {
         $("#sendRequest").on("click", function (e) {
             e.stopPropagation();
-            button("loading");
+
             var $then = $("#toolApiContainer");
 
             var request = {
@@ -92,13 +94,18 @@
                 url : $then.find("#requestUrl").val(),
                 method : $then.find("input[name='http_method']").val()
             };
+            if(request.url === ""){
+                alert("请输入请求的URL.");
+                return false;
+            }
 
+            button("loading");
             chrome.runtime.sendMessage(request,function () {
-                console.log("消息已发送")
+                //console.log("消息已发送")
             });
 
             chrome.runtime.onMessage.addListener(function returnResult(request, sender, sendResponse) {
-                console.log(request)
+               // console.log(request)
                 $("#chromeExtensionResponse").text(JSON.stringify(request));
                 $("#chromeExtensionResponseEventTriggerBtn").trigger("click");
 
@@ -108,5 +115,12 @@
 
             button("reset");
         });
-    });
+    }
+
+    /**
+     * 当页面变更后，重写绑定事件。
+     */
+    $("#chromeExtensionEventTriggerBtn").on("click",bindSendEvent);
+
+    bindSendEvent();
 })(jQuery);

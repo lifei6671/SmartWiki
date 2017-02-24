@@ -13,15 +13,18 @@
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{asset('static/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
     <link href="/static/seltree/seltree.css" rel="stylesheet">
+    <link href="{{asset('static/editormd/css/editormd.min.css')}}" rel="stylesheet">
 
     <link href="{{asset('static/styles/styles.css')}}" rel="stylesheet">
     <link href="{{asset('static/bootstrap/icheck/skins/square/square.css')}}" rel="stylesheet">
     <link href="{{asset('static/codemirror/lib/codemirror.css')}}" rel="stylesheet">
     <link href="{{asset('static/styles/tool.css')}}" rel="stylesheet">
-    <style type="text/css">
+    <link href="{{asset('static/styles/markdown.css')}}" rel="stylesheet">
+    <link href="{{asset('static/editormd/editormd.js')}}" rel="contents" id="editormdScript">
 
-        .CodeMirror { height: 250px; border: 1px solid #ddd; font-family: "Courier New", 'Source Sans Pro', Helvetica, Arial, sans-serif;font-size: 12px;}
-        .CodeMirror-scroll { max-height: 250px; }
+    <style type="text/css">
+        html, body{ margin:0; height:100%; }
+        .CodeMirror { height: 250px; border: 1px solid #ddd; font-family: "Courier New", 'Source Sans Pro', Helvetica, Arial, sans-serif !important;font-size: 12px !important;}
         .CodeMirror pre { padding-left: 7px; line-height: 1.25; }
         .CodeMirror .CodeMirror-linenumber{font-size: 12px;min-width: 21px;}
 
@@ -242,6 +245,9 @@
         .tool-api-menu .method-get{
             color: #7ED321;
         }
+        #responseCookie td{word-wrap:break-word;}
+        #editormdContainer {border: 0;padding: 0;margin: 0;height: 100%}
+        #editormdContainer .CodeMirror-scroll{max-height: inherit;}
     </style>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -440,6 +446,7 @@
     </div>
 
     @include('runapi.metadata',['isForm'=>true])
+    @include("runapi.markdown")
 
     <script type="text/plain" id="parameterTemplate">
         @include("runapi.params")
@@ -455,12 +462,14 @@
 <script type="text/javascript" src="/static/seltree/seltree.js"></script>
 <script type="text/javascript" src="/static/scripts/jquery.form.js"></script>
 <script type="text/javascript" src="/static/codemirror/lib/codemirror.js"></script>
-<script src="/static/codemirror/mode/xml/xml.js"></script>
-<script src="/static/codemirror/mode/javascript/javascript.js"></script>
-<script src="/static/codemirror/mode/css/css.js"></script>
-<script src="/static/codemirror/mode/htmlmixed/htmlmixed.js"></script>
-<script src="/static/codemirror/addon/edit/matchbrackets.js"></script>
-<script src="/static/scripts/json2.js"></script>
+<script src="/static/codemirror/mode/xml/xml.js" type="text/javascript"></script>
+<script src="/static/codemirror/mode/javascript/javascript.js" type="text/javascript"></script>
+<script src="/static/codemirror/mode/css/css.js" type="text/javascript"></script>
+<script src="/static/codemirror/mode/htmlmixed/htmlmixed.js" type="text/javascript"></script>
+<script src="/static/codemirror/addon/edit/matchbrackets.js" type="text/javascript"></script>
+<script src="/static/scripts/json2.js" type="text/javascript"></script>
+
+
 <script type="text/javascript" src="{{asset('static/scripts/runapi.js')}}"></script>
 <script type="text/javascript">
     window.RawEditor = null;

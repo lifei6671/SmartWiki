@@ -130,9 +130,9 @@
             <textarea id="responseBodyContainer" style="display: none;"></textarea>
         </div>
         <div role="tabpanel" class="tab-pane" id="responseCookie">
-            <table class="table table-condensed">
+            <table class="table table-condensed" style="table-layout:fixed;">
                 <thead>
-                <tr><th>Name</th><th style="width: 150px;">Value</th><th>Domian</th><th>Path</th><th>Expires</th><th>HTTP</th><th>Secure</th></tr>
+                <tr><th>Name</th><th style="word-wrap:break-word;">Value</th><th>Domian</th><th>Path</th><th>Expires</th><th>HTTP</th><th>Secure</th></tr>
                 </thead>
                 <tbody>
 

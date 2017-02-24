@@ -399,4 +399,39 @@ class RunApiController extends Controller
         }
         return $apiModel;
     }
+
+    public function makeMarkdown()
+    {
+        $api_name = $this->request->get('apiName',null);
+        $description = $this->request->get('apiDescription',null);
+        $classify_id = intval($this->request->get('classifyId',0));
+
+        $request_url = $this->request->get('request_url');
+
+        $http_method = strtoupper($this->request->get('http_method','GET'));
+        $parameterType = strtolower($this->request->get('parameterType','x-www-form-urlencodeed'));
+        $http_header = $this->request->get('http_header');
+        $http_body = $this->request->get('http_body');
+        $raw_data = $this->request->get('raw_data');
+        $response = $this->request->get('response','');
+
+        $data['api_name'] = $api_name;
+        $data['description'] = $description;
+        $data['request_host'] = '';
+        $data['method'] = $http_method;
+        $data['request_path'] = '';
+        $data['headers'] = $http_header;
+        $data['enctype'] = $parameterType;
+        $data['body'] = $http_body;
+        $data['raw_data'] = $raw_data;
+        $data['response'] = $response;
+        $data['response_error'] = '';
+
+        if(empty($request_url) === false &&  $result = parse_url($request_url)){
+            $data['request_host'] = $result['scheme'] .'://'. $result['host'];
+            $data['request_path'] = substr($request_url,strlen($data['request_host']));
+        }
+
+        return view('template.markdown',$data);
+    }
 }

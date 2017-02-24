@@ -51,6 +51,10 @@ class RunApiRoutes
             $router->post('runapi/api/delete',[
                 'uses' => 'RunApiController@deleteApi', 'as' => 'runapi.delete.api'
             ]);
+
+            $router->post('runapi/markdown',[
+                'uses' => 'RunApiController@makeMarkdown', 'as' => 'runapi.markdown'
+            ]);
         });
     }
 }
