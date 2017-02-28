@@ -39,6 +39,9 @@ class RunApiRoutes
             $router->match(['GET','POST'],'runapi/api/save/{apiId?}',[
                'uses' => 'RunApiController@editApi', 'as' => 'runapi.edit.api'
             ]);
+            $router->match(['GET','POST'],'runapi/api/share/{id?}',[
+                'uses' => 'RunApiController@shareRequestFolder', 'as' => 'runapi.share.api'
+            ]);
 
             $router->get('runapi/api/metadata/get/{apiId?}',[
                'uses' =>  'RunApiController@getApiMetaData', 'as' => 'runapi.metadata.api'
@@ -55,6 +58,7 @@ class RunApiRoutes
             $router->post('runapi/markdown',[
                 'uses' => 'RunApiController@makeMarkdown', 'as' => 'runapi.markdown'
             ]);
+
         });
     }
 }

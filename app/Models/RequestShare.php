@@ -7,6 +7,7 @@
  */
 
 namespace SmartWiki\Models;
+use DB;
 
 /**
  * 接口参与列表
@@ -26,4 +27,15 @@ class RequestShare extends ModelBase
 
     public $timestamps = false;
 
+    public static function getRequestMembers($classifyId)
+    {
+
+        $results = DB::table('request_share')
+            ->select(['*','member.account'])
+            ->leftJoin('member','request_share.member_id','=','member.member_id')
+            ->where('request_share.classify_id','=',$classifyId)
+            ->get();
+
+        return $results;
+    }
 }

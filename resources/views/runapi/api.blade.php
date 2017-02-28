@@ -10,7 +10,9 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-more">
             <li><a href="###" title="编辑接口" class="btn_api_edit"><i class="fa fa-pencil"></i> 编辑</a></li>
+            @if(isset($role) && $role === 0)
             <li><a href="###" title="删除接口" class="btn_api_del"><i class="fa fa-trash"></i> 删除</a></li>
+            @endif
         </ul>
     </div>
 </li>

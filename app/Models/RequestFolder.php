@@ -38,10 +38,19 @@ class RequestFolder extends ModelBase
      */
     public static function getApiClassifyList($memberId, $parentId = 0)
     {
-        $result = DB::table('request_folder as classify')
+        $query = DB::table('request_share as share')
             ->select(['classify.*','share.member_id as uid','share.role'])
-            ->leftJoin('request_share as share','share.classify_id','=','classify.classify_id')
-            ->where('share.member_id','=',$memberId)
+            ->leftJoin('request_folder as classify','share.classify_id','=','classify.classify_id');
+
+        if($parentId > 0){
+            $share = RequestShare::where('classify_id','=',$parentId)->where('member_id','=',$memberId);
+            if(empty($share)){
+                return null;
+            }
+        }else{
+            $query = $query->where('share.member_id','=',$memberId);
+        }
+        $result = $query
             ->where('classify.parent_id','=',$parentId)
             ->orderBy('classify.classify_sort','DESC')
             ->get();
@@ -76,8 +85,66 @@ class RequestFolder extends ModelBase
      */
     public static function isHasEditRole($member_id,$classify_id)
     {
+        $classifyId = intval($classify_id);
+        if($classifyId <= 0){
+            return false;
+        }
+
+        $share = RequestFolder::find($classifyId);
+
+        if(empty($share)){
+            return false;
+        }
+        if($share->parent_id !== 0){
+            $share =  RequestFolder::find($share->parent_id);
+            if(empty($share)){
+                return false;
+            }
+            return RequestShare::where('classify_id','=',$share->classify_id)->where('member_id','=',$member_id)->exists();
+        }
+
         return RequestShare::where('member_id','=',$member_id)
-            ->where('classify_id','=',$classify_id)
+            ->where('classify_id','=',$classifyId)
             ->exists();
+    }
+
+    /**
+     * 获取指定用户对指定目录的角色
+     * @param int $member_id
+     * @param int $classify_id
+     * @return bool|int|mixed
+     */
+    public static function getRequestFolderRole($member_id,$classify_id)
+    {
+        $memberId = intval($member_id);
+        //如果是超级管理员，则默认为拥有者
+        if(Member::isSuperMember($memberId)){
+            return 0;
+        }
+        $classifyId = intval($classify_id);
+        if($classifyId <= 0){
+            return false;
+        }
+
+        $share = RequestFolder::find($classifyId);
+
+        if(empty($share)){
+            return false;
+        }
+        if($share->parent_id !== 0){
+            $share =  RequestFolder::find($share->parent_id);
+            if(empty($share)){
+                return false;
+            }
+            $share = RequestShare::where('classify_id','=',$share->classify_id)->where('member_id','=',$member_id)->first();
+
+            return empty($share) ?  false : $share->role;
+        }
+
+        $share = RequestShare::where('member_id','=',$member_id)
+            ->where('classify_id','=',$classifyId)
+            ->first();
+
+        return empty($share) ?  false : $share->role;
     }
 }

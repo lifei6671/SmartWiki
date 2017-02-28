@@ -3,6 +3,7 @@
 namespace SmartWiki\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use SmartWiki\Models\Member;
 use SmartWiki\Models\RequestShare;
 use SmartWiki\Models\RequestFolder;
 use SmartWiki\Models\RequestModel;
@@ -40,6 +41,7 @@ class RunApiController extends Controller
         $classifyList = RequestFolder::getApiClassifyList($this->member_id,$parentId);
         if(empty($classifyList) === false && count($classifyList) > 0 && strcasecmp($dataType,'html') === 0){
             foreach ($classifyList as $classify){
+
                 $view .= view('runapi.classify',(array)$classify)->render();
             }
         }
@@ -235,19 +237,24 @@ class RunApiController extends Controller
     public function deleteApi($apiId = 0)
     {
         $apiId = intval($apiId);
-        if($apiId <= 0){
-            $apiId = intval($this->request->get('api_id',0));
+        if ($apiId <= 0) {
+            $apiId = intval($this->request->get('api_id', 0));
         }
 
-        $apiModel = $this->isAbleEditApi($apiId);
+        $model = RequestModel::find($apiId);
 
-        if($apiModel instanceof ModelBase){
-            if($apiModel->delete()){
-                return $this->jsonResult(0);
-            }
-            return $this->jsonResult(500);
+        if (empty($model)) {
+            return $this->jsonResult(404);
         }
-        return $apiModel;
+        //如果当前用户不是所有者则禁止删除
+        if (RequestFolder::getRequestFolderRole($this->member_id, $model->classify_id) !== 0) {
+            return $this->jsonResult(403);
+        }
+
+        if ($model->delete()) {
+            return $this->jsonResult(0);
+        }
+        return $this->jsonResult(500);
     }
 
     /**
@@ -310,7 +317,7 @@ class RunApiController extends Controller
         }
         if($classifyId > 0){
             //判断是否有编辑权限
-            if(!RequestFolder::isHasEditRole($this->member_id,$classifyId)){
+            if(RequestFolder::getRequestFolderRole($this->member_id,$classifyId) !== 0){
                 return $this->jsonResult(60001);
             }
             $classify = RequestFolder::find($classifyId);
@@ -370,7 +377,8 @@ class RunApiController extends Controller
         if($classifyId <= 0){
             return $this->jsonResult(50502);
         }
-        if(!RequestFolder::isHasEditRole($this->member_id,$classifyId)){
+        //如果不是管理员，则没有删除权限
+        if(RequestFolder::getRequestFolderRole($this->member_id,$classifyId) !== 0){
             return $this->jsonResult(60001);
         }
         $classify = RequestFolder::find($classifyId);
@@ -394,12 +402,16 @@ class RunApiController extends Controller
 
         $apiModel= RequestModel::find($apiId);
 
-        if(!RequestFolder::isHasEditRole($this->member_id,$apiModel->classify_id)){
+        if(RequestFolder::getRequestFolderRole($this->member_id,$apiModel->classify_id) === false){
             return $this->jsonResult(403);
         }
         return $apiModel;
     }
 
+    /**
+     * 生成 Markdown 文档
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function makeMarkdown()
     {
         $api_name = $this->request->get('apiName',null);
@@ -433,5 +445,87 @@ class RunApiController extends Controller
         }
 
         return view('template.markdown',$data);
+    }
+
+
+    public function shareRequestFolder($id = 0)
+    {
+        $folderId = intval($id);
+
+        if($this->isPost()){
+            $folderId = intval($this->request->get('classify_id'));
+            $action = $this->request->get('action');
+
+            $account = $this->request->get('account');
+
+            if(!RequestFolder::isHasEditRole($this->member_id,$folderId)){
+                return $this->jsonResult(404);
+            }
+            $requestFolder = RequestFolder::find($folderId);
+            if(empty($requestFolder)){
+                return $this->jsonResult(403);
+            }
+            $requestShare = RequestShare::where('classify_id','=',$folderId)->where('member_id','=',$this->member_id)->first();
+
+            if($requestShare->role !== 0){
+                return $this->jsonResult(403);
+            }
+            $member = Member::where('account','=',$account)->first();
+            if(empty($member)){
+                return $this->jsonResult(40513);
+            }
+
+            $model = RequestShare::where('classify_id','=',$folderId)->where('member_id','=',$member->member_id)->first();
+
+            if(empty($model) === false){
+                if(strcasecmp('del',$action) === 0){
+                    if($model->delete()){
+                        return $this->jsonResult(0);
+                    }else{
+                        return $this->jsonResult(500);
+                    }
+                }
+                return $this->jsonResult(0);
+            }
+            $model = new RequestShare();
+            $model->classify_id = $folderId;
+            $model->member_id = $member->member_id;
+            $model->role = 1;
+            $model->create_time = date('Y-m-d H:i:s');
+
+            if($model -> save()){
+                $array = $model->toArray();
+                $array['account'] = $member->account;
+
+                $data['view'] = view('runapi.shareitem',$array)->render();
+                return $this->jsonResult(0,$data);
+            }
+            return $this->jsonResult(500);
+        }
+
+        if(!RequestFolder::isHasEditRole($this->member_id,$folderId)){
+            return "";
+        }
+        $requestFolder = RequestFolder::find($folderId);
+        if(empty($requestFolder)){
+            $data['errcode'] = '403';
+            $data['message'] = '没有共享目录的权限';
+            return view('runapi.share',$data);
+        }
+        $requestShare = RequestShare::where('classify_id','=',$folderId)->where('member_id','=',$this->member_id)->first();
+
+        if($requestShare->role !== 0){
+            $data['errcode'] = '403';
+            $data['message'] = '没有共享目录的权限';
+            return view('runapi.share',$data);
+        }
+
+        $requestShareList = RequestShare::getRequestMembers($folderId);
+
+
+        $data['lists'] = $requestShareList;
+        $data['classify_id'] = $folderId;
+
+        return view("runapi.share",$data);
     }
 }

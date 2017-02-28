@@ -248,6 +248,17 @@
         #responseCookie td{word-wrap:break-word;}
         #editormdContainer {border: 0;padding: 0;margin: 0;height: 100%}
         #editormdContainer .CodeMirror-scroll{max-height: inherit;}
+        .team-member-item{
+            width: 280px;
+            border: 1px #e5e5e5 solid !important;
+            border-radius: 3px;
+            float: left;
+            display: inline-block;
+            padding: 10px;
+            margin-right: 5px;
+        }
+        .team-member-item .card{color: #666666}
+
     </style>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -266,7 +277,8 @@
             "ClassifyTreeUrl" : "{{route('runapi.classify.tree')}}",
             "ApiMetadataGetUrl" : "{{route('runapi.metadata.api')}}",
             "ApiMetadataSaveUrl" : "{{route('runapi.metadata.save.api')}}",
-            "ApiDeleteUrl" : "{{route('runapi.delete.api')}}"
+            "ApiDeleteUrl" : "{{route('runapi.delete.api')}}",
+            "ClassifyShareUrl" : "{{route('runapi.share.api')}}"
         };
     </script>
 </head>
@@ -329,75 +341,6 @@
                             @include("runapi.classify", (array)$item)
                         @endforeach
                     @endif
-
-                    <li>
-                        <a href="###">
-                            <i class="fa fa-folder"></i>
-                            <div class="tool-api-menu-title">默认分类<br/><span class="text">0 个接口</span></div>
-                        </a>
-                        <div class="btn-group btn-group-more">
-                            <button class="btn btn-more dropdown-toggle" style="height: 63px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-more">
-                                <li><a href="###"><i class="fa fa-pencil"></i> 编辑</a></li>
-                                <li><a href="###"><i class="fa fa-folder"></i> 添加分类</a> </li>
-                                <li><a href="###"><i class="fa fa-trash"></i> 删除</a></li>
-                            </ul>
-                        </div>
-                        <ul class="tool-api-menu-submenu">
-                            <li>
-                                <a href="javascript:;">
-                                    <i class="fa fa-folder-o"></i>
-                                    微信
-                                </a>
-                                <div class="btn-group btn-group-more">
-                                    <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-ellipsis-h"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-more">
-                                        <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
-                                        <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
-                                    </ul>
-                                </div>
-                                <ul class="api-items">
-                                    <li>
-                                        <a href="javascript:;">
-                                            <i class="fa"></i>
-                                            <span class="method-default method-get">GET</span>
-                                            <span class="menu-title">搜索订单搜索订单搜索订单搜索订单搜索订单搜索订单</span>
-                                        </a>
-                                        <div class="btn-group btn-group-more">
-                                            <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fa fa-ellipsis-h"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-more">
-                                                <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
-                                                <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <ul class="api-items">
-                            <li>
-                                <a href="javascript:;">
-                                    <span class="method-default method-get">GET</span>
-                                    <span class="menu-title">搜索订单搜索订单搜索订单搜索订单搜索订单搜索订单</span>
-                                </a>
-                                <div class="btn-group btn-group-more">
-                                    <button class="btn btn-more dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-ellipsis-h"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-more">
-                                        <li><a href="#"><i class="fa fa-pencil"></i> 编辑</a></li>
-                                        <li><a href="#"><i class="fa fa-trash"></i> 删除</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -447,6 +390,7 @@
 
     @include('runapi.metadata',['isForm'=>true])
     @include("runapi.markdown")
+    @include("runapi.share")
 
     <script type="text/plain" id="parameterTemplate">
         @include("runapi.params")
@@ -603,6 +547,13 @@
                     }
                 }
             });
+        }).on("click",".btn_classify_share",function () {
+            var id = parseInt($(this).closest("li[data-id]").attr("data-id"));
+            var url = window.config.ClassifyShareUrl + "/" + id + " .modal-body-content";
+
+            $("#shareRequestFolderModal").find(".modal-body").load(url,function () {
+                $("#shareRequestFolderModal").modal("show");
+            });
         });
 
         //用于接收Chrome插件响应数据处理
@@ -611,6 +562,58 @@
             if(responseText !== ""){
                 var response =  jQuery.parseJSON(responseText);
                 window.renderResponseView(response)
+            }
+        });
+
+        $("#shareRequestFolderModal").on("click",".close",function () {
+            var $then = $(this);
+
+            var account = $then.closest('.team-member-item').attr('data-account');
+            var action = $("#shareRequestFolderForm").attr("action");
+            var classify_id = $("#shareRequestFolderForm").find("input[name='classify_id']").val();
+            var index = layer.load();
+
+            $.ajax({
+                url : action,
+                type :"post",
+                data : {"account" : account,"action" :"del","classify_id" : classify_id},
+                dataType : "json",
+                success : function (res) {
+                    if(res.errcode === 0){
+                        $then.closest(".team-member-item").remove().empty();
+                    }else{
+                        layer.msg(res.message);
+                    }
+                },
+                complete : function () {
+                    layer.close(index);
+                }
+            });
+
+        });
+        $("#shareRequestFolderForm").ajaxForm({
+            beforeSubmit : function () {
+                var account = $("#memberName").val();
+                if(account == ""){
+                    layer.msg('用户账号不能为空');
+                    $("#memberName").focus();
+                    return false;
+                }
+                var btn = $("#shareRequestFolderForm").find('button[type="submit"]');
+                btn.button('loading');
+            },
+            success :function (res) {
+                if(res.errcode === 0){
+                    if(res.hasOwnProperty('data')){
+                        $("#shareRequestFolderForm").find(".team-member-list").prepend(res.data.view);
+                    }
+                    $("#memberName").val('');
+                }else{
+                    layer.msg(res.message);
+                }
+            },
+            complete : function () {
+                $("#shareRequestFolderForm").find('button[type="submit"]').button('reset');
             }
         });
     });
