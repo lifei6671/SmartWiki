@@ -1,5 +1,8 @@
 <?php
 
+define('VERSION','v0.4.0');
+header('SmartWiki:'.VERSION);
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application

@@ -221,7 +221,12 @@
             }
 
         }).on('select_node.jstree', function (node, selected, event) {
-             window.loadDocument(selected);
+            if($("#markdown-save").hasClass('change')) {
+                if(confirm("编辑内容未保存，需要保存吗？")){
+                    $("#form-editormd").submit();
+                }
+            }
+            window.loadDocument(selected);
 
         }).on("move_node.jstree", function (node, parent) {
 

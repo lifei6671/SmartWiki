@@ -8,7 +8,6 @@
         <div class="modal-content">
             {!! $beginForm or '' !!}
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="editClassifyTitle">{{isset($isForm) ? '编辑接口' : '保存接口'}}</h4>
                 </div>
                 <div class="modal-body">
@@ -21,8 +20,6 @@
                         <label for="description">描述</label>
                         <textarea name="apiDescription" class="form-control" style="resize: none;height: 150px;" placeholder="接口功能简单描述" id="apiDescription" autocomplete="off" maxlength="2000">{{$description or ''}}</textarea>
                     </div>
-                    @if(isset($isDisplayClassify) && $isDisplayClassify === true)
-
                     <div class="form-group">
                         <label for="apiClassifyId">所属分类</label>
                         <div class="input-group dropdown-select" style="width: 60%">
@@ -36,7 +33,6 @@
                             <div class="dropdown-select-menu"></div>
                         </div>
                     </div>
-                    @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

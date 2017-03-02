@@ -306,10 +306,15 @@ class ProjectController extends Controller
         if (empty($project_id)) {
             return $this->jsonResult(50502);
         }
+        if($this->member->group_level === 2){
+            return $this->jsonResult(403);
+        }
+
         $project = Project::find($project_id);
         if (empty($project)) {
             return $this->jsonResult(40206);
         }
+
         $relationship = Relationship::where('project_id','=',$project_id)->where('member_id','=',$this->member_id)->first();
 
 

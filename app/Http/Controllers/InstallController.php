@@ -13,7 +13,8 @@ use PDO;
 
 class InstallController extends Controller
 {
-    public function index()
+
+    public function next()
     {
         if($this->isPost()) {
             $dbHost = $this->request->input('dataAddress');
@@ -32,15 +33,15 @@ class InstallController extends Controller
                 return $this->jsonResult($ex->getCode(),null,$ex->getMessage());
             }
 
-            file_put_contents(public_path('install.lock'),'true');
+            @file_put_contents(public_path('install.lock'),'true');
             session('install.result',true);
-            $url = (route('member.index'));
+            $url = (route('member.projects'));
 
 
             return $this->jsonResult(0,["url" => $url]);
 
         }
-        return view('install.index',$this->data);
+        return view('install.next',$this->data);
     }
 
 }

@@ -22,28 +22,16 @@ class RequestFolderObservers
 
     public function created(RequestFolder $model)
     {
-        $classify = RequestFolder::find($model->classify_id);
-        if(empty($classify) === false){
-            if($classify->parent_id === 0){
-                $classify->api_count = RequestFolder::where('parent_id','=',$model->classify_id)
-                    ->sum('api_count');
-            }else{
-                $classify->api_count = RequestModel::where('classify_id','=',$model->classify_id)
-                    ->count();
-            }
-            $classify->save();
-        }
-
         $share = new RequestShare();
         $share->classify_id = $model->classify_id;
         $share->member_id = $model->member_id;
         $share->role = 0;
         $share->save();
-
     }
 
     public function deleted(RequestFolder $model)
     {
+        RequestFolder::updateRequestCount($model->classify_id);
         RequestShare::where('classify_id','=',$model->classify_id)->delete();
         RequestModel::where('classify_id','=',$model->classify_id)->delete();
 

@@ -1,4 +1,5 @@
 (function ($) {
+    var options = {};
     /**
      * 解析请求的 ContentType
      * @param header
@@ -44,7 +45,7 @@
         var body = {};
         var type = $(".parameter-post-list input:checked").val();
 
-        if(type === "x-www-form-urlencodeed" || isAll){
+        if(type === "x-www-form-urlencodeed"){
             $("#x-www-form-urlencodeed>table>tbody>tr").each(function (index, domEle) {
                 var checkbox = $(domEle).find('input[type="checkbox"]').is(":checked");
                 if(checkbox){
@@ -56,7 +57,7 @@
             });
         }else{
             if(window.RawEditor != null){
-                body = window.RawEditor.getValue();
+                body = $("#rawModeData").val();
             }else{
                 body = $("#rawModeData").val();
             }
@@ -69,13 +70,11 @@
     function button(state) {
 
         var $this = $("#sendRequest");
+        console.log(state)
         if (state == "loading") {
-            var buttonText = $this.text();
-            var buttonLoadText = $this.attr("data-loading-text");
-            $this.attr("disabled", "disabled").text(buttonLoadText).attr("data-text", buttonText);
+            $this.attr("disabled", "disabled");
         } else if (state == "reset") {
-            var buttonText = $this.attr("data-text");
-            $this.removeAttr("disabled").text(buttonText);
+            $this.removeAttr("disabled");
         }
     }
 
@@ -98,6 +97,7 @@
                 alert("请输入请求的URL.");
                 return false;
             }
+            console.log(request);
 
             button("loading");
             chrome.runtime.sendMessage(request,function () {
@@ -110,10 +110,10 @@
                 $("#chromeExtensionResponseEventTriggerBtn").trigger("click");
 
                 chrome.extension.onMessage.removeListener(returnResult);
-
+                button("reset");
             });
 
-            button("reset");
+
         });
     }
 

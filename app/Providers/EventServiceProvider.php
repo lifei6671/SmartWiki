@@ -12,6 +12,7 @@ use SmartWiki\Observers\RequestFolderObservers;
 use SmartWiki\Observers\DocumentObservers;
 use SmartWiki\Observers\MemberObservers;
 use SmartWiki\Observers\ProjectObservers;
+use SmartWiki\Observers\RequestModelObservers;
 use SmartWiki\Observers\WikiConfigObservers;
 use SmartWiki\Models\Project;
 use SmartWiki\Models\WikiConfig;
@@ -56,6 +57,7 @@ class EventServiceProvider extends ServiceProvider
         //注册配置观察者
         WikiConfig::observe(new WikiConfigObservers());
 
+        RequestModel::observe(new RequestModelObservers());
         RequestFolder::observe(new RequestFolderObservers());
     }
 }

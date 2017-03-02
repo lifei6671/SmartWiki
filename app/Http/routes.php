@@ -138,9 +138,5 @@ Route::group(['middleware' => 'authorize','prefix' => 'member'],function (){
  * 安装首页
  */
 Route::match(['get','post'],'/install',[
-    'uses' => 'InstallController@index'
+    'uses' => 'InstallController@next'
 ])->name('install.index');
-
-Route::get('/install/next',[
-    'as' => 'install.next', 'uses' => 'InstallController@next'
-]);

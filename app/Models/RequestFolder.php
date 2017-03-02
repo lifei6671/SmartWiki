@@ -70,8 +70,31 @@ class RequestFolder extends ModelBase
             ->select(['classify.*','share.member_id as uid','share.role'])
             ->leftJoin('request_share as share','share.classify_id','=','classify.classify_id')
             ->where('share.member_id','=',$memberId)
+            ->where('classify.parent_id','=',0)
             ->orderBy('classify.classify_sort','DESC')
             ->get();
+
+        if(empty($result) === false){
+            $parentIds = [];
+            foreach ($result as $item){
+                $parentIds[] = $item->classify_id;
+            }
+            $classifyList = DB::table('request_folder as classify')
+                ->select(['classify.*'])
+                ->whereIn('classify.parent_id',$parentIds)
+                ->orderBy('classify.classify_sort','DESC')
+                ->get();
+            if(empty($classifyList) === false){
+                foreach ($classifyList as &$item){
+                    foreach ($result as $value){
+                        if($item->parent_id === $value->classify_id){
+                            $item->role = $value->role;
+                        }
+                    }
+                }
+                $result = array_merge($result,$classifyList);
+            }
+        }
 
         return $result;
     }
@@ -146,5 +169,40 @@ class RequestFolder extends ModelBase
             ->first();
 
         return empty($share) ?  false : $share->role;
+    }
+
+    /**
+     * 更新和统计指定分类的接口数量
+     *
+     * @param $classifyId
+     */
+    public static function updateRequestCount($classifyId)
+    {
+        $classify = RequestFolder::find($classifyId);
+
+        $nodeFun = function ($classifyId){
+            $subNodeId = RequestFolder::where('parent_id','=',$classifyId)->get(['classify_id']);
+
+            $nodeIds = [];
+            foreach ($subNodeId as $item){
+                $nodeIds[] = intval($item['classify_id']);
+            }
+            $nodeIds[] = $classifyId;
+            return RequestModel::whereIn('classify_id',$nodeIds)->count();
+        };
+
+        if(empty($classify) === false){
+            if($classify->parent_id === 0){
+                $classify->api_count = $nodeFun($classifyId);
+            }else{
+                $classify->api_count = RequestModel::where('classify_id','=',$classifyId)->count();
+
+                $topClassify = RequestFolder::find($classify->parent_id);
+                $topClassify->api_count = $nodeFun($classify->parent_id);
+                $topClassify->save();
+
+            }
+            $classify->save();
+        }
     }
 }

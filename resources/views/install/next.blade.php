@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SmartWiki安装</title>
+    <title>SmartWiki</title>
     <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <!--[if lt IE 9]>
     <script src="{{asset('static/bootstrap/js/html5shiv.min.js')}}"></script>
@@ -43,24 +43,61 @@
         <span id="error-message-content"></span>
     </div>
     <form method="post" action="{{route('install.index')}}" class="form-horizontal" role="form">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>目录</th><th>读</th><th>写</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($lists as $path=>$item)
-            <tr>
-                <td>{{$path}}</td><td>{!! $item['read']?'<span style="color:green;">[√]</span>' : '<span style="color:red;">[×]</span>'!!}</td><td>{!! $item['write']?'<span style="color:green;">[√]</span>' : '<span style="color:red;">[×]</span>'!!}</td>
-            </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="form-group">
+            <label class="col-sm-3" for="data-account">数据库地址：</label>
+            <div class="col-sm-9">
+                <div class="col-sm-9 pull-left">
+                    <input type="text" class="form-control" value="127.0.0.1" name="dataAddress" id="data-address" placeholder="数据库地址">
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <input name="dataPort" type="text" class="form-control col-sm-2" value="3306" placeholder="端口号">
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3" for="data-name">数据库名称：</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" value="smart_wiki" name="dataName" id="data-name" placeholder="数据库名称">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3" for="data-account">数据库账号：</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" value="root" name="dataAccount" id="data-account" placeholder="数据库账号">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3" for="data-password">数据库密码：</label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" name="dataPassword" id="data-password" placeholder="数据库密码">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3" for="account">管理员账号：</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" value="admin" name="account" id="account" placeholder="管理员账号">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3" for="password">管理员密码：</label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" name="password" id="password" placeholder="管理员密码">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3" for="password">管理员邮箱：</label>
+            <div class="col-sm-9">
+                <input type="email" class="form-control" name="email" id="email" placeholder="管理员邮箱">
+            </div>
+        </div>
         <hr>
         <div class="form-group text-center">
+            <a href="install.php" class="btn btn-success">
+                上一步
+            </a>
             <button type="submit" class="btn btn-success" id="btn-install" data-loading-text="安装中...">
-                下一步
+                立即安装
             </button>
         </div>
     </form>

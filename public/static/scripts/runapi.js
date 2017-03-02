@@ -440,6 +440,8 @@
             });
             window.RawEditor.on("change",function () {
                 $("#isChangeForApi").trigger("change.api");
+                $("#rawModeData").val(window.RawEditor.getValue());
+
             });
         }
     };
@@ -454,6 +456,30 @@
         var body = runApi.resolveRequestBody();
 
         runApi.send(url,method,header,body);
+    };
+    /**
+     * 弹出接口元数据窗口
+     */
+    window.showSaveApiModal = function ($id,callback ) {
+        $.ajax({
+            url : window.config.ClassifyTreeUrl,
+            success : function (res) {
+                if(res.errcode === 0){
+
+                    $($id).find(".dropdown-select-menu").html(res.data.view);
+                    $($id).find(".dropdown-select").selTree({});
+
+                    $($id).modal("show");
+                }else{
+                    layer.msg(res.message);
+                }
+            },
+            complete : function () {
+                if(callback !== null && typeof callback === "function"){
+                    callback();
+                }
+            }
+        });
     };
     /***
      * API区域事件绑定和初始化
@@ -541,35 +567,27 @@
                             $("#toolApiContainer .tool-api-title>h4>span").text(apiName);
                             $("#toolApiContainer .tool-api-title>.text").text(res.data.description);
 
-                            var current = $("#tool-api-classify-items li[data-id='"+ res.data.api_id+"']");
-                            if(current.length > 0){
-                                current.replaceWith(res.data.view);
-                            }else{
-                                $("#tool-api-classify-items li[data-id='"+ res.data.classify_id+"']").find(".api-items").append(res.data.view);
-                            }
+                            $("#api-item-" + res.data.api_id).empty().remove();
+                            $("#tool-api-classify-items li[data-id='"+ res.data.classify_id+"']>.api-items").append(res.data.view);
 
+
+                        }else{
+                            layer.msg(res.message);
                         }
                     },
                     complete:function () {
                         $("#saveApiModal button[type='submit']").button("rest");
                         $("#btnSaveApi").button("reset");
+                        setTimeout(function () {
+                            $("#btnSaveApi").attr("disabled","disabled");
+                        });
+
                     }
                 });
             }else {
                 var index = layer.load();
-                $.ajax({
-                    url : window.config.ClassifyTreeUrl,
-                    success : function (res) {
-                        if(res.errcode === 0){
-                            var $then = $("#saveApiModal").find(".dropdown-select-menu").html(res.data.view);
-                            $("#saveApiModal").modal("show");
-                        }else{
-                            layer.msg(res.message);
-                        }
-                    },
-                    complete : function () {
-                        layer.close(index);
-                    }
+                window.showSaveApiModal("#saveApiModal",function () {
+                    layer.close(index);
                 });
 
                 return false;
@@ -650,8 +668,11 @@
                }
             });
 
-
-
+        }).on("click","#editAndSave",function () {
+            var index = layer.load();
+            window.showSaveApiModal("#saveApiModal",function () {
+                layer.close(index)
+            });
         });
     };
 

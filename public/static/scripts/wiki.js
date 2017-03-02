@@ -138,6 +138,19 @@ $(document).ready(function () {
                 window.loadDocument(window.CONFIG.selected);
             }
             initJsTree();
+
+            var keyMap = {
+                "Ctrl-S": function(cm) {
+                    if($("#markdown-save").hasClass('change')) {
+                        $("#form-editormd").submit();
+                    }
+                },
+                "Ctrl-A": function(cm) { // default Ctrl-A selectAll
+                    // custom
+                    cm.execCommand("selectAll");
+                }
+            };
+            this.addKeyMap(keyMap);
         },
         onchange : function () {
             if(win.isEditorChange) {
@@ -218,17 +231,19 @@ $(document).ready(function () {
         });
 
         $.get("/docs/content/" + selected.node.id + '?dataType=json').done(function (data) {
+            win.isEditorChange = true;
             layer.close(index);
             $("#documentId").val(selected.node.id);
-            window.editor.setValue("");
+            window.editor.clear();
             if(data.errcode == 0 && data.data.doc.content){
                 window.editor.insertValue(data.data.doc.content);
                 window.editor.setCursor({line:0, ch:0});
-                win.isEditorChange = true;
+            }else if(data.errcode != 0){
+                layer.msg("文档加载失败");
             }
         }).fail(function () {
             layer.close(index);
-            layer.msg("加载文档失败");
+            layer.msg("文档加载失败");
         });
     };
     /**

@@ -34,6 +34,7 @@ class RunApiController extends Controller
         $parentId = intval($parentId);
         $containApis =  boolval($this->request->get('containApi',1));
         $dataType = $this->request->get('type','html');
+        $role = RequestFolder::getRequestFolderRole($this->member_id,$parentId);
 
         $view = '';
 
@@ -41,8 +42,9 @@ class RunApiController extends Controller
         $classifyList = RequestFolder::getApiClassifyList($this->member_id,$parentId);
         if(empty($classifyList) === false && count($classifyList) > 0 && strcasecmp($dataType,'html') === 0){
             foreach ($classifyList as $classify){
-
-                $view .= view('runapi.classify',(array)$classify)->render();
+                $data = (array)$classify;
+                $data['role'] = $role;
+                $view .= view('runapi.classify',$data)->render();
             }
         }
 
@@ -54,8 +56,9 @@ class RunApiController extends Controller
 
                 if (empty($apiList) === false && count($apiList) > 0 && strcasecmp($dataType,'html') === 0) {
                     foreach ($apiList as $item) {
-
-                        $apiView .= view('runapi.api', $item->toArray())->render();
+                        $data = $item->toArray();
+                        $data['role'] = $role;
+                        $apiView .= view('runapi.api', $data)->render();
                     }
                 }
             }
@@ -112,10 +115,11 @@ class RunApiController extends Controller
     public function editApi($apiId = 0)
     {
         $apiId = intval($apiId);
+        $role = false;
 
         if($apiId > 0){
             $apiModel = RequestModel::find($apiId);
-            if(empty($apiModel) || !RequestFolder::isHasEditRole($this->member_id,$apiModel->classify_id)){
+            if(empty($apiModel) || ($role = RequestFolder::getRequestFolderRole($this->member_id,$apiModel->classify_id) ) === false){
                 return $this->jsonResult(403);
             }
         }
@@ -159,7 +163,10 @@ class RunApiController extends Controller
 
             }else {
                 $apiModel = RequestModel::find($apiId);
-                if(!RequestFolder::isHasEditRole($this->member_id,$apiModel->classify_id)){
+                if(empty($apiModel)){
+                    return $this->jsonResult(404);
+                }
+                if(RequestFolder::getRequestFolderRole($this->member_id,$apiModel->classify_id) === false){
                     return $this->jsonResult(403);
                 }
             }
@@ -171,9 +178,9 @@ class RunApiController extends Controller
                 if(empty($classify)){
                     return $this->jsonResult(60006);
                 }
-                $classifyRole = RequestShare::where('member_id','=',$this->member_id)->where("classify_id",'=',$classify_id)->first();
-                if(empty($classifyRole)){
-                    return $this->jsonResult(60001);
+                $classifyRole = RequestFolder::getRequestFolderRole($this->member_id,$classify_id);
+                if($classifyRole === false){
+                    return $this->jsonResult(403);
                 }
                 $apiModel->classify_id = $classify_id;
             }
@@ -194,7 +201,10 @@ class RunApiController extends Controller
             if($apiModel->save()){
                 $data['api_id'] = $apiModel->api_id;
                 $data['classify_id'] = $apiModel->classify_id;
-                $data['view'] = view('runapi.api', $apiModel->toArray())->render();
+                $apiData = $apiModel->toArray();
+                $apiData['role'] = RequestFolder::getRequestFolderRole($this->member_id,$apiModel->classify_id);
+
+                $data['view'] = view('runapi.api', $apiData)->render();
                 $data['api_name'] = $apiModel->api_name;
                 $data['description'] = $apiModel->description;
 
@@ -218,6 +228,11 @@ class RunApiController extends Controller
 
         $data['headers'] = json_decode($header,true);
         $data['body'] = json_decode($body,true);
+        $data['role'] = $role;
+
+        $requestFolder = RequestFolder::find($apiModel->classify_id);
+
+        $data['classify_name'] = $requestFolder->classify_name;
 
 
         $isView = $this->request->get('dataType');
@@ -266,15 +281,26 @@ class RunApiController extends Controller
     {
         $apiId = intval($apiId);
 
-        $apiModel = $this->isAbleEditApi($apiId);
+        $apiModel = RequestModel::find($apiId);
 
-        if($apiModel instanceof ModelBase){
-            $data = $apiModel->toArray();
-            $data['isForm'] = true;
-
-            return view('runapi.metadata',$data);
+        if (empty($apiModel)) {
+            abort(404);
         }
-        return $apiModel;
+        $role = RequestFolder::getRequestFolderRole($this->member_id, $apiModel->classify_id);
+
+        if ($role === false) {
+            abort(403);
+        }
+
+        $requestFolder = RequestFolder::find($apiModel->classify_id);
+
+        $data = $apiModel->toArray();
+        $data['classify_name'] = $requestFolder->classify_name;
+
+        $data['isForm'] = true;
+
+        return view('runapi.metadata', $data);
+
     }
 
     /**
@@ -286,21 +312,44 @@ class RunApiController extends Controller
         $apiId = intval($this->request->get('apiId'));
         $apiName = $this->request->get('apiName');
         $apiDescription = $this->request->get('apiDescription');
+        $classifyId = intval($this->request->get('classifyId'));
 
 
-        $apiModel = $this->isAbleEditApi($apiId);
+        $apiModel = RequestModel::find($apiId);
 
-        if($apiModel instanceof ModelBase && RequestFolder::isHasEditRole($this->member_id,$apiModel->classify_id)){
-            $apiModel->api_name = $apiName;
-            $apiModel->description = $apiDescription;
-            if($apiModel->save()){
-                $data = $apiModel->toArray();
-                $data['view'] = view('runapi.api',$data)->render();
-                return $this->jsonResult(0,$data);
-            }
-            return $this->jsonResult(500);
+        if(empty($apiModel)){
+            return $this->jsonResult(404);
         }
-        return $this->jsonResult(403);
+
+        $role = RequestFolder::getRequestFolderRole($this->member_id,$apiModel->classify_id);
+
+        if($role === false){
+            return $this->jsonResult(403);
+        }
+
+        $role = RequestFolder::getRequestFolderRole($this->member_id,$classifyId);
+
+        if($role === false){
+            return $this->jsonResult(403);
+        }
+
+
+        $apiModel->api_name = $apiName;
+        $apiModel->description = $apiDescription;
+        $apiModel->classify_id = $classifyId;
+
+        if($apiModel->save()){
+            $data['api_id'] = $apiModel->api_id;
+            $data['api_name'] = $apiModel->api_name;
+            $data['classify_id'] = $apiModel->classify_id;
+            $data['method'] = $apiModel->method;
+
+            $data['role'] = $role;
+            $data['view'] = view('runapi.api',$data)->render();
+
+            return $this->jsonResult(0,$data);
+        }
+        return $this->jsonResult(500);
     }
 
     /**
@@ -327,6 +376,7 @@ class RunApiController extends Controller
             $classifyName = $this->request->get('classifyName');
             $description = $this->request->get('description');
             $classifySort = $this->request->get('sort',null);
+            $parentId = intval($this->request->get('parentId',0));
 
             if(empty($classifyName)){
                 return $this->jsonResult(60002);
@@ -334,11 +384,17 @@ class RunApiController extends Controller
             if(mb_strlen($classifyName) > 50){
                 return $this->jsonResult(60003);
             }
+            if($parentId > 0){
+                $role = RequestFolder::getRequestFolderRole($this->member_id,$parentId);
+                if($role !== 0){
+                    return $this->jsonResult(403);
+                }
+            }
 
             //如果是创建
             if(empty($classify)){
                 $classify = new RequestFolder();
-                $classify->parent_id = intval($this->request->get('parentId',0));
+                $classify->parent_id = $parentId;
                 $classify->member_id = $this->member_id;
             }
             $classify->classify_name = $classifyName;
@@ -348,8 +404,11 @@ class RunApiController extends Controller
             $result = $classify->save();
 
             if($result){
+                $array = $classify->toArray();
+                $array['role'] = 0;
 
-                $data['view'] = view('runapi.classify',$classify)->render();
+                $data['view'] = view('runapi.classify',$array)->render();
+
                 $data['classify_id'] = $classify->classify_id;
                 $data['parent_id'] = $classify->parent_id;
                 $data['is_edit'] = boolval($classifyId);

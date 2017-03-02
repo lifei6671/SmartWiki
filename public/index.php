@@ -1,7 +1,5 @@
 <?php
 
-define('VERSION','v0.4.0');
-header('SmartWiki:'.VERSION);
 //header('X-Frame-Options:SAMEORIGIN');
 
 /**

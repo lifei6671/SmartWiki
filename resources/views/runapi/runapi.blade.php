@@ -10,9 +10,9 @@
     <title>接口测试工具 - {{wiki_config('SITE_NAME','SmartWiki')}}</title>
 
     <!-- Bootstrap -->
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{asset('static/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('static/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
-    <link href="/static/seltree/seltree.css" rel="stylesheet">
+    <link href="{{asset('static/seltree/seltree.css')}}" rel="stylesheet">
     <link href="{{asset('static/editormd/css/editormd.min.css')}}" rel="stylesheet">
 
     <link href="{{asset('static/styles/styles.css')}}" rel="stylesheet">
@@ -21,245 +21,8 @@
     <link href="{{asset('static/styles/tool.css')}}" rel="stylesheet">
     <link href="{{asset('static/styles/markdown.css')}}" rel="stylesheet">
     <link href="{{asset('static/editormd/editormd.js')}}" rel="contents" id="editormdScript">
+    <link href="{{asset('static/styles/runapi.css')}}" rel="stylesheet">
 
-    <style type="text/css">
-        html, body{ margin:0; height:100%; }
-        .CodeMirror { height: 250px; border: 1px solid #ddd; font-family: "Courier New", 'Source Sans Pro', Helvetica, Arial, sans-serif !important;font-size: 12px !important;}
-        .CodeMirror pre { padding-left: 7px; line-height: 1.25; }
-        .CodeMirror .CodeMirror-linenumber{font-size: 12px;min-width: 21px;}
-
-        .tool-container{
-            min-width: 500px;
-        }
-        .tool-api-response{
-            background: #FAFAFA;
-            border-top: 1px solid #DDDDDD;
-        }
-        .response-info{
-            line-height: 40px;
-            font-size: 12px;
-            margin-right: 15px;
-            color: #989898;
-        }
-        .response-info .result{
-            color: #0978EE;
-        }
-        .tool-api-response .nav-tabs li a{
-            border-bottom: 2px solid transparent;
-        }
-        .tool-api-response .nav-tabs li.active a{
-            border: 0;
-            background: inherit;
-            border-bottom: 2px solid #F47023;
-        }
-        .page-left{
-            position: fixed;
-            overflow: auto;
-            top: 50px;
-            bottom: 0;
-            z-index: 100;
-            width: 300px;
-            background-color: #f5f5f5;
-            border-right: 1px solid #eaeaea
-        }
-        .page-right{
-            padding: 15px 0 15px 24px;
-            margin-left: 315px;
-            margin-right: 20px;
-            min-width: 660px;
-        }
-        .page-right>.row{
-            margin: 0;
-        }
-        .tool-api-menu-top{
-            text-align: center;
-            border-bottom: 1px solid #DBDBDB;
-            background: #F3F3F3;
-        }
-        .tool-api-menu-top a{
-            text-decoration: none;
-            color: #9A3D7C;
-        }
-        .tool-api-menu-top a:hover{
-            background: #DDDDBB;
-        }
-        .tool-api-action{
-            display: inline-block;
-            padding: 10px 0px;
-            width: 50%;
-        }
-        .tool-api-menu,.tool-api-menu-submenu{
-            margin: 0px auto;
-            color: #505050;
-            list-style: none;
-            padding: 0;
-            line-height: 20px;
-        }
-        .tool-api-menu-submenu>li>a{
-            padding-left: 10px;
-        }
-        .tool-api-menu a{
-            color: #505050;
-            display: block;
-            padding: 10px 0;
-            text-decoration: none;
-            border-bottom: 1px solid #DBDBDB;
-
-        }
-        .tool-api-menu>.open-menu>a{
-            -webkit-box-shadow: 0 1px 5px #DBDBDB;
-            -moz-box-shadow:0 1px 5px #DBDBDB;
-            box-shadow: 0 1px 5px #DBDBDB;
-        }
-        .tool-api-menu a:hover{
-            text-decoration: none;
-            background: #F0F0F0;
-        }
-        .tool-api-menu .tool-api-menu-title{
-            display: inline-block;
-        }
-        .tool-api-menu .tool-api-menu-title .text{
-            font-size: 10px;
-            color: #919191;
-        }
-        .tool-api-menu>li,.tool-api-menu-submenu>li,.api-items>li{
-            display: block;
-            position: relative;
-        }
-        .tool-api-menu>li .fa{
-            display: inline-block;
-            width: 40px;
-            text-align: center;
-            font-size: 24px;
-            vertical-align: super;
-        }
-        .tool-api-item>i.fa{
-            width: 15px;
-        }
-        .tool-api-menu .btn>.fa{
-            vertical-align: baseline;
-            vertical-align: -webkit-baseline-middle;
-        }
-        .tool-api-menu .btn-group-more{
-            position: absolute;top:0;right: 0;
-        }
-
-        .tool-api-menu .btn-more{
-            position: absolute;top:0;right: 0;
-            border-radius:0;
-            background:transparent;
-            padding-left: 1px;
-            padding-right: 1px;
-            box-shadow: none !important;
-        }
-
-        .tool-api-menu>li>.tool-api-menu-submenu{
-            position: relative;
-            display: none;
-        }
-        .tool-api-menu .tool-api-menu-submenu .fa{
-            vertical-align: bottom;
-        }
-        .tool-api-menu .tool-api-menu-submenu a>.fa{
-            color: #B4B4B4;
-        }
-        .tool-api-menu .tool-api-menu-submenu .btn-more{
-            height: 44px;
-        }
-
-        .tool-api-menu .menu-title{
-            display: inline-block;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            width: 140px;
-            line-height: 20px;
-        }
-        .tool-api-menu .api-items{
-            margin: 0;
-            padding: 0;
-            position: relative;
-            font-size: 12px;
-            display: none;
-        }
-        .tool-api-menu>li>.tool-api-menu-submenu,
-        .tool-api-menu>li>.tool-api-menu-submenu>li>.api-items{
-            display: none;
-        }
-        .tool-api-menu>.open-menu>.tool-api-menu-submenu,
-        .tool-api-menu>.open-menu>.tool-api-menu-submenu>.open-menu>.btn-more,
-        .tool-api-menu>.open-menu>.tool-api-menu-submenu>.open-menu>.api-items,
-        .tool-api-menu>.open-menu>.api-items{
-            display: block;
-        }
-        .tool-api-menu>.open-menu>a>i:before{
-            content: "\f07c";
-        }
-        .tool-api-menu>.open-menu>.tool-api-menu-submenu>.open-menu>a>i:before{
-                content: "\f115";
-        }
-
-        .tool-api-menu .api-items>li>a{
-            padding: 12px 0 6px 0;
-        }
-        .tool-api-menu>li>.api-items>li .btn-more,
-        .tool-api-menu .tool-api-menu-submenu .btn-group>.btn-more{
-            display: none;
-            box-shadow: none;
-        }
-        .tool-api-menu .api-items>li:hover>.btn-group>.btn-more,
-        .tool-api-menu .tool-api-menu-submenu>li:hover>.btn-group-more>.btn-more,
-        .tool-api-menu .tool-api-menu-submenu>.open>.btn-group-more>.btn-more,
-        .tool-api-menu .api-items>li>.open>.btn-more,
-        .tool-api-menu .tool-api-menu-submenu>li>.open>.btn-more{
-            display: block;
-            box-shadow: none;
-        }
-
-        .dropdown-menu-more{
-            right: 2px;
-            top: 44px;
-            left:inherit;
-            padding: 0;
-        }
-        .dropdown-menu-more>li>a{
-            padding: 10px 0 10px 15px;
-            border: 0;
-            line-height: 15px;
-            font-size: 13px;
-        }
-        .dropdown-menu-more>li>a>.fa{
-            display: inline-block;
-            width: auto;
-            font-size: 13px;
-            vertical-align: baseline;
-        }
-        .tool-api-menu .method-default{
-            display: inline-block;
-            width: 65px;
-            font-weight: bold;
-            text-align: right;
-            line-height: 20px;
-            overflow: hidden;
-        }
-        .tool-api-menu .method-get{
-            color: #7ED321;
-        }
-        #responseCookie td{word-wrap:break-word;}
-        #editormdContainer {border: 0;padding: 0;margin: 0;height: 100%}
-        #editormdContainer .CodeMirror-scroll{max-height: inherit;}
-        .team-member-item{
-            width: 280px;
-            border: 1px #e5e5e5 solid !important;
-            border-radius: 3px;
-            float: left;
-            display: inline-block;
-            padding: 10px;
-            margin-right: 5px;
-        }
-        .team-member-item .card{color: #666666}
-
-    </style>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -403,18 +166,17 @@
 <script type="text/javascript" src="{{asset('static/bootstrap/js/bootstrap.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('static/bootstrap/icheck/icheck.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('static/layer/layer.js')}}"></script>
-<script type="text/javascript" src="/static/seltree/seltree.js"></script>
-<script type="text/javascript" src="/static/scripts/jquery.form.js"></script>
-<script type="text/javascript" src="/static/codemirror/lib/codemirror.js"></script>
-<script src="/static/codemirror/mode/xml/xml.js" type="text/javascript"></script>
-<script src="/static/codemirror/mode/javascript/javascript.js" type="text/javascript"></script>
-<script src="/static/codemirror/mode/css/css.js" type="text/javascript"></script>
-<script src="/static/codemirror/mode/htmlmixed/htmlmixed.js" type="text/javascript"></script>
-<script src="/static/codemirror/addon/edit/matchbrackets.js" type="text/javascript"></script>
-<script src="/static/scripts/json2.js" type="text/javascript"></script>
-
-
+<script type="text/javascript" src="{{asset('static/seltree/seltree.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/scripts/jquery.form.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/codemirror/lib/codemirror.js')}}"></script>
+<script src="{{asset('static/codemirror/mode/xml/xml.js')}}" type="text/javascript"></script>
+<script src="{{asset('static/codemirror/mode/javascript/javascript.js')}}" type="text/javascript"></script>
+<script src="{{asset('static/codemirror/mode/css/css.js')}}" type="text/javascript"></script>
+<script src="{{asset('static/codemirror/mode/htmlmixed/htmlmixed.js')}}" type="text/javascript"></script>
+<script src="{{asset('static/codemirror/addon/edit/matchbrackets.js')}}" type="text/javascript"></script>
+<script src="{{asset('static/scripts/json2.js')}}" type="text/javascript"></script>
 <script type="text/javascript" src="{{asset('static/scripts/runapi.js')}}"></script>
+
 <script type="text/javascript">
     window.RawEditor = null;
 
@@ -452,8 +214,10 @@
                 },
                 success : function (res) {
                     if(res.errcode === 0){
-                        $("#api-item-" + res.data.api_id).replaceWith(res.data.view);
+                        $("#api-item-7").empty().remove();
 
+
+                        $("#tool-api-classify-items").find("li[data-id='"+res.data.classify_id+"']>.api-items").append(res.data.view);
                     }else{
                         layer.msg(res.message);
                     }
@@ -522,12 +286,16 @@
 
             var id = $(this).closest("li[data-id]").attr("data-id");
             var index = layer.load();
-            var url = window.config.ApiMetadataGetUrl + '/' + id + ' .modal-body';
+            var url = window.config.ApiMetadataGetUrl + '/' + id;
 
-            $("#editApiModal .modal-body").load(url,function () {
-                layer.close(index);
-                $("#editApiModal").modal('show');
+            $.get(url,function (res) {
+                var html = $(res).find(".modal-body").html();
+                $("#editApiModal .modal-body").html(html);
+                window.showSaveApiModal("#editApiModal",function () {
+                    layer.close(index)
+                });
             });
+
         }).on("click",".btn_api_del",function () {
             //接口删除
             var $then = $(this).closest("li[data-id]");

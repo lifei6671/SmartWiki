@@ -45,8 +45,8 @@
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="###" id="editAndSave" data-toggle="modal" data-target="#saveApiModal">编辑并保存</a> </li>
-                    <li><a href="###" id="saveToDocument">保存到文档</a></li>
+                    <li><a href="###" id="editAndSave">编辑并保存</a> </li>
+                    {{--<li><a href="###" id="saveToDocument">保存到文档</a></li>--}}
                     <li><a href="###" id="makeMarkdown">生成 Markdown</a> </li>
                 </ul>
             </div>
@@ -87,7 +87,7 @@
                 <li href="#raw"><label><input type="radio" name="parameterType" value="raw"{{(isset($enctype) && $enctype == 'raw') ? ' checked' : ''}}>raw</label></li>
             </ul>
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane {{(isset($enctype) && $enctype == 'x-www-form-urlencodeed') ? ' active' : ''}}" id="x-www-form-urlencodeed">
+                <div role="tabpanel" class="tab-pane {{((isset($enctype) && $enctype == 'x-www-form-urlencodeed') || empty($enctype)) ? ' active' : ''}}" id="x-www-form-urlencodeed">
                     <table style="margin-top: 10px;width: 100%" class="parameter-active">
                         <tbody>
                         <tr>

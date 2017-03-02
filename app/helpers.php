@@ -172,8 +172,21 @@ if(!function_exists('system_install')) {
         if (empty($sqlContent)) {
             throw new \Exception('SQL file not exist',1000002);
         }
+        $sqlContent = "CREATE DATABASE IF NOT EXISTS {$dbName};".$sqlContent;
 
-        $pdo = new PDO('mysql:host=' . $dbHost . ';dbname=' . $dbName . ';port=' . $dbPort, $dbUser, $dbPassword, [PDO::ATTR_AUTOCOMMIT => 0]);
+        $pdo = new PDO("mysql:host={$dbHost};port={$dbPort}",$dbUser,$dbPassword, [PDO::ATTR_AUTOCOMMIT => 0]);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '?';");
+        $stmt->execute([$dbName]);
+
+        if(! ((bool) $stmt->fetchColumn())){
+            $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbName`;");
+        }
+
+        $pdo->query("use $dbName");
+
+        //$pdo = new PDO('mysql:host=' . $dbHost . ';dbname=' . $dbName . ';port=' . $dbPort, $dbUser, $dbPassword, [PDO::ATTR_AUTOCOMMIT => 0]);
 
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -186,7 +199,7 @@ if(!function_exists('system_install')) {
                 $pdo->exec($sqlContent);
 
                 $password = password_hash($password, PASSWORD_DEFAULT);
-                $headimgurl = asset('/static/images/middle.gif');
+                $headimgurl = asset('static/images/middle.gif');
 
                 $sql = "INSERT INTO wk_member(account,member_passwd,group_level,nickname,email,create_time,state,headimgurl) SELECT '{$account}','{$password}',0,'{$account}','{$email}',now(),0,'{$headimgurl}' FROM dual WHERE NOT exists(SELECT * FROM wk_member WHERE `account` = '{$account}');";
 
