@@ -146,14 +146,16 @@
                         .tooltip('show')
                         .parents('.form-group').addClass('has-error');
                     return false;
-                }else if($("#code").length > 0 && code !== undefined && code === ""){
+                    @if(wiki_config('ENABLED_CAPTCHA'))
+                }else if(code !== undefined && code === ""){
                     $("#code").focus().tooltip({title : '验证码不能为空',trigger : 'manual'})
                         .tooltip('show')
                         .parents('.form-group').addClass('has-error');
                     return false;
+                    @endif
                 }else {
 
-                    var $btn = $("button[type='submit']").button('loading');
+                    $("button[type='submit']").button('loading');
                 }
             },
             success : function (res) {
