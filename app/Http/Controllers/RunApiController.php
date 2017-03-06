@@ -3,6 +3,7 @@
 namespace SmartWiki\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use SmartWiki\Models\Member;
 use SmartWiki\Models\RequestShare;
 use SmartWiki\Models\RequestFolder;
@@ -11,6 +12,15 @@ use SmartWiki\Models\ModelBase;
 
 class RunApiController extends Controller
 {
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+
+        if($this->member->group_level === 2){
+            abort(403);
+        }
+    }
+
     public function index()
     {
         $classifyList = RequestFolder::getApiClassifyList($this->member_id,0);

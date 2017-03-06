@@ -67,6 +67,8 @@
                     <li{!! (isset($member_setting) ? ' class="active"' : '') !!}><a href="{{route('member.setting')}}" class="item"><i class="fa fa-gear"></i> 开发配置</a> </li>
                     <li{!! (isset($setting_site) ? ' class="active"' : '') !!}><a href="{{route('setting.site')}}" class="item"><i class="fa fa-cogs"></i> 网站设置</a> </li>
                     <li{!! (isset($member_users) ? ' class="active"' : '') !!}><a href="{{route('member.users')}}" class="item"><i class="fa fa-group"></i> 用户管理</a> </li>
+                @endif
+                @if(isset($member->group_level) and $member->group_level < 2)
                     <li><a href="{{route('runapi.index')}}" class="item"><i class="fa fa-wrench"></i> 接口工具</a> </li>
                 @endif
             </ul>
