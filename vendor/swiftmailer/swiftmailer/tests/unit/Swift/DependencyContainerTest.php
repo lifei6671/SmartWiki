@@ -4,6 +4,7 @@ class One
 {
     public $arg1;
     public $arg2;
+
     public function __construct($arg1 = null, $arg2 = null)
     {
         $this->arg1 = $arg1;
@@ -15,7 +16,7 @@ class Swift_DependencyContainerTest extends \PHPUnit_Framework_TestCase
 {
     private $_container;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_container = new Swift_DependencyContainer();
     }

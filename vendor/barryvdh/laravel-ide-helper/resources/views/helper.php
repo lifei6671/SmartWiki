@@ -7,21 +7,21 @@
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
  */
+namespace  {
+    exit("This file should not be included, only analyzed by your IDE");
+}
 
 <?php foreach($namespaces as $namespace => $aliases): ?>
-namespace <?= $namespace == '__root' ? '' : $namespace ?>{
-<?php if($namespace == '__root'): ?>
-    exit("This file should not be included, only analyzed by your IDE");
-<?= $helpers ?>
-<?php endif; ?>
+namespace <?= $namespace == '__root' ? '' : trim($namespace, '\\') ?> {
 <?php foreach($aliases as $alias): ?>
 
-    <?= $alias->getClassType() ?> <?= $alias->getShortName() ?> <?= $alias->getExtends() ? 'extends ' . $alias->getExtends() : '' ?>{
+    <?= $alias->getClassType() ?> <?= $alias->getExtendsCLass() ?> {
         <?php foreach($alias->getMethods() as $method): ?>
 
         <?= trim($method->getDocComment('        ')) ?>
 
-        public static function <?= $method->getName() ?>(<?= $method->getParamsWithDefault() ?>){<?php if($method->getDeclaringClass() !== $method->getRoot()): ?>
+        public static function <?= $method->getName() ?>(<?= $method->getParamsWithDefault() ?>)
+        {<?php if($method->getDeclaringClass() !== $method->getRoot()): ?>
 
             //Method inherited from <?= $method->getDeclaringClass() ?>
             <?php endif; ?>
@@ -30,14 +30,22 @@ namespace <?= $namespace == '__root' ? '' : $namespace ?>{
         }
         <?php endforeach; ?>
 
-    }
-
+    }         
 <?php endforeach; ?>
-
 }
-
+    
 <?php endforeach; ?>
+    
+namespace {
+<?= $helpers ?>
 
+<?php foreach($namespaces as $namespace => $aliases): ?>
+<?php foreach($aliases as $alias): ?>
+    <?= $alias->getClassType() ?> <?= $alias->getShortName() ?> extends <?= $alias->getExtends() ?> {}
+    
+<?php endforeach; ?>
+<?php endforeach; ?>
+}
 
 <?php if($include_fluent): ?>
 namespace Illuminate\Support {
@@ -51,11 +59,11 @@ namespace Illuminate\Support {
      * @method Fluent default(mixed $value) Add the default modifier
      * @method Fluent first() Select first row
      * @method Fluent index(string $name = null) Add the in dex clause
-     * @method Fluent on(string $column) `on` of a foreign key
+     * @method Fluent on(string $table) `on` of a foreign key
      * @method Fluent onDelete(string $action) `on delete` of a foreign key
      * @method Fluent onUpdate(string $action) `on update` of a foreign key
      * @method Fluent primary() Add the primary key modifier
-     * @method Fluent references(string $table) `references` of a foreign key
+     * @method Fluent references(string $column) `references` of a foreign key
      * @method Fluent nullable() Add the nullable modifier
      * @method Fluent unique(string $name = null) Add unique index clause
      * @method Fluent unsigned() Add the unsigned modifier

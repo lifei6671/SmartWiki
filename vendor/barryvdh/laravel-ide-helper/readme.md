@@ -151,6 +151,18 @@ php artisan ide-helper:models --ignore="Post,User"
 
 Note: With namespaces, wrap your model name in " signs: `php artisan ide-helper:models "API\User"`, or escape the slashes (`Api\\User`)
 
+### Automatic phpDocs generation for Laravel Fluent methods
+If you need phpDocs support for Fluent methods in migration, for example
+```php
+$table->string(“somestring”)->nullable()->index();
+```
+After publishing vendor, simply change the `include_fluent` line your `config/ide-helper.php` file into:
+```php
+'include_fluent' => true,
+```
+And then run `php artisan ide-helper:generate` , you will now see all of the Fluent methods are recognized by your IDE now.
+
+
 ## PhpStorm Meta for Container instances
 
 It's possible to generate a PhpStorm meta file to [add support for factory design pattern](https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata). For Laravel, this means we can make PhpStorm understand what kind of object we are resolving from the IoC Container. For example, `events` will return an `Illuminate\Events\Dispatcher` object, so with the meta file you can call `app('events')` and it will autocomplete the Dispatcher methods.
@@ -177,7 +189,7 @@ Pre-generated example: https://gist.github.com/barryvdh/bb6ffc5d11e0a75dba67
 
 ## Lumen Install
 
-This pacakges is focused on Laravel development, but it can also be used in Lumen with some workarounds. Because Lumen works a little different, as it is like a barebone version of Laravel and the main configuration parameters are instead located in `bootstrap/app.php`, some arreglements must be made.
+This package is focused on Laravel development, but it can also be used in Lumen with some workarounds. Because Lumen works a little different, as it is like a barebone version of Laravel and the main configuration parameters are instead located in `bootstrap/app.php`, some alterations must be made.
 
 #### Enabling Facades
 
@@ -205,8 +217,7 @@ if ($app->environment() !== 'production') {
 }
 ```
 
-After that, Laravel IDE Helper should work correctly. During the generation process, the script may throw exceptions saying that some Classes doesn't exist or there are some undefined indexes. This is normal, as Lumen has some default packages stripped away, like Cookies, Storage and Session. If you plan to add these packages, you will have to add them manually and create additional 
-Facades if needed.
+After that, Laravel IDE Helper should work correctly. During the generation process, the script may throw exceptions saying that some Class(s) doesn't exist or there are some undefined indexes. This is normal, as Lumen has some default packages stripped away, like Cookies, Storage and Session. If you plan to add these packages, you will have to add them manually and create additional Facades if needed.
 
 #### Adding Additional Facades
 

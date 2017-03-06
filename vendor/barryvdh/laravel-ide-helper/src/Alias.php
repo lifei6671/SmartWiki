@@ -15,6 +15,8 @@ class Alias
     protected $alias;
     protected $facade;
     protected $extends = null;
+    protected $extendsClass = null;
+    protected $extendsNamespace = null;
     protected $classType = 'class';
     protected $short;
     protected $namespace = '__root';
@@ -53,6 +55,7 @@ class Alias
         $this->addClass($this->root);
         $this->detectNamespace();
         $this->detectClassType();
+        $this->detectExtendsNamespace();
         
         if ($facade === '\Illuminate\Database\Eloquent\Model') {
             $this->usedMethods = array('decrement', 'increment');
@@ -103,6 +106,26 @@ class Alias
     public function getExtends()
     {
         return $this->extends;
+    }
+    
+    /**
+     * Get the class short name which this alias extends
+     *
+     * @return null|string
+     */
+    public function getExtendsClass()
+    {
+        return $this->extendsClass;
+    }
+    
+    /**
+     * Get the namespace of the class which this alias extends
+     *
+     * @return null|string
+     */
+    public function getExtendsNamespace()
+    {
+        return $this->extendsNamespace;
     }
 
     /**
@@ -155,6 +178,18 @@ class Alias
             $this->namespace = implode('\\', $nsParts);
         } else {
             $this->short = $this->alias;
+        }
+    }
+    
+    /**
+     * Detect the extends namespace
+     */
+    protected function detectExtendsNamespace()
+    {
+        if (strpos($this->extends, '\\') !== false) {
+            $nsParts = explode('\\', $this->extends);
+            $this->extendsClass = array_pop($nsParts);
+            $this->extendsNamespace = implode('\\', $nsParts);
         }
     }
 
