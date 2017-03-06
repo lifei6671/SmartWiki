@@ -9,10 +9,10 @@
 namespace SmartWiki\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use SmartWiki\Member;
+use SmartWiki\Models\Member;
 use Mail;
 use Session;
-use SmartWiki\Passwords;
+use SmartWiki\Models\Passwords;
 use SmartWiki\Exceptions\DataNullException;
 
 class AccountController extends Controller

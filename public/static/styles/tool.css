@@ -1,0 +1,80 @@
+/***API测试工具样式***/
+.tool-container{
+    margin-top: 40px;
+    min-height: 300px;
+    padding: 0;
+}
+
+.tool-container .tool-api-title{
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #DDDDDD;
+}
+.tool-container .tool-api-title .title{
+    font-size: 14px;
+}
+.tool-container .tool-api-title .title>.fa{
+    color: #DC2B2B;
+    font-weight: 500;
+    font-size: 12px;
+    text-shadow: 0 0 12px  #DC2B2B;
+    border-radius: 12px;
+}
+.tool-container .tool-api-title .title>.saved{
+    color: #547EC1;
+    text-shadow: none;
+}
+.tool-container .tool-api-title .text{
+    font-size: 12px;
+    color: #8A8A8A;
+}
+.tool-container .tool-api-parameter{
+    margin: 20px auto;
+}
+
+.tool-api-parameter .input-text{
+    border: none;
+    border-bottom: 1px solid #dddddd;
+    outline:none;
+    padding: 5px;
+    width: 100%;
+    font-size: 12px;
+    font-family: "Helvetica Neue", Helvetica, Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
+}
+.tool-api-parameter .input-text:focus{
+    border: none;
+    border-bottom: 1px solid #F47023;
+
+}
+.tool-api-parameter .parameter-close{
+    color: #B3B3B3;
+    display: block;
+    background: #ffffff;
+    padding: 3px 7px;
+}
+
+.tool-api-parameter .parameter-close:hover{
+    color: #F47023;
+    background: #DEDEDE;
+}
+.tool-api-parameter .parameter-post-list{
+    margin: 10px 5px;
+    list-style: none;
+    padding: 0;
+}
+
+.tool-api-parameter .parameter-post-list>li{
+    float: left;
+    display: inline-block;
+    font-weight: inherit;
+    margin-right: 10px;
+}
+.tool-api-parameter .parameter-post-list>li label{
+    font-weight: inherit;
+    font-size: 12px;
+    cursor: pointer;
+}
+.tool-api-parameter .parameter-post-list>li input{
+    cursor: pointer;
+    vertical-align: text-bottom;
+}

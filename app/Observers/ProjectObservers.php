@@ -10,8 +10,8 @@ namespace SmartWiki\Observers;
 
 use Cache;
 use Carbon\Carbon;
-use SmartWiki\Document;
-use SmartWiki\Project;
+use SmartWiki\Models\Document;
+use SmartWiki\Models\Project;
 
 /**
  * 项目模型观察者

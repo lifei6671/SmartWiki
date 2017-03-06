@@ -26,17 +26,18 @@ class InstallMiddleware
 
         $uri = $request->getRequestUri();
 
-
-        if(stripos($uri,'/install') === false){
-
-            if( file_exists($path) === false) {
-                return redirect(route('install.index'));
-            }
-        }elseif(stripos($uri,'/install') === 0){
+        if(stripos($uri,'/install') === 0){
             if( file_exists($path)) {
-                return redirect(route('member.index'));
+                return redirect(route('member.projects'));
             }
+
+        }elseif(file_exists($path) === false){
+
+            $url = substr($request->getUri(),0,-strlen($uri)) . '/install.php';
+
+            return redirect($url);
         }
+
         return $next($request);
     }
 }

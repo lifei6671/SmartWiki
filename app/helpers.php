@@ -3,8 +3,8 @@
 use SmartWiki\Extentions\Markdown\Parser\AutoLinkParser;
 use SmartWiki\Extentions\Markdown\Parser\HttpMethodParser;
 use SmartWiki\Extentions\Markdown\Renderer\HttpMethodRenderer;
-use SmartWiki\Member;
-use SmartWiki\WikiConfig;
+use SmartWiki\Models\Member;
+use SmartWiki\Models\WikiConfig;
 
 
 if (! function_exists('session_member')) {
@@ -126,7 +126,7 @@ if(!function_exists('is_can_create_project')) {
      * @return bool
      */
     function is_can_create_project($member_id){
-        return \SmartWiki\Project::isCanCreateProject($member_id);
+        return \SmartWiki\Models\Project::isCanCreateProject($member_id);
     }
 }
 
@@ -172,8 +172,21 @@ if(!function_exists('system_install')) {
         if (empty($sqlContent)) {
             throw new \Exception('SQL file not exist',1000002);
         }
+        $sqlContent = "CREATE DATABASE IF NOT EXISTS {$dbName};".$sqlContent;
 
-        $pdo = new PDO('mysql:host=' . $dbHost . ';dbname=' . $dbName . ';port=' . $dbPort, $dbUser, $dbPassword, [PDO::ATTR_AUTOCOMMIT => 0]);
+        $pdo = new PDO("mysql:host={$dbHost};port={$dbPort}",$dbUser,$dbPassword, [PDO::ATTR_AUTOCOMMIT => 0]);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '?';");
+        $stmt->execute([$dbName]);
+
+        if(! ((bool) $stmt->fetchColumn())){
+            $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbName`;");
+        }
+
+        $pdo->query("use $dbName");
+
+        //$pdo = new PDO('mysql:host=' . $dbHost . ';dbname=' . $dbName . ';port=' . $dbPort, $dbUser, $dbPassword, [PDO::ATTR_AUTOCOMMIT => 0]);
 
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -186,7 +199,7 @@ if(!function_exists('system_install')) {
                 $pdo->exec($sqlContent);
 
                 $password = password_hash($password, PASSWORD_DEFAULT);
-                $headimgurl = asset('/static/images/middle.gif');
+                $headimgurl = asset('static/images/middle.gif');
 
                 $sql = "INSERT INTO wk_member(account,member_passwd,group_level,nickname,email,create_time,state,headimgurl) SELECT '{$account}','{$password}',0,'{$account}','{$email}',now(),0,'{$headimgurl}' FROM dual WHERE NOT exists(SELECT * FROM wk_member WHERE `account` = '{$account}');";
 
@@ -279,4 +292,54 @@ if(!function_exists('resolve_attachicons')) {
         return null;
     }
 
+}
+
+if(!function_exists('output_word')){
+    /**
+     * 导出 word
+     * @param string $content
+     * @return string
+     */
+    function output_word($content){
+
+        $path = public_path('static/styles/kancloud.css');
+        $data = '';
+
+        if(file_exists($path)){
+            $data .= file_get_contents($path);
+        }
+
+        $content = str_replace("<thead>\n<tr>","<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>",$content);
+        $content = str_replace("<pre><code>","<table width='100%' class='codestyle'><pre><code>",$content);
+        $content = str_replace("</code></pre>","</code></pre></table>",$content);
+
+
+        $html = '<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"  xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+        <meta http-equiv=Content-Type content="text/html;  charset=utf-8">
+		<style type="text/css">
+			table  
+			{  
+				border-collapse: collapse;
+				border: none;  
+				width: 100%;  
+			}  
+			td  
+			{  
+				border: solid #CCC 1px;  
+			}  
+			.codestyle{
+				word-break: break-all;
+				background:silver;mso-highlight:silver;
+			}
+			'.$data.'
+		</style>
+        <meta name=ProgId content=Word.Document>
+        <meta name=Generator content="Microsoft Word 11">
+        <meta name=Originator content="Microsoft Word 11">
+        <xml><w:WordDocument><w:View>Print</w:View></xml></head>
+        <body>'  .$content.'</body></html>';
+
+        return $html;
+    }
 }

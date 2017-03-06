@@ -48,7 +48,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-lock"></i>
                         </div>
-                        <input type="password" class="form-control" placeholder="密码" name="passwd" id="passwd">
+                        <input type="password" class="form-control" placeholder="密码" name="passwd" id="passwd" autocomplete="off">
                     </div>
                 </div>
                 @if(wiki_config('ENABLED_CAPTCHA'))
@@ -135,10 +135,11 @@ $(function () {
                        $("#captcha-img").click();
                        $("#code").val('');
                        layer.msg(res.message);
+                       $btn.button('reset');
                    }else{
                        window.location = "/";
                    }
-                   $btn.button('reset');
+
                },
                error :function () {
                    $("#captcha-img").click();

@@ -1,3 +1,20 @@
+body  ::-webkit-scrollbar , body  .scrollbar-track-color{
+    height: 9px;
+    width: 5px;
+    background: #E6E6E6;
+}
+body  ::-webkit-scrollbar:hover {
+    background: #CCCCCC;
+}
+body  ::-webkit-scrollbar-thumb {
+    background: #A2A2A2;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+
 .wiki-container{
     margin-top: 15px;
 }
@@ -20,6 +37,8 @@
     background-color: #fafafa;
 
 }
+
+
 @media (max-width: 1200px) {
     #sidebar ul{
        position: inherit !important;

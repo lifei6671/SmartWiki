@@ -8,9 +8,8 @@
 
 namespace SmartWiki\Http\Controllers;
 
-//use Gregwar\Captcha\CaptchaBuilder;
 use Minho\Captcha\CaptchaBuilder;
-use Storage;
+use Cookie;
 use Session;
 
 class CaptchaController extends Controller
@@ -37,7 +36,12 @@ class CaptchaController extends Controller
         $builder->create()->output(1);
 
         $phrase = $builder->getText();
-        Session::flash('milkcaptcha', $phrase);
+        //Session::flash('milkcaptcha', $phrase);
+      //  session(['milkcaptcha' => $phrase]);
+        Session::put('milkcaptcha',$phrase);
+       // $_SESSION['milkcaptcha'] = $phrase;
+        Session::save();
+        Cookie::make('aaa','fff');
 
 //        header('Content-type: image/jpeg');
 //        $fonts = Storage::allFiles('fonts');
@@ -57,6 +61,6 @@ class CaptchaController extends Controller
 //
 //
 //        header('Content-type: image/jpeg');
-//        return;
+        return ;
     }
 }

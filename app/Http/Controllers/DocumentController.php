@@ -9,9 +9,9 @@
 namespace SmartWiki\Http\Controllers;
 
 use League\Flysystem\Exception;
-use SmartWiki\Document;
-use SmartWiki\DocumentHistory;
-use SmartWiki\Project;
+use SmartWiki\Models\Document;
+use SmartWiki\Models\DocumentHistory;
+use SmartWiki\Models\Project;
 use Illuminate\Auth\Access\AuthorizationException;
 
 
@@ -28,7 +28,7 @@ class DocumentController extends Controller
             abort(404);
         }
         $project = Project::find($id);
-        if(empty($id)){
+        if(empty($project)){
             abort(404);
         }
         //判断是否有编辑权限
@@ -36,7 +36,7 @@ class DocumentController extends Controller
             abort(403);
         }
 
-        $jsonArray = Project::getProjectTree($id);
+        $jsonArray = Project::getProjectArrayTree($id);
 
         if(empty($jsonArray) === false){
             $jsonArray[0]['state']['selected'] = true;
@@ -490,5 +490,100 @@ class DocumentController extends Controller
             }
         }
         return $this->jsonResult(0);
+    }
+
+    public function export($id)
+    {
+        if($id <= 0){
+            abort(404);
+        }
+        $project = Project::getProjectFromCache($id);
+
+        if(empty($project)){
+            abort(404);
+        }
+
+        $member_id = null;
+        if(empty($this->member) === false){
+            $member_id = $this->member->member_id;
+
+        }
+
+        $permissions = Project::hasProjectShow($id,$member_id);
+
+        //校验是否有权限访问文档
+        if($permissions === 0){
+            abort(404);
+        }elseif($permissions === 2){
+            $role = session_project_role($id);
+            if(empty($role)){
+                $this->data = $project;
+                return view('home.password',$this->data);
+            }
+        }else if($permissions === 3 && empty($member_id)){
+            return redirect(route("account.login"));
+        }elseif($permissions === 3) {
+            abort(403);
+        }
+
+        $tree = Project::getProjectArrayTree($id);
+
+
+        $filename = $project->project_name;
+
+        header('pragma:public');
+        header('Content-type:application/vnd.ms-word;charset=utf-8;name="'.$filename.'".doc');
+        header("Content-Disposition:attachment;filename=$filename.doc");
+        header('Content-Type: application/octet-stream');
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+
+        $path = public_path('static/styles/kancloud.css');
+        $content = '';
+
+        if(file_exists($path)){
+            $content .= '<head><style type="text/css">' . file_get_contents($path) . '</style></head>';
+        }
+        $content .= '<body><div class="m-manual"><div class="manual-article"><div class="article-content"><div class="article-body editor-content"><div style="width: 100%;text-align: center;font-size: 25px;padding: 50px 0;"><h1>' . $project->project_name . '</h1></div>';
+
+
+
+        $content .= self::recursion('#',1,$tree) . '</div></div></div></div></body>';
+
+        echo output_word($content);
+    }
+
+    private static function recursion($parent,$level,&$tree)
+    {
+        global $content;
+        $content .= '';
+
+        if ($level > 7) {
+            $level = 6;
+        }
+        foreach ($tree as $item) {
+
+            if ($item['parent'] == $parent) {
+
+                $doc = Document::getDocumnetHtmlFromCache($item['id']);
+
+                if ($doc !== false) {
+                    $text = '<h' . $level . '>' . $item['text'] . '</h' . $level . '>'  . '<div style="margin: 50px auto;">' . $doc . '</div>';
+
+                    $content  .= $text;
+                }
+
+                $key = array_search($item['id'], array_column($tree, 'parent'));
+
+                if ($key !== false) {
+                    $level++;
+                    self::recursion($item['id'], $level, $tree);
+                }
+            }
+        }
+        $content .= '';
+        return $content;
     }
 }

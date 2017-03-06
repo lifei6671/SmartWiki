@@ -27,7 +27,7 @@
                 <a href="{{route('home.index')}}" class="navbar-brand">{{wiki_config('SITE_NAME','SmartWiki')}}</a>
                 <div class="searchbar pull-left visible-lg-inline-block visible-md-inline-block">
                     <form class="form-inline" action="{{route('search.search')}}" method="get">
-                        <input class="form-control" name="keyword" type="search" placeholder="请输入关键词..." value="{!! $keyword !!}">
+                        <input class="form-control" name="keyword" type="search" placeholder="请输入关键词..." value="{{ $keyword }}">
                         <button class="search-btn">
                             <i class="fa fa-search"></i>
                         </button>

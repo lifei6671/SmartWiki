@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartWiki Interceptor</title>
+    <script type="text/javascript" src="../config.js"></script>
+    <script type="text/javascript" src="../lib/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+</head>
+<body>
+<div>
+    <h2 style="font-size: 14px;color: #563D7C">SmartWiki 请求插件</h2>
+    <p>该插件支持你的SmartWiki接口工具读取请求URL的Cookie值，跨域请求等。</p>
+</div>
+<div>
+    监听的地址：<input type="text" name="siteHost" id="siteHost" placeholder="需要监听的域名">
+    <p>支持*号匹配，例如：*.iminho.me </p>
+</div>
+<div>
+    <button type="button" id="saveHost">确定</button><span id="message"></span>
+</div>
+
+</body>
+</html>

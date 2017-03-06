@@ -9,9 +9,9 @@
 namespace SmartWiki\Observers;
 
 use Carbon\Carbon;
-use SmartWiki\Document;
-use SmartWiki\DocumentHistory;
-use SmartWiki\Project;
+use SmartWiki\Models\Document;
+use SmartWiki\Models\DocumentHistory;
+use SmartWiki\Models\Project;
 use Cache;
 
 /**

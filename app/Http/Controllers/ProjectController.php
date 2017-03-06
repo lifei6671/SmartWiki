@@ -10,9 +10,9 @@ namespace SmartWiki\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Log;
-use SmartWiki\Member;
-use SmartWiki\Project;
-use SmartWiki\Relationship;
+use SmartWiki\Models\Member;
+use SmartWiki\Models\Project;
+use SmartWiki\Models\Relationship;
 use Illuminate\Auth\Access\AuthorizationException;
 
 class ProjectController extends Controller
@@ -171,7 +171,10 @@ class ProjectController extends Controller
 
             try{
                 if($project->addOrUpdate()) {
-                    return $this->jsonResult(0);
+                    $data['project_id'] = $project->project_id;
+                    $data['url'] = route('project.edit',['id'=>$project->project_id]);
+
+                    return $this->jsonResult(0,$data);
                 }else{
                     return $this->jsonResult(500);
                 }
@@ -303,10 +306,15 @@ class ProjectController extends Controller
         if (empty($project_id)) {
             return $this->jsonResult(50502);
         }
+        if($this->member->group_level === 2){
+            return $this->jsonResult(403);
+        }
+
         $project = Project::find($project_id);
         if (empty($project)) {
             return $this->jsonResult(40206);
         }
+
         $relationship = Relationship::where('project_id','=',$project_id)->where('member_id','=',$this->member_id)->first();
 
 

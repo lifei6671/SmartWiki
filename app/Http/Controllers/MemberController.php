@@ -8,15 +8,15 @@
 
 namespace SmartWiki\Http\Controllers;
 
-use SmartWiki\WikiConfig;
+use SmartWiki\Models\WikiConfig;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use SmartWiki\Member;
+use SmartWiki\Models\Member;
 use Image;
 use Config;
-use SmartWiki\Project;
+use SmartWiki\Models\Project;
 use DB;
 
 class MemberController extends Controller
@@ -339,6 +339,11 @@ class MemberController extends Controller
         return view('member.users_edit',$this->data);
     }
 
+    /***
+     * 删除项目参与用户
+     * @param int $id
+     * @return JsonResponse
+     */
     public function deleteUser($id = null)
     {
         $member_id = intval($id);
@@ -353,7 +358,7 @@ class MemberController extends Controller
         if($member->group_level == 0){
             return $this->jsonResult(40510);
         }
-        $member->state = $member->state == 0 ?1 :0;
+        $member->state = $member->state == 0 ? 1 :0;
         if($member->save() == false){
             return $this->jsonResult(500);
         }

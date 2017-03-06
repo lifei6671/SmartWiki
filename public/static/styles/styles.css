@@ -2,6 +2,24 @@ body {
     position: relative;
     font-family: Verdana, "Lantinghei SC", "Hiragino Sans GB", "Microsoft Yahei", Helvetica, arial, \5b8b\4f53, sans-serif;
 }
+
+body  ::-webkit-scrollbar , body  .scrollbar-track-color{
+    height: 9px;
+    width: 5px;
+    background: #E6E6E6;
+}
+body  ::-webkit-scrollbar:hover {
+    background: #CCCCCC;
+}
+body  ::-webkit-scrollbar-thumb {
+    background: #A2A2A2;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+
 .dropdown-menu li>a{
     line-height: 2em;
 }
@@ -187,7 +205,7 @@ body {
     font-size: 12px;
     background-color: #ffffff;
 }
-.footer .container{
+.footer .container,.footer .container-fluid{
     margin-top: 70px;
     border-top: 2px solid #e5e5e5;
     padding-top: 30px;
@@ -558,6 +576,7 @@ body {
     opacity: 0.5;
     filter: alpha(opacity=20);
 }
+
 
 @media screen and (max-width: 768px) {
     .manual-reader .slidebar{

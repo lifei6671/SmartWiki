@@ -10,7 +10,7 @@ namespace SmartWiki\Http\Controllers;
 
 
 use Request;
-use SmartWiki\WikiConfig;
+use SmartWiki\Models\WikiConfig;
 
 class SettingController extends Controller
 {

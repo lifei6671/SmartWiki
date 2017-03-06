@@ -9,7 +9,7 @@
 namespace SmartWiki\Observers;
 
 use Cache;
-use SmartWiki\WikiConfig;
+use SmartWiki\Models\WikiConfig;
 
 /**
  * 配置文件观察者
