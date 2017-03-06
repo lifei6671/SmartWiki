@@ -1,7 +1,7 @@
 <?php
 
-define('VERSION','v1.0.0-beta.0');
-header('SmartWiki:'.VERSION);
+define('SmartWikiVersion','v1.0.0-beta.0');
+header('SmartWiki:'.SmartWikiVersion);
 
 /*
 |--------------------------------------------------------------------------

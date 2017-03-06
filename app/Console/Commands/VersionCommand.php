@@ -25,7 +25,7 @@ class VersionCommand extends Command
     public function handle()
     {
 
-        $this->info('SmartWiki ' . VERSION);
+        $this->info('SmartWiki ' . SmartWikiVersion);
 
         return true;
     }
