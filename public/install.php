@@ -4,34 +4,47 @@ if(file_exists(__DIR__ . '/install.lock')){
 }
 
 $basePath = substr(__DIR__,0,-6);
+@rmdir(__DIR__ . '/temp');
 
 $lists[__DIR__]['read'] = is_readable(__DIR__);
 $lists[__DIR__]['write'] = is_writable(__DIR__);
-$lists[__DIR__]['executable'] = is_executable (__DIR__);
+$lists[__DIR__]['executable'] = @mkdir (__DIR__ . '/temp');
+@rmdir(__DIR__ . '/temp');
 
-$storagePath = $basePath . 'storage/';
+$storagePath = $basePath . 'storage';
+@rmdir ($storagePath . '/temp');
 
 $lists[$storagePath]['read'] = is_readable($storagePath);
 $lists[$storagePath]['write'] = is_writable($storagePath);
-$lists[$storagePath]['executable'] = is_executable ($storagePath);
+$lists[$storagePath]['executable'] = @mkdir($storagePath . '/temp');
 
-$vendorPath = $basePath .'vendor/';
+@rmdir ($storagePath . '/temp');
+
+$vendorPath = $basePath .'vendor';
+@rmdir($vendorPath.'/temp');
 
 $lists[$vendorPath]['read'] = is_readable($vendorPath);
 $lists[$vendorPath]['write'] = is_writable($vendorPath);
-$lists[$vendorPath]['executable'] = is_executable ($vendorPath);
+$lists[$vendorPath]['executable'] = @mkdir($vendorPath.'/temp');
 
-$cachePath = $basePath . 'bootstrap/cache/';
+@rmdir($vendorPath.'/temp');
+
+$cachePath = $basePath . 'bootstrap'. DIRECTORY_SEPARATOR. 'cache' ;
+@rmdir($cachePath . '/temp');
 
 $lists[$cachePath]['read'] = is_readable($cachePath);
 $lists[$cachePath]['write'] = is_writable($cachePath);
-$lists[$cachePath]['executable'] = is_executable ($cachePath);
+$lists[$cachePath]['executable'] = @mkdir ($cachePath . '/temp');
 
-$uploadPath = __DIR__ .'/uploads/';
+@rmdir($cachePath . '/temp');
+
+$uploadPath = __DIR__ . DIRECTORY_SEPARATOR .'uploads';
+@rmdir($uploadPath . '/temp');
 
 $lists[$uploadPath]['read'] = is_readable($uploadPath);
 $lists[$uploadPath]['write'] = is_writable($uploadPath);
-$lists[$uploadPath]['executable'] = is_executable ($uploadPath);
+$lists[$uploadPath]['executable'] = @mkdir ($uploadPath . '/temp');
+@rmdir($uploadPath . '/temp');
 
 $extends['fileinfo'] = extension_loaded('fileinfo');
 $extends['gd'] = extension_loaded('gd');
@@ -45,10 +58,24 @@ $extends['tokenizer'] = extension_loaded('tokenizer');
 $extends['ctype'] = extension_loaded('ctype');
 $extends['curl'] = extension_loaded('curl');
 
+if(!file_exists($basePath . '.env') && file_exists($basePath.'.env.example')) {
+    $env = file_get_contents($basePath.'.env.example');
+
+    $env = str_replace('APP_DEBUG=true', 'APP_DEBUG=false', $env);
+
+    if(function_exists('openssl_random_pseudo_bytes')) {
+        $secure = true;
+        $app_key = 'base64:' . base64_encode(openssl_random_pseudo_bytes(32,$secure));
+
+        $env = str_replace('APP_KEY=', 'APP_KEY=' . $app_key, $env);
+    }
+    file_put_contents($basePath.'.env', $env);
+}
 ?>
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
     <title>SmartWiki安装</title>
     <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!--[if lt IE 9]>
