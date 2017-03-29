@@ -124,16 +124,19 @@ class HomeController extends Controller
         if($id <= 0){
             return $this->jsonResult(40301);
         }
-        $member_id = empty($this->member) ? null : $this->member->member_id;
-
-        if(Project::hasProjectShow($id,$member_id,$passwd)){
-            session_project_role($id,['project_id'=>$id,'project_password' => $passwd]);
-            return $this->jsonResult(0);
-        }
         $project = Project::find($id);
         if(empty($project)){
             return $this->jsonResult(40301);
         }
+
+        $member_id = empty($this->member) ? null : $this->member->member_id;
+
+
+        if(Project::hasProjectShow($id,$member_id,$passwd) === 1){
+            session_project_role($id,['project_id'=>$id,'project_password' => $passwd]);
+            return $this->jsonResult(0);
+        }
+
 
         return $this->jsonResult(40302);
     }
