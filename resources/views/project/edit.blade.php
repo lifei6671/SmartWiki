@@ -25,10 +25,12 @@
         $(function () {
             $("#basicForm").on('click','#projectPasswd1,#projectPasswd2',function () {
                 $("#btn-project-passwd").hide();
-            });
-            $("#basicForm").on('click','#projectPasswd3',function () {
+            }).on('click','#projectPasswd3',function () {
                 $("#btn-project-passwd").show();
             });
+
+
+
             $("#basicForm").ajaxForm({
                 beforeSubmit : function () {
                     var name = $.trim($("#name").val());
@@ -120,7 +122,7 @@
                     <input type="hidden" name="project_id" id="project_id" value="{{$project_id or ''}}">
                     <div class="form-group">
                         <label for="user-account">项目名称</label>
-                        <input type="text" class="form-control" name="name" value="{{$project->project_name or ''}}" id="name" placeholder="项目名称" title="项目名称">
+                        <input type="text" class="form-control" name="name" value="{{$project->project_name or ''}}" id="name" placeholder="项目名称" title="项目名称" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label class="control-label">项目权限</label>
@@ -132,8 +134,9 @@
                                 <input type="radio" name="state" autocomplete="off" value="1"><i class="fa fa-unlock"></i>
                             </label>
                             <label class="btn btn-default{{$project->project_open_state == 2 ?' active':''}}" title="加密公开" id="projectPasswd3" data-toggle="tooltip" data-placement="auto">
-                                <input type="radio" name="state" autocomplete="off" value="2"><i class="fa fa-unlock-alt"></i>
+                                <input type="radio" name="state" autocomplete="off" value="2" ><i class="fa fa-unlock-alt"></i>
                             </label>
+
                             <input type="password" name="password" class="form-control" style="width: 200px;margin-left: 110px;{{$project->project_open_state == 2 ? '':'display: none;'}}" id="btn-project-passwd" placeholder="项目密码" maxlength="20"  autocomplete="off" value="{{$project->project_password}}">
                         </div>
                     </div>

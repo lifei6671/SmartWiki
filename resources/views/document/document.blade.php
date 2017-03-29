@@ -71,7 +71,7 @@
                     <div class="form-group">
                         <label for="documentName" class="col-sm-2 control-label" id="inputTitle">名称</label>
                         <div class="col-sm-10">
-                            <input type="text" name="documentName" class="form-control" id="documentName" placeholder="文档名称">
+                            <input type="text" name="documentName" class="form-control" id="documentName" placeholder="文档名称" autocomplete="off">
                         </div>
                     </div>
                 </div>

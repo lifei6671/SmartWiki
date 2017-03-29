@@ -195,24 +195,24 @@
                 <form role="form" method="post" action="{{route('member.index')}}" id="basic-form">
                     <div class="form-group">
                         <label for="user-account">用户名</label>
-                        <input type="text" class="form-control disabled" name="userAccount" value="{{$member->account}}" disabled id="user-account">
+                        <input type="text" class="form-control disabled" name="userAccount" value="{{$member->account}}" disabled id="user-account" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="user-nickname">昵称</label>
-                        <input type="text" class="form-control" name="userNickname" id="user-nickname" max="20" placeholder="昵称" value="{{$member->nickname or ''}}">
+                        <input type="text" class="form-control" name="userNickname" id="user-nickname" max="20" placeholder="昵称" value="{{$member->nickname or ''}}" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="user-email">邮箱<strong class="text-danger">*</strong></label>
-                        <input type="email" class="form-control" value="{{$member->email or ''}}" id="user-email" name="userEmail" max="100" placeholder="邮箱">
+                        <input type="email" class="form-control" value="{{$member->email or ''}}" id="user-email" name="userEmail" max="100" placeholder="邮箱" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label>手机号</label>
-                        <input type="text" class="form-control" id="user-phone" name="userPhone" maxlength="20" title="手机号码" placeholder="手机号码" value="{{$member->phone}}">
+                        <input type="text" class="form-control" id="user-phone" name="userPhone" maxlength="20" title="手机号码" placeholder="手机号码" value="{{$member->phone}}" autocomplete="off">
                     </div>
 
                     <div class="form-group">
                         <label class="description">描述</label>
-                        <textarea class="form-control" rows="3" title="描述" name="description" id="description" maxlength="500">{{$member->description or ''}}</textarea>
+                        <textarea class="form-control" rows="3" title="描述" name="description" id="description" maxlength="500" autocomplete="off">{{$member->description or ''}}</textarea>
                         <p style="color: #999;font-size: 12px;">描述不能超过500字</p>
                     </div>
                     <div class="form-group">
