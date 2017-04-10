@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.4.2 - 2017-03-20
+
+* Reverted BC break to `Uri::resolve` and `Uri::removeDotSegments` by removing 
+  calls to `trigger_error` when deprecated methods are invoked.
+
 ## 1.4.1 - 2017-02-27
 
 * Reverted BC break by reintroducing behavior to automagically fix a URI with a

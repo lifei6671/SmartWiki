@@ -265,12 +265,6 @@ class Uri implements UriInterface
      */
     public static function removeDotSegments($path)
     {
-        @trigger_error(
-            'GuzzleHttp\Psr7\Uri::removeDotSegments is deprecated since version 1.4. ' .
-            'Use GuzzleHttp\Psr7\UriResolver::removeDotSegments instead.',
-            E_USER_DEPRECATED
-        );
-
         return UriResolver::removeDotSegments($path);
     }
 
@@ -287,11 +281,6 @@ class Uri implements UriInterface
      */
     public static function resolve(UriInterface $base, $rel)
     {
-        @trigger_error(
-            'GuzzleHttp\Psr7\Uri::resolve is deprecated since version 1.4. Use GuzzleHttp\Psr7\UriResolver::resolve instead.',
-            E_USER_DEPRECATED
-        );
-
         if (!($rel instanceof UriInterface)) {
             $rel = new self($rel);
         }
