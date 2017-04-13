@@ -447,10 +447,11 @@ h6 {
     white-space: inherit;
 }
 .editor-content blockquote {
-    border-color: inherit;
-    color: inherit;
+    border-color: #DDDDDD;
+    color: #999;
     background: 0
 }
+
 
 .hljs-line-numbers {
     text-align: right;

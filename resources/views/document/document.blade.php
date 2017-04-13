@@ -137,7 +137,7 @@
 <script type="text/plain" id="template-code">
 @include("template.dictionary")
 </script>
-<script src="{{asset('static/bootstrap/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('static/bootstrap/js/bootstrap.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('static/jstree/jstree.js')}}"></script>
 <script type="text/javascript" src="{{asset('static/scripts/jquery.form.js')}}"></script>
 <script type="text/javascript" src="{{asset('static/layer/layer.js')}}"></script>

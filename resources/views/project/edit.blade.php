@@ -9,8 +9,8 @@
     </style>
 @endsection
 @section('scripts')
-    <script type="text/javascript" src="/static/cropper/cropper.js"></script>
-    <script type="text/javascript" src="/static/webuploader/webuploader.js"></script>
+    <script type="text/javascript" src="{{asset('static/cropper/cropper.js')}}"></script>
+    <script type="text/javascript" src="{{asset('static/webuploader/webuploader.js')}}"></script>
 
     <script type="text/javascript">
         function showError($msg) {
