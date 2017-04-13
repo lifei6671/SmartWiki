@@ -57,6 +57,7 @@ $(document).ready(function () {
         imageFormats: ["jpg", "jpeg", "gif", "png", "JPG", "JPEG", "GIF", "PNG"],
         imageUploadURL: "/upload",
         fileUpload: true,
+        htmlDecode : true,
         fileUploadURL : '/upload',
         tocStartLevel : 1,
         tocm : true,
