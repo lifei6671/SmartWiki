@@ -12,7 +12,7 @@
 $(function () {
 
    $("#account-form").ajaxForm({
-       beforSubmit : function () {
+       beforeSubmit : function () {
            var oldPasswd = $("#oldPasswd").val();
            var newPasswd = $("#newPasswd").val();
            var confirmPassword = $("#confirmPassword").val();
