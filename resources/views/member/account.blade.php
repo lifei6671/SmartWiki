@@ -12,7 +12,7 @@
 $(function () {
 
    $("#account-form").ajaxForm({
-       beforSubmit : function () {
+       beforeSubmit : function () {
            var oldPasswd = $("#oldPasswd").val();
            var newPasswd = $("#newPasswd").val();
            var confirmPassword = $("#confirmPassword").val();
@@ -28,13 +28,13 @@ $(function () {
                showError("确认密码不能为空");
                return false;
            }
-           if(configPasswd != newPasswd){
+           if(confirmPassword !== newPasswd){
                showError("确认密码不正确");
                return false;
            }
        },
        success : function (res) {
-            if(res.errcode == 0){
+            if(res.errcode === 0){
                 showSuccess('保存成功');
             }else{
                 showError(res.message);
